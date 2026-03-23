@@ -1,5 +1,11 @@
 # BoseControl Changelog
 
+## v1.1.1 — March 23, 2026
+**Landing Page: Community Testimonials**
+- Added animated testimonials section with real user feedback from r/bose
+- Framer-style horizontal scroll with fade-in/out edges
+- Placed between "How It Works" and "Pricing" sections
+
 ## v1.1.0 — March 18, 2026
 **Gen 2 Support & Improved Device Discovery**
 - Added support for Bose QC Ultra Gen 2 headphones
