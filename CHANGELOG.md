@@ -1,5 +1,12 @@
 # BoseControl Changelog
 
+## v1.1.2 — March 24, 2026
+**QC Ultra Earbuds 2nd Gen Support Confirmed**
+- QC Ultra Earbuds 2nd Gen confirmed working (thanks tofu79 on Reddit!)
+- Updated landing page: device list now includes Headphones & Earbuds
+- Added new testimonial from Earbuds 2nd Gen user
+- Updated FAQ to reflect all supported devices
+
 ## v1.1.1 — March 23, 2026
 **Landing Page: Community Testimonials**
 - Added animated testimonials section with real user feedback from r/bose
@@ -29,5 +36,5 @@
 ## Roadmap
 - Global hotkeys (work even when app is not focused)
 - Apple Shortcuts integration
-- Multi-device support (QC Ultra Earbuds)
+- ~~Multi-device support (QC Ultra Earbuds)~~ ✅ Confirmed working (v1.1.2)
 - Additional Bose model support (based on demand)
