@@ -1,5 +1,24 @@
 # BoseControl Changelog
 
+## v1.2.1 — April 19, 2026
+**Landing Page: Lifetime Updates Highlight**
+- Hero subtext now reads "Lifetime updates" instead of "No subscription"
+- Pricing card tagline updated to "Lifetime updates included"
+- Pricing card bullet reworded to "Lifetime updates — free forever"
+- FAQ firmware answer clarified with lifetime updates note
+- Added new FAQ entry: "Do I get updates for free?"
+
+## v1.2.0 — April 19, 2026
+**14-Day Free Trial & License Activation**
+- Added 14-day free trial — try all features before buying, no credit card required
+- Added in-app license activation via Lemon Squeezy License API ("Activate License…" menu item)
+- Added "Buy BoseControl…" menu item linking directly to Lemon Squeezy checkout
+- Trial status now shown in menu ("Trial: X days left")
+- After trial: noise mode buttons disabled until a valid license key is entered
+- Online license validation enforces the 3-Mac activation limit per key
+- Anti-tamper: clock rollback is detected and treated as expired trial
+- Offline-friendly: temporary network failures never lock out an already-licensed user
+
 ## v1.1.2 — March 24, 2026
 **QC Ultra Earbuds 2nd Gen Support Confirmed**
 - QC Ultra Earbuds 2nd Gen confirmed working (thanks tofu79 on Reddit!)
