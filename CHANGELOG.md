@@ -1,5 +1,14 @@
 # BoseControl Changelog
 
+## v1.2.2 — April 19, 2026
+**Activation Dialog Redesign — Clipboard Magic**
+- Activation dialog now auto-detects a license key in the clipboard and pre-fills the field — one ENTER and you're activated
+- Extracts the key even from pasted email text (e.g. "Your license key is: XXXX-…-XXXX")
+- Cmd+V / Cmd+C / Cmd+X / Cmd+A / Cmd+Z now work inside the activation field (previously silently blocked in menu-bar-only apps)
+- Activate button stays disabled until the key has a valid UUID format — catches typos before the API call
+- After a failed activation, the dialog re-opens with your key preserved and the error shown inline — no more lost input, no dead end
+- When a trial has expired and you click a mode, the app checks the clipboard first: if a key is there, it jumps straight to the pre-filled dialog instead of showing a generic error
+
 ## v1.2.1 — April 19, 2026
 **Landing Page: Lifetime Updates Highlight**
 - Hero subtext now reads "Lifetime updates" instead of "No subscription"
