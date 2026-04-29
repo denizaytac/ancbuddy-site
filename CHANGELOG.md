@@ -1,5 +1,13 @@
 # BoseControl Changelog
 
+## v1.2.3 — April 19, 2026
+**Free Trial Download — Email-Gated**
+- Added "Try Free for 14 Days" button next to every "Buy" CTA (hero, nav, pricing)
+- New modal dialog asks for name + email, then triggers the trial DMG download
+- Email submissions land in the maintainer's inbox via formsubmit.co — no account, no third-party newsletter tool, simple lead-capture
+- Honeypot field included for basic bot protection
+- Modal is keyboard-accessible (ESC closes), backdrop-click closes, focus moves to the name field on open
+
 ## v1.2.2 — April 19, 2026
 **Activation Dialog Redesign — Clipboard Magic**
 - Activation dialog now auto-detects a license key in the clipboard and pre-fills the field — one ENTER and you're activated
