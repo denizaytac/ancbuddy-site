@@ -1,12 +1,11 @@
-# BoseControl Changelog
+# ANCBuddy Changelog
 
 ## v1.2.3 — April 19, 2026
-**Free Trial Download — Email-Gated**
-- Added "Try Free for 14 Days" button next to every "Buy" CTA (hero, nav, pricing)
-- New modal dialog asks for name + email, then triggers the trial DMG download
-- Email submissions land in the maintainer's inbox via formsubmit.co — no account, no third-party newsletter tool, simple lead-capture
-- Honeypot field included for basic bot protection
-- Modal is keyboard-accessible (ESC closes), backdrop-click closes, focus moves to the name field on open
+**Landing Page: Free Trial Download (Email-Gated)**
+- Landing page now offers a "Try Free for 14 Days" button next to every "Buy" CTA
+- Email + name capture via formsubmit.co (no third-party newsletter, signups arrive in maintainer's inbox)
+- Trial DMG hosted on GitHub Releases — direct download starts after submit
+- App code unchanged in this release; trial logic was already shipped in v1.2.0
 
 ## v1.2.2 — April 19, 2026
 **Activation Dialog Redesign — Clipboard Magic**
@@ -17,19 +16,11 @@
 - After a failed activation, the dialog re-opens with your key preserved and the error shown inline — no more lost input, no dead end
 - When a trial has expired and you click a mode, the app checks the clipboard first: if a key is there, it jumps straight to the pre-filled dialog instead of showing a generic error
 
-## v1.2.1 — April 19, 2026
-**Landing Page: Lifetime Updates Highlight**
-- Hero subtext now reads "Lifetime updates" instead of "No subscription"
-- Pricing card tagline updated to "Lifetime updates included"
-- Pricing card bullet reworded to "Lifetime updates — free forever"
-- FAQ firmware answer clarified with lifetime updates note
-- Added new FAQ entry: "Do I get updates for free?"
-
 ## v1.2.0 — April 19, 2026
 **14-Day Free Trial & License Activation**
 - Added 14-day free trial — try all features before buying, no credit card required
 - Added in-app license activation via Lemon Squeezy License API ("Activate License…" menu item)
-- Added "Buy BoseControl…" menu item linking directly to Lemon Squeezy checkout
+- Added "Buy …" menu item linking directly to Lemon Squeezy checkout
 - Trial status now shown in menu ("Trial: X days left")
 - After trial: noise mode buttons disabled until a valid license key is entered
 - Online license validation enforces the 3-Mac activation limit per key
@@ -59,7 +50,7 @@
 - Future-proofed: any Bose device using BMAP protocol will be detected automatically
 
 ## v1.0.0 — March 17, 2026
-**Initial Release**
+**Initial Release (as BoseControl)**
 - Native macOS menu bar app for Bose QC Ultra headphones
 - One-click noise mode switching: Quiet / Aware / Immersion
 - Keyboard shortcuts (1/2/3 for modes, R to refresh, Q to quit)
@@ -74,3 +65,5 @@
 - Apple Shortcuts integration
 - ~~Multi-device support (QC Ultra Earbuds)~~ ✅ Confirmed working (v1.1.2)
 - Additional Bose model support (based on demand)
+- Raycast extension
+- Multi-brand expansion (Sony WH-1000, Sennheiser Momentum) — under evaluation
