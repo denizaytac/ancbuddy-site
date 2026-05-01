@@ -30,7 +30,7 @@ jobs:
 
       - name: Install
         working-directory: site-src
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Build
         working-directory: site-src
