@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# Vite build output (built by GitHub Actions, not committed)
+site-src/dist/
+site-src/node_modules/
+
+# Logs
+*.log
+npm-debug.log*
