@@ -38,7 +38,7 @@ export function Nav() {
           </a>
         </div>
         <a className="nav-cta" href="#pricing">
-          Get app
+          Get ANCBuddy
         </a>
       </div>
     </nav>
