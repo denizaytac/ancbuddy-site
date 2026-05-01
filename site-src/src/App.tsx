@@ -1,6 +1,5 @@
 import { Hero } from "./components/Hero";
 import { Nav } from "./components/Nav";
-import { MobileBuy } from "./components/MobileBuy";
 import { TrialDialog } from "./components/TrialDialog";
 import { TrialDialogProvider } from "./hooks/useTrialDialog";
 import { useReveal } from "./hooks/useReveal";
@@ -37,7 +36,6 @@ function AppShell() {
       </main>
 
       <Footer />
-      <MobileBuy />
       <TrialDialog />
     </>
   );
