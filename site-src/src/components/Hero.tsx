@@ -39,8 +39,8 @@ export function Hero() {
           src="/buddy-hero.png"
           alt=""
           aria-hidden="true"
-          width="910"
-          height="1247"
+          width="1024"
+          height="1024"
         />
         <span className="pill">
           <span className="pill-dot" />
