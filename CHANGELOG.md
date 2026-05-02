@@ -1,5 +1,13 @@
 # ANCBuddy Changelog
 
+## Site Brand Refresh — May 2, 2026
+**Mascot artwork rolled out across the site — app code unchanged**
+- New buddy mascot lands in the hero section above the headline (transparent PNG with violet drop‑shadow halo, gentle float animation, motion-respectful)
+- Refreshed favicon set: `.ico` plus 16 / 32 / 180 / 512 PNG sizes and a dedicated `apple-touch-icon.png`
+- New 1200×630 social preview image at `/og-image.png` replaces the old square logo for `og:image` + `twitter:image` — WhatsApp, Twitter, LinkedIn now show the full landscape banner
+- Menubar logo in the Mac mockup, the footer mark, and the iOS home-screen icon all share the same Squircle app-icon master
+- Removed the unused inline `mark.svg` from `/public`
+
 ## v1.2.3 — April 19, 2026
 **Landing Page: Free Trial Download (Email-Gated)**
 - Landing page now offers a "Try Free for 14 Days" button next to every "Buy" CTA
