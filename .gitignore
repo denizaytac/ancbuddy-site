@@ -8,3 +8,14 @@ site-src/node_modules/
 # Logs
 *.log
 npm-debug.log*
+
+# Local Claude harness config
+site-src/.claude/
+
+# iCloud/Spotlight duplicates
+**/* 2.json
+**/* 2.md
+**/* 2.txt
+
+# Brand asset backups (local-only safety net)
+site-src/public/.brand-backup-*/

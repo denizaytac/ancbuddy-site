@@ -34,6 +34,14 @@ export function Hero() {
   return (
     <section className="hero container">
       <div className="hero-stack">
+        <img
+          className="hero-mascot"
+          src="/buddy-hero.png"
+          alt=""
+          aria-hidden="true"
+          width="910"
+          height="1247"
+        />
         <span className="pill">
           <span className="pill-dot" />
           <span>v1.2.0 · Now on macOS</span>

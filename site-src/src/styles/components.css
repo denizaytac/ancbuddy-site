@@ -67,7 +67,7 @@
 }
 .nav-logo img { width: 100%; height: 100%; display: block; border-radius: inherit; }
 
-/* Hero floating logo */
+/* Hero floating logo (legacy app-icon style, currently unused) */
 .hero-logo {
   width: clamp(80px, 14vw, 112px);
   height: clamp(80px, 14vw, 112px);
@@ -85,6 +85,27 @@
   50% { transform: translateY(-6px) rotate(2deg); }
 }
 [data-motion="off"] .hero-logo { animation: none; }
+
+/* Hero mascot — transparent buddy figure above the headline */
+.hero-mascot {
+  width: auto;
+  height: clamp(140px, 22vw, 240px);
+  display: block;
+  margin: 0 auto -8px;
+  pointer-events: none;
+  filter: drop-shadow(0 30px 60px var(--accent-glow))
+          drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
+  animation: heroMascotFloat 7s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes heroMascotFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+[data-motion="off"] .hero-mascot { animation: none; }
+@media (max-width: 600px) {
+  .hero-mascot { height: clamp(120px, 32vw, 180px); margin-bottom: -4px; }
+}
 
 /* Footer logo */
 .footer-logo {
