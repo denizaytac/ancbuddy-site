@@ -1,5 +1,11 @@
 # ANCBuddy Changelog
 
+## Trial Form Fix — May 12, 2026
+**Free trial download was failing for every visitor — fixed**
+- FormSubmit's hashed (anonymous) endpoint was no longer active on their side, so submissions died with "Email address … is not formatted correctly" before the DMG redirect could fire
+- Trial form now posts to the verified direct‑email endpoint instead — restores the GitHub Releases DMG download for every "Try free for 14 days" click
+- Reported by a Reddit user; affected anyone using the trial flow since the hashed endpoint silently stopped responding
+
 ## Site Brand Refresh — May 2, 2026
 **Mascot artwork rolled out across the site — app code unchanged**
 - New buddy mascot lands in the hero section above the headline — friendly violet character wearing the headphones, transparent PNG with violet drop‑shadow halo, gentle float animation, motion-respectful

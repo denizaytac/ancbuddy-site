@@ -9,7 +9,7 @@ import { useTrialDialog } from "@/hooks/useTrialDialog";
 import { Icon } from "./Icon";
 
 const FORMSUBMIT_ENDPOINT =
-  "https://formsubmit.co/dfb814c3a0727b708d511f9d0e2ef929";
+  "https://formsubmit.co/denoaytac62@gmail.com";
 const DMG_URL =
   "https://github.com/denizaytac/ancbuddy-site/releases/download/v1.2.0/BoseControl-1.2.0.dmg";
 
