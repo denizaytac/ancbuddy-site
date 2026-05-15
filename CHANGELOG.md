@@ -1,5 +1,14 @@
 # ANCBuddy Changelog
 
+## Trial Form Resilience — May 15, 2026
+**FormSubmit went down (Cloudflare 521) and took the trial funnel with it — replaced with a hybrid setup that survives outages**
+- Trial form no longer POSTs natively to FormSubmit. It now fires two parallel requests on submit: a Web3Forms call for the email notification, and a Supabase insert into a new `trial_signups` table for logging
+- If Web3Forms is reachable, the user is redirected to the GitHub Releases DMG exactly as before. If Web3Forms is unreachable (timeout or 5xx), the dialog switches to a fallback view with the direct DMG download link so visitors never hit a Cloudflare error page again
+- The Supabase insert runs independently from the email dispatch — every trial attempt is logged, even during a Web3Forms outage
+- 8-second client-side timeout via `AbortController` prevents the dialog from hanging if either service stalls
+- Honeypot anti-spam field preserved; submit button shows a `Sending…` state while in flight, then transitions to a `Download started` confirmation with a manual download button — the browser typically auto-triggers the DMG download without navigating away, so the dialog now stays on the user's screen with a clear next step instead of getting stuck
+- Required env vars (committed in `.env.example`): `VITE_WEB3FORMS_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
+
 ## Trial Form Fix — May 12, 2026
 **Free trial download was failing for every visitor — fixed**
 - FormSubmit's hashed (anonymous) endpoint was no longer active on their side, so submissions died with "Email address … is not formatted correctly" before the DMG redirect could fire

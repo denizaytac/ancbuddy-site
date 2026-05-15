@@ -904,6 +904,8 @@
 }
 .trial-form input:focus { outline: none; border-color: var(--accent); }
 .trial-form input::placeholder { color: var(--fg-4); }
+.trial-form input:disabled { opacity: 0.6; cursor: not-allowed; }
+.trial-form button:disabled { opacity: 0.7; cursor: progress; }
 .trial-fineprint {
   font-family: var(--font-mono); font-size: 11px;
   color: var(--fg-4);
