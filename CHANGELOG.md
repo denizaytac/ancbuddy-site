@@ -1,5 +1,9 @@
 # ANCBuddy Changelog
 
+## App v2.0.1: Sparkle updater test — June 1, 2026
+**App source + update metadata**
+- Added a short Sparkle updater test release with `CFBundleVersion=20001` so v2.0.0 can verify the signed, notarized in-app update path
+
 ## App/Site v2.0.0: Sparkle updater + universal build — June 1, 2026
 **App source + site release metadata**
 - Redesigned the app panel footer into a quieter macOS-style utility zone: `Launch at Login` is now a distinct preference card with its switch aligned to the AI Auto-EQ control column, update and quit actions sit in a compact utility bar, footer boxes share one radius/background/border system, divider edges/spacing now align with the sound-profile card, and version/license metadata is visually de-emphasized
