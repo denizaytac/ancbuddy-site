@@ -10,11 +10,15 @@ export const FAQ_ITEMS: FAQItem[] = [
   },
   {
     q: "Which Macs and macOS versions are supported?",
-    a: "macOS 13 Ventura and newer, Apple Silicon and Intel. The app is signed and notarized by Apple — no security warnings on first launch.",
+    a: "macOS 12 Monterey and newer, Apple Silicon and Intel. The app is signed and notarized by Apple — no security warnings on first launch.",
   },
   {
     q: "How does it talk to the headphones?",
     a: "Direct Bluetooth Low Energy. ANCBuddy uses the Bose BMAP protocol (the same one the official iOS/Android app uses) over the FEBE service UUID. No cloud round‑trip, no Bose Music app required.",
+  },
+  {
+    q: "How does AI Auto‑EQ handle my music data?",
+    a: "AI Auto‑EQ is opt‑in. When enabled, ANCBuddy sends the current artist, title, and album to ANCBuddy's AI relay to generate a 3‑band EQ profile. The relay keeps Deniz's AI key server‑side, caches results by a hashed track key, and does not store raw song names.",
   },
   {
     q: "What's the difference between Quiet, Aware, and Immersion?",

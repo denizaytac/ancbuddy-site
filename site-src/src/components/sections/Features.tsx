@@ -40,7 +40,7 @@ export function Features() {
         Built like the rest of <em>your menu bar.</em>
       </SectionTitle>
       <SectionLede>
-        Native Swift. No Electron. No analytics. Three modes, three keystrokes, one icon.
+        Native Swift. No Electron. Direct headphone control, optional AI Auto-EQ, one icon.
       </SectionLede>
 
       <div className="features">
@@ -84,7 +84,7 @@ export function Features() {
           span={4}
           icon="shield"
           title="Local & private"
-          body="Zero analytics, zero accounts. The app talks to your headphones, full stop."
+          body="No analytics, no accounts. Noise controls stay direct over BLE; AI Auto-EQ sends the current track to ANCBuddy's relay only when you turn it on."
         />
 
         <Feature

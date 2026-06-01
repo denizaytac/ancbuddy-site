@@ -9,7 +9,7 @@ export interface Mode {
 }
 
 export const MODES: Mode[] = [
-  { id: 0, name: "Quiet", desc: "Block out the world", shortcut: "⌃⌥1", icon: "quiet" },
-  { id: 1, name: "Aware", desc: "Stay in the room", shortcut: "⌃⌥2", icon: "aware" },
-  { id: 2, name: "Immersion", desc: "360° spatial audio", shortcut: "⌃⌥3", icon: "immersion" },
+  { id: 0, name: "Quiet", desc: "Full noise cancellation", shortcut: "⌃⌥1", icon: "quiet" },
+  { id: 1, name: "Aware", desc: "Hear your surroundings", shortcut: "⌃⌥2", icon: "aware" },
+  { id: 2, name: "Immersion", desc: "Wider, more spacious sound", shortcut: "⌃⌥3", icon: "immersion" },
 ];

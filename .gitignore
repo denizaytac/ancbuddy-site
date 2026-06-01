@@ -12,6 +12,9 @@ npm-debug.log*
 # Local Claude harness config
 site-src/.claude/
 
+# Supabase local link/cache metadata
+supabase/.temp/
+
 # iCloud/Spotlight duplicates
 **/* 2.json
 **/* 2.md

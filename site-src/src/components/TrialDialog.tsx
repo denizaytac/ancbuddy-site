@@ -13,7 +13,7 @@ import { Icon } from "./Icon";
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY as string | undefined;
 const DMG_URL =
-  "https://github.com/denizaytac/ancbuddy-site/releases/download/v1.2.0/BoseControl-1.2.0.dmg";
+  "https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.0/ANCBuddy-2.0.0.dmg";
 const SUBMIT_TIMEOUT_MS = 8000;
 
 type Status = "idle" | "submitting" | "success" | "fallback";

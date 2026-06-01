@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>ANCBuddy</title>
+        <item>
+            <title>2.0.0</title>
+            <pubDate>Mon, 01 Jun 2026 23:18:36 +0200</pubDate>
+            <sparkle:version>20000</sparkle:version>
+            <sparkle:shortVersionString>2.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.0/ANCBuddy-2.0.0.dmg" length="4033185" type="application/octet-stream" sparkle:edSignature="dOtNr07hqVjqHbx+OA23YkcMVeo1yO5LQlT0AMNWa/Zqy4j6nTus4R9LGI52s8zSrYq5N7vApcG/ZWPIMyJhAw=="/>
+        </item>
+    </channel>
+</rss>

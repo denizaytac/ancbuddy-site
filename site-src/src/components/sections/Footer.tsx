@@ -55,7 +55,7 @@ export function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 Deniz Aytaç · ANCBuddy v1.2.0</span>
+          <span>© 2026 Deniz Aytaç · ANCBuddy v2.0.0</span>
           <span>Built with Swift · Hosted on GitHub Pages</span>
         </div>
       </div>

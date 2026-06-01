@@ -44,7 +44,7 @@ export function Hero() {
         />
         <span className="pill">
           <span className="pill-dot" />
-          <span>v1.2.0 · Now on macOS</span>
+          <span>v2.0.0 · Now on macOS</span>
         </span>
         <h1>
           Bose QC Ultra control,
@@ -75,7 +75,7 @@ export function Hero() {
           </span>
           <span className="hero-meta-dot" />
           <span>
-            <Icon name="check" size={12} /> macOS 13+
+            <Icon name="check" size={12} /> macOS 12+
           </span>
         </div>
       </div>
@@ -120,10 +120,10 @@ export function Hero() {
                       82%
                     </div>
                   </div>
-                  <div className="dd-meta">LE-Atom · Connected via BLE</div>
+                  <div className="dd-meta">Connected via Bluetooth</div>
                 </div>
 
-                <div className="dd-section-label">Noise Cancellation</div>
+                <div className="dd-section-label">Listening Mode</div>
 
                 {MODES.map((m, i) => (
                   <button
@@ -162,7 +162,7 @@ export function Hero() {
             <div className="wave-card">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ color: "var(--accent)" }}>{MODES[mode].name.toUpperCase()}</span>
-                <span>BMAP · 0x01{mode.toString(16).padStart(2, "0")}</span>
+                <span>Current EQ</span>
               </div>
               <div className="wave">
                 {bars.map((h, i) => (
@@ -180,8 +180,8 @@ export function Hero() {
                 ))}
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", color: "var(--fg-4)" }}>
-                <span>FBlock 0x1F</span>
-                <span>← BLE FEBE</span>
+                <span>Waiting for music</span>
+                <span>No EQ yet</span>
               </div>
             </div>
           </div>
