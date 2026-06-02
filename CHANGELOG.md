@@ -4,6 +4,7 @@
 **App source + site release metadata**
 - Flattened the native panel's lower half into the same row language as the listening-mode controls: `AI Auto-EQ`, `Launch at Login`, update, license, buy, and quit actions now sit under consistent `SOUND` / `GENERAL` section labels without permanent footer boxes, the `Sound Profile` wave card remains a recessed data display, and the Sound-to-General divider spacing is tightened to match the rest of the panel rhythm
 - Aligned the current release metadata around v2.0.2 / build 20002: site-visible version strings, structured-data download URL, trial DMG URL, release-process docs, and handoff notes now point at `ANCBuddy-2.0.2.dmg`
+- Completed the v2.0.2 release path: signed/notarized/stapled DMG, GitHub Release asset, live Sparkle appcast, trial download URL, and Lemon Squeezy published download now all point at `ANCBuddy-2.0.2.dmg`
 
 ## App v2.0.1: Sparkle updater test — June 1, 2026
 **App source + update metadata**
@@ -261,8 +262,11 @@
 - App update mechanism: Sparkle 2.9.2 is now embedded with a signed appcast flow and `Check for Updates…`; v2.0.0 is the manual bootstrap release for future in-app 2.x updates
 - Universal build: the app and Now Playing adapter now build as `arm64` + `x86_64`
 
-### v2.0.2 Remaining Release Work
-- Release operations: refresh notary credentials, build/sign/notarize `ANCBuddy-2.0.2.dmg`, publish GitHub Release, deploy the generated appcast, then update Lemon Squeezy
+### v2.0.2 Release Ops Completed
+- `ANCBuddy-2.0.2.dmg` is signed, notarized, stapled, uploaded to GitHub Releases, referenced by the live Sparkle appcast, used by the trial download, and published in Lemon Squeezy
+
+### Post-v2.0.2 Release Work
+- Rotate/revoke the Lemon Squeezy API key used during the June 2 release verification, then prepare launch communication (Reddit update, Show HN, Product Hunt)
 
 ### Post-v2.0 Polish
 - Liquid Glass / Icon Composer app-icon pass: keep the current violet buddy icon for v2.0, but later rebuild it as a layered Icon Composer source asset with separated background, headphones, buddy silhouette, face details, and highlights. Preview Default, Dark, Mono/Clear, and Tinted appearances; preserve small-size Dock legibility; export refreshed `AppIcon.icns`, iconset, favicon/marketing PNGs, and a dock-context mockup. This is visual polish, not a v2.0 release blocker.
