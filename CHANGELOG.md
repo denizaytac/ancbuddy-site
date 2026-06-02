@@ -1,5 +1,10 @@
 # ANCBuddy Changelog
 
+## App v2.0.2: Panel flat row polish — June 2, 2026
+**App source + site release metadata**
+- Flattened the native panel's lower half into the same row language as the listening-mode controls: `AI Auto-EQ`, `Launch at Login`, update, license, buy, and quit actions now sit under consistent `SOUND` / `GENERAL` section labels without permanent footer boxes, the `Sound Profile` wave card remains a recessed data display, and the Sound-to-General divider spacing is tightened to match the rest of the panel rhythm
+- Aligned the current release metadata around v2.0.2 / build 20002: site-visible version strings, structured-data download URL, trial DMG URL, release-process docs, and handoff notes now point at `ANCBuddy-2.0.2.dmg`
+
 ## App v2.0.1: Sparkle updater test — June 1, 2026
 **App source + update metadata**
 - Added a short Sparkle updater test release with `CFBundleVersion=20001` so v2.0.0 can verify the signed, notarized in-app update path
@@ -22,7 +27,7 @@
 - Improved release-script notarization error reporting so missing `ANCBuddy-Notary` credentials print the exact `notarytool store-credentials` command instead of failing silently during output capture
 - Cleared macOS metadata from generated DMGs before signing so strict DMG signature verification passes reliably
 - Signed the final DMG without `codesign --timestamp` after local verification showed timestamped disk-image signatures becoming invalid on repeat verification; the app and embedded code remain timestamped
-- Updated site release metadata, trial download URL, and visible version strings to point at the upcoming `ANCBuddy-2.0.0.dmg`
+- Updated site release metadata, trial download URL, and visible version strings for the upcoming ANCBuddy 2.x DMG release path
 - Resolved the site/app OS-support mismatch by advertising macOS 12+ consistently with the app's `LSMinimumSystemVersion`
 
 ## App v2.0.0: One honest connection status — June 1, 2026
@@ -251,13 +256,13 @@
 - Single Swift binary, 64KB DMG, zero dependencies
 
 ## Roadmap
-### v2.0.0 Completed Roadmap Items
+### v2.x Completed Roadmap Items
 - Launch at Login control: autostart is now a first-class panel setting backed by macOS Login Items, with the local build script no longer overriding the user's choice
 - App update mechanism: Sparkle 2.9.2 is now embedded with a signed appcast flow and `Check for Updates…`; v2.0.0 is the manual bootstrap release for future in-app 2.x updates
 - Universal build: the app and Now Playing adapter now build as `arm64` + `x86_64`
 
-### v2.0.0 Remaining Release Work
-- Release operations: refresh notary credentials, build/sign/notarize `ANCBuddy-2.0.0.dmg`, publish GitHub Release, deploy the generated appcast, then update Lemon Squeezy and trial download URLs
+### v2.0.2 Remaining Release Work
+- Release operations: refresh notary credentials, build/sign/notarize `ANCBuddy-2.0.2.dmg`, publish GitHub Release, deploy the generated appcast, then update Lemon Squeezy
 
 ### Post-v2.0 Polish
 - Liquid Glass / Icon Composer app-icon pass: keep the current violet buddy icon for v2.0, but later rebuild it as a layered Icon Composer source asset with separated background, headphones, buddy silhouette, face details, and highlights. Preview Default, Dark, Mono/Clear, and Tinted appearances; preserve small-size Dock legibility; export refreshed `AppIcon.icns`, iconset, favicon/marketing PNGs, and a dock-context mockup. This is visual polish, not a v2.0 release blocker.

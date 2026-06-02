@@ -44,7 +44,7 @@ export function Hero() {
         />
         <span className="pill">
           <span className="pill-dot" />
-          <span>v2.0.0 · Now on macOS</span>
+          <span>v2.0.2 · Now on macOS</span>
         </span>
         <h1>
           Bose QC Ultra control,
