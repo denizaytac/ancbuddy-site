@@ -10,20 +10,18 @@ export function Problem() {
             Switch modes <em>without</em> reaching for your phone.
           </SectionTitle>
           <SectionLede>
-            Bose's official app makes you unlock a phone, find the app, wait for it to connect, tap
-            through a carousel — just to toggle a mode you change ten times a day. ANCBuddy lives in
-            your menu bar. One click. Done.
+            Bose Music is fine on a phone. It is not where you want to go when you are already
+            working on your Mac. ANCBuddy keeps the everyday controls in the menu bar.
           </SectionLede>
         </div>
         <div className="compare">
           <div className="compare-row">
             <div className="compare-card before reveal">
               <div className="compare-tag">Bose Music</div>
-              <div className="compare-headline">Pick up phone → unlock → open app → wait → tap</div>
+              <div className="compare-headline">Pick up phone, unlock, open app, wait, tap</div>
               <div className="compare-steps">
-                <span>↳ ~6 seconds</span>
-                <span>↳ 5 taps</span>
-                <span>↳ phone in hand</span>
+                <span>Mode changes leave your Mac workflow</span>
+                <span>Sound tweaks live in a separate app</span>
               </div>
             </div>
             <div
@@ -31,33 +29,10 @@ export function Problem() {
               style={{ "--reveal-delay": "100ms" } as React.CSSProperties}
             >
               <div className="compare-tag">ANCBuddy</div>
-              <div className="compare-headline">⌃⌥1</div>
+              <div className="compare-headline">Open the panel, switch modes, tune sound</div>
               <div className="compare-steps">
-                <span>↳ &lt; 200 ms</span>
-                <span>↳ 1 keystroke</span>
-                <span>↳ no context switch</span>
-              </div>
-            </div>
-          </div>
-          <div className="compare-row">
-            <div
-              className="compare-card before reveal"
-              style={{ "--reveal-delay": "50ms" } as React.CSSProperties}
-            >
-              <div className="compare-tag">Bose Music</div>
-              <div className="compare-headline">Re‑authenticate when it forgets your headphones</div>
-              <div className="compare-steps">
-                <span>↳ feels like a phone OS update</span>
-              </div>
-            </div>
-            <div
-              className="compare-card after reveal"
-              style={{ "--reveal-delay": "150ms" } as React.CSSProperties}
-            >
-              <div className="compare-tag">ANCBuddy</div>
-              <div className="compare-headline">Pairs once. Stays paired.</div>
-              <div className="compare-steps">
-                <span>↳ uses BLE service UUID, not the device name</span>
+                <span>Quiet, Aware, and Immersion in one place</span>
+                <span>AI Auto-EQ is ready when music is playing</span>
               </div>
             </div>
           </div>

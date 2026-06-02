@@ -18,26 +18,25 @@ export function Pricing() {
       <div className="pricing-card reveal">
         <span className="pill" style={{ background: "transparent" }}>
           <span className="pill-dot" />
-          Launch week — code{" "}
-          <strong style={{ color: "var(--accent)", marginLeft: 4 }}>LAUNCH10</strong> (10% off)
+          Mac menu-bar app · 14-day trial
         </span>
         <div className="price-amount">
           <span className="cur">$</span>9.99
         </div>
-        <div className="price-tag">One‑time purchase · No subscription · Lifetime updates</div>
+        <div className="price-tag">One‑time purchase · No subscription · Updates included</div>
 
         <ul className="price-list">
           <li>
-            <Icon name="check" size={14} /> All current and future modes
+            <Icon name="check" size={14} /> Quiet, Aware, and Immersion from your Mac
           </li>
           <li>
-            <Icon name="check" size={14} /> Global hotkeys
+            <Icon name="check" size={14} /> AI Auto-EQ sound profiles
           </li>
           <li>
             <Icon name="check" size={14} /> All Bose QC Ultra devices
           </li>
           <li>
-            <Icon name="check" size={14} /> Free updates, forever
+            <Icon name="check" size={14} /> Built-in update checks
           </li>
           <li>
             <Icon name="check" size={14} /> Email support, from the dev directly
@@ -52,9 +51,7 @@ export function Pricing() {
           <Icon name="bolt" size={15} /> Buy ANCBuddy — $9.99
         </a>
         <div className="price-foot">
-          Or{" "}
-          <button onClick={() => openTrial(true)}>download the free trial</button> · email‑gated · 14
-          days
+          Or <button onClick={() => openTrial(true)}>try ANCBuddy free for 14 days</button>
         </div>
       </div>
     </section>

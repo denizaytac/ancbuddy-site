@@ -1,5 +1,17 @@
 # ANCBuddy Changelog
 
+## Site v2.0.2: Truth pass + product-story refresh — June 2, 2026
+**Site source only**
+- Removed public hotkey claims, shortcut chips, stale launch-week copy, device placeholders, terminal-style install mockups, and protocol-heavy marketing from the landing page
+- Removed the explanatory demo-state pills from the hero so the mockup feels more like the product itself and less like a tutorial overlay
+- Replaced developer-facing `native panel` language in the hero, feature copy, CTA, pricing, and metadata with buyer-facing menu-bar control wording
+- Reworked the hero trust line from generic purchase/platform facts into buyer-facing reassurance: no Bose Music app needed, QC Ultra headphones/earbuds support, and buy-once pricing
+- Simplified the supported-device section into buyer-facing compatibility copy with one `Supported` status across all QC Ultra models, removed internal test-source labels, and added a quiet email link for other Bose model requests
+- Rebuilt the hero around a lighter v2.0.2-style menu-bar demo with Listening Mode, AI Auto-EQ, Sound Profile, Launch at Login, and Check for Updates, while keeping the Buddy artwork as a small brand detail instead of the main visual
+- Updated pricing, FAQ, supported-device copy, footer, metadata, and the Open Graph image so the page now leads with Mac menu-bar control and frames AI Auto-EQ as an opt-in track-aware sound-profile enhancement with visible privacy disclosure
+- Tightened the AI Auto-EQ FAQ copy so it explains track-metadata handling without personal names or internal API-key details
+- Removed the separate optional-AI FAQ entry because the opt-in/privacy answer already covers it and the extra question felt internally motivated rather than buyer-led
+
 ## App v2.0.2: Panel flat row polish — June 2, 2026
 **App source + site release metadata**
 - Flattened the native panel's lower half into the same row language as the listening-mode controls: `AI Auto-EQ`, `Launch at Login`, update, license, buy, and quit actions now sit under consistent `SOUND` / `GENERAL` section labels without permanent footer boxes, the `Sound Profile` wave card remains a recessed data display, and the Sound-to-General divider spacing is tightened to match the rest of the panel rhythm

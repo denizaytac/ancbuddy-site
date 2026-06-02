@@ -21,30 +21,23 @@ export function Footer() {
                 maxWidth: "36ch",
               }}
             >
-              A tiny menu‑bar app for Bose QC Ultra. Made in Berlin by Deniz Aytaç.
+              A tiny menu‑bar app for Bose QC Ultra, built for quick Mac control.
             </p>
           </div>
           <div className="footer-col">
             <h5>Product</h5>
             <a href="#features">Features</a>
-            <a href="#how">How it works</a>
+            <a href="#devices">Devices</a>
             <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
           </div>
           <div className="footer-col">
             <h5>Resources</h5>
-            <a href="https://github.com/denizaytac/ancbuddy-site">GitHub</a>
             <a href="https://github.com/denizaytac/ancbuddy-site/blob/main/CHANGELOG.md">
               Changelog
             </a>
             <button onClick={() => openTrial(true)}>Free trial</button>
             <a href="mailto:denoaytac62@gmail.com">Contact</a>
-          </div>
-          <div className="footer-col">
-            <h5>Legal</h5>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Refund policy</a>
           </div>
         </div>
 
@@ -55,8 +48,8 @@ export function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 Deniz Aytaç · ANCBuddy v2.0.2</span>
-          <span>Built with Swift · Hosted on GitHub Pages</span>
+          <span>© 2026 ANCBuddy · v2.0.2</span>
+          <span>Independent utility for compatible Bose hardware</span>
         </div>
       </div>
     </footer>

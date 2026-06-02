@@ -35,20 +35,21 @@ function Feature({ span, icon, title, body, children }: FeatureProps) {
 export function Features() {
   return (
     <section id="features" className="section container">
-      <Eyebrow>Features</Eyebrow>
+      <Eyebrow>Product tour</Eyebrow>
       <SectionTitle>
-        Built like the rest of <em>your menu bar.</em>
+        One place for <em>modes, sound, and status.</em>
       </SectionTitle>
       <SectionLede>
-        Native Swift. No Electron. Direct headphone control, optional AI Auto-EQ, one icon.
+        ANCBuddy puts the Bose controls you actually use in your Mac menu bar, ready while
+        you work, listen, and move between calls.
       </SectionLede>
 
       <div className="features">
         <Feature
           span={6}
           icon="menubar"
-          title="Menu‑bar native"
-          body="A 22×22 icon that lives where it belongs — between your Wi‑Fi and your battery. Drag it anywhere. Hide it with ⌘‑drag. It behaves."
+          title="Mac menu-bar control"
+          body="A quiet menu-bar icon opens the controls you need: headphone status, battery, listening modes, sound profile, and app actions."
         >
           <div className="bytes">
             <span className="byte hi">QUIET</span>
@@ -59,54 +60,37 @@ export function Features() {
 
         <Feature
           span={6}
-          icon="command"
-          title="Global hotkeys"
-          body="Triple‑bind ⌃⌥1, ⌃⌥2, ⌃⌥3 to switch modes from anywhere — from a video call, from Logic Pro, from full‑screen Xcode."
+          icon="bolt"
+          title="AI Auto-EQ sound profiles"
+          body="When you turn it on, ANCBuddy reads the current track and applies a visible Bass/Mid/Treble profile shaped for the song."
         >
-          <div className="kbd-row">
-            <span className="kbd">⌃</span>
-            <span className="kbd">⌥</span>
-            <span className="kbd">1</span>
-            <span style={{ color: "var(--fg-4)", alignSelf: "center", margin: "0 6px" }}>
-              → Quiet
-            </span>
+          <div className="eq-strip">
+            <span>Bass +4</span>
+            <span>Mid +1</span>
+            <span>Treble +3</span>
           </div>
         </Feature>
 
         <Feature
           span={4}
-          icon="bolt"
-          title="< 200 ms switch"
-          body="Direct BLE write to the headphones — no cloud round‑trip, no app launch, no spinner."
+          icon="headphones"
+          title="One-click modes"
+          body="Switch Quiet, Aware, and Immersion from the Mac menu bar, with immediate feedback while the headphones confirm the change."
+        />
+
+        <Feature
+          span={4}
+          icon="device"
+          title="Built for daily use"
+          body="Launch at Login and Check for Updates live inside the panel, so ANCBuddy behaves like the small Mac utility it is."
         />
 
         <Feature
           span={4}
           icon="shield"
-          title="Local & private"
-          body="No analytics, no accounts. Noise controls stay direct over BLE; AI Auto-EQ sends the current track to ANCBuddy's relay only when you turn it on."
+          title="Private by default"
+          body="Mode control is direct and local. AI Auto-EQ is opt-in and sends track metadata to ANCBuddy's relay only while the feature is enabled."
         />
-
-        <Feature
-          span={4}
-          icon="code"
-          title="Reverse‑engineered BMAP"
-          body="The exact Bose protocol the iOS app uses, lifted from the APK and re‑implemented in 1 Swift file."
-        >
-          <div className="protocol-block">
-            <div>
-              <span className="tk-key">FBlock</span> = <span className="tk-num">0x1F</span>
-            </div>
-            <div>
-              <span className="tk-key">Function</span> = <span className="tk-num">0x03</span>{" "}
-              <span style={{ color: "var(--fg-4)" }}>// SET</span>
-            </div>
-            <div>
-              <span className="tk-key">Mode</span> = <span className="tk-num">0x00</span>{" "}
-              <span style={{ color: "var(--fg-4)" }}>// Quiet</span>
-            </div>
-          </div>
-        </Feature>
       </div>
     </section>
   );

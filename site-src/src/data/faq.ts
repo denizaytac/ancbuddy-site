@@ -10,27 +10,39 @@ export const FAQ_ITEMS: FAQItem[] = [
   },
   {
     q: "Which Macs and macOS versions are supported?",
-    a: "macOS 12 Monterey and newer, Apple Silicon and Intel. The app is signed and notarized by Apple — no security warnings on first launch.",
+    a: "macOS 12 Monterey and newer, Apple Silicon and Intel Macs are supported. ANCBuddy is signed and notarized for normal macOS installation.",
   },
   {
-    q: "How does it talk to the headphones?",
-    a: "Direct Bluetooth Low Energy. ANCBuddy uses the Bose BMAP protocol (the same one the official iOS/Android app uses) over the FEBE service UUID. No cloud round‑trip, no Bose Music app required.",
+    q: "Do I need the Bose Music app open?",
+    a: "No. ANCBuddy talks directly to your paired Bose QC Ultra headphones over Bluetooth for mode control, so the phone app does not need to be open.",
   },
   {
     q: "How does AI Auto‑EQ handle my music data?",
-    a: "AI Auto‑EQ is opt‑in. When enabled, ANCBuddy sends the current artist, title, and album to ANCBuddy's AI relay to generate a 3‑band EQ profile. The relay keeps Deniz's AI key server‑side, caches results by a hashed track key, and does not store raw song names.",
+    a: "AI Auto‑EQ is opt‑in. When enabled, ANCBuddy sends the current artist, title, and album to the AI service only to generate a 3‑band EQ profile for that track. Results are cached by a hashed track key, and raw song names are not stored.",
   },
   {
     q: "What's the difference between Quiet, Aware, and Immersion?",
-    a: "Quiet = full noise cancellation. Aware = transparency mode (lets ambient sound through). Immersion = Bose's spatial audio mode. ANCBuddy maps each to BMAP mode index 0/1/2.",
+    a: "Quiet is full noise cancellation. Aware lets more of your surroundings through. Immersion is Bose's wider, more spacious listening mode.",
+  },
+  {
+    q: "How do updates work?",
+    a: "ANCBuddy includes a Check for Updates action in the panel and can check for updates in the background. Installs are user-confirmed.",
+  },
+  {
+    q: "Can it launch at login?",
+    a: "Yes. The panel includes a Launch at Login switch, so you can decide whether ANCBuddy starts automatically with your Mac.",
+  },
+  {
+    q: "I bought BoseControl. Do I need to buy again?",
+    a: "No. The ANCBuddy 2.x app migrates existing BoseControl license and trial data automatically when it starts.",
   },
   {
     q: "Will it work with my Sony / Sennheiser / AirPods?",
-    a: "No. ANCBuddy speaks Bose's proprietary BMAP. Other manufacturers use their own protocols. (If there's enough demand, multi‑brand support might come later.)",
+    a: "No. ANCBuddy is built specifically for Bose QC Ultra headphones and earbuds. Other manufacturers use different control systems.",
   },
   {
     q: "Is there a free trial?",
-    a: "Yes. Drop your email and get the same DMG with a 14‑day timer. If you like it, $9.99 unlocks it permanently.",
+    a: "Yes. The trial runs for 14 days. If you like it, $9.99 unlocks ANCBuddy permanently.",
   },
   {
     q: "Refunds?",

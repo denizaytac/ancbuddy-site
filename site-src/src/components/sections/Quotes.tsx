@@ -28,11 +28,9 @@ export function Quotes() {
           className="quote-card reveal"
           style={{ "--reveal-delay": "200ms" } as React.CSSProperties}
         >
-          <p>
-            "Worked first try with my QC Ultra Earbuds 2nd Gen. The hotkeys made me fire my phone."
-          </p>
+          <p>"Worked first try with my QC Ultra Earbuds 2nd Gen."</p>
           <div className="quote-meta">
-            <span>tofu79</span>
+            <span>QC Ultra Earbuds user</span>
             <span className="quote-meta-dot" />
             <span>r/bose</span>
           </div>

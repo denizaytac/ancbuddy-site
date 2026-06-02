@@ -1,12 +1,11 @@
 import { Hero } from "./components/Hero";
 import { Nav } from "./components/Nav";
 import { TrialDialog } from "./components/TrialDialog";
-import { TrialDialogProvider } from "./hooks/useTrialDialog";
+import { TrialDialogProvider } from "./hooks/TrialDialogProvider";
 import { useReveal } from "./hooks/useReveal";
 import { Problem } from "./components/sections/Problem";
 import { Features } from "./components/sections/Features";
 import { Quotes } from "./components/sections/Quotes";
-import { How } from "./components/sections/How";
 import { Devices } from "./components/sections/Devices";
 import { Pricing } from "./components/sections/Pricing";
 import { FAQ } from "./components/sections/FAQ";
@@ -28,7 +27,6 @@ function AppShell() {
         <Problem />
         <Features />
         <Quotes />
-        <How />
         <Devices />
         <Pricing />
         <FAQ />

@@ -3,33 +3,90 @@ import { Icon } from "./Icon";
 import { MODES } from "@/data/modes";
 import { useTrialDialog } from "@/hooks/useTrialDialog";
 
+interface HeroScene {
+  id: string;
+  mode: number;
+  pendingMode?: number;
+  status: string;
+  battery: string;
+  soundBadge: string;
+  soundText: string;
+  soundDetail: string;
+  track: string;
+  autoEQ: boolean;
+  levels: [number, number, number];
+}
+
+const HERO_SCENES: HeroScene[] = [
+  {
+    id: "aware",
+    mode: 1,
+    status: "Connected",
+    battery: "82%",
+    soundBadge: "READY",
+    soundText: "Bass 0 · Mid 0 · Treble 0",
+    soundDetail: "Ready for music",
+    track: "",
+    autoEQ: false,
+    levels: [0, 0, 0],
+  },
+  {
+    id: "analyzing",
+    mode: 1,
+    status: "Connected",
+    battery: "82%",
+    soundBadge: "UPDATING",
+    soundText: "Choosing sound profile",
+    soundDetail: "Current track",
+    track: "The Less I Know The Better · Tame Impala",
+    autoEQ: true,
+    levels: [4, 1, 3],
+  },
+  {
+    id: "switching",
+    mode: 1,
+    pendingMode: 2,
+    status: "Connecting…",
+    battery: "82%",
+    soundBadge: "AI TUNED",
+    soundText: "Bass +4 · Mid +1 · Treble +3",
+    soundDetail: "Current track",
+    track: "The Less I Know The Better · Tame Impala",
+    autoEQ: true,
+    levels: [4, 1, 3],
+  },
+];
+
 export function Hero() {
-  const [mode, setMode] = useState(0);
+  const [sceneIndex, setSceneIndex] = useState(0);
+  const [manualMode, setManualMode] = useState<number | null>(null);
   const [open, setOpen] = useState(true);
   const [autoplay, setAutoplay] = useState(true);
   const { setOpen: openTrial } = useTrialDialog();
+  const scene = HERO_SCENES[sceneIndex];
+  const visibleMode = scene.pendingMode ?? manualMode ?? scene.mode;
 
   useEffect(() => {
     if (!autoplay) return;
-    const t = setInterval(() => setMode((m) => (m + 1) % 3), 3200);
+    const t = setInterval(() => setSceneIndex((i) => (i + 1) % HERO_SCENES.length), 3200);
     return () => clearInterval(t);
   }, [autoplay]);
 
   const pickMode = (i: number) => {
     setAutoplay(false);
-    setMode(i);
+    setManualMode(i === 2 ? null : i);
+    setSceneIndex(i === 2 ? 2 : 0);
   };
 
   const bars = useMemo(() => {
-    return Array.from({ length: 28 }, (_, i) => {
-      const heights = [
-        0.18 + Math.sin(i * 0.6) * 0.08,
-        0.3 + Math.abs(Math.sin(i * 0.9)) * 0.6,
-        0.5 + Math.abs(Math.sin(i * 0.4)) * 0.5,
-      ];
-      return heights[mode];
+    return Array.from({ length: 30 }, (_, i) => {
+      const band = Math.min(2, Math.floor((i / 30) * 3));
+      const normalized = (scene.levels[band] + 10) / 20;
+      const crown = 0.72 + 0.22 * Math.sin((i % 10) * 0.32);
+      const motion = scene.id === "analyzing" ? 0.12 * Math.sin(i * 0.8) : 0;
+      return Math.max(0.12, Math.min(0.92, (0.18 + normalized * 0.66) * crown + motion));
     });
-  }, [mode]);
+  }, [scene]);
 
   return (
     <section className="hero container">
@@ -44,38 +101,38 @@ export function Hero() {
         />
         <span className="pill">
           <span className="pill-dot" />
-          <span>v2.0.2 · Now on macOS</span>
+          <span>Bose QC Ultra + AI Auto-EQ</span>
         </span>
         <h1>
           Bose QC Ultra control,
           <br />
-          <em>without the noise.</em>
+          <em>right from your Mac.</em>
         </h1>
         <p className="hero-sub">
-          A tiny menu‑bar app that switches Quiet, Aware, and Immersion modes on your Bose
-          QuietComfort Ultra headphones — no Bose Music app, no clicks lost to a phone.
+          Switch Quiet, Aware, and Immersion without reaching for your phone. Turn on AI
+          Auto-EQ when you want a track-aware sound profile with more depth.
         </p>
         <div className="hero-cta">
           <a className="btn btn-accent" href="#pricing">
             <Icon name="bolt" size={15} />
-            Get ANCBuddy — $9.99
+            Buy ANCBuddy — $9.99
           </a>
           <button className="btn btn-ghost" onClick={() => openTrial(true)}>
-            Try free
+            Try free for 14 days
             <Icon name="arrow" size={15} />
           </button>
         </div>
         <div className="hero-meta">
           <span>
-            <Icon name="check" size={12} /> One‑time purchase
+            <Icon name="check" size={12} /> No Bose Music app needed
           </span>
           <span className="hero-meta-dot" />
           <span>
-            <Icon name="check" size={12} /> Notarized by Apple
+            <Icon name="check" size={12} /> QC Ultra Headphones + Earbuds
           </span>
           <span className="hero-meta-dot" />
           <span>
-            <Icon name="check" size={12} /> macOS 12+
+            <Icon name="check" size={12} /> Buy once, no subscription
           </span>
         </div>
       </div>
@@ -112,15 +169,17 @@ export function Hero() {
                 <div className="dd-header">
                   <div className="dd-header-row">
                     <div className="dd-device">
-                      <span className="dd-device-dot" />
                       QC Ultra Headphones
                     </div>
                     <div className="dd-battery">
                       <Icon name="battery" size={13} style={{ verticalAlign: "-2px", marginRight: 4 }} />
-                      82%
+                      {scene.battery}
                     </div>
                   </div>
-                  <div className="dd-meta">Connected via Bluetooth</div>
+                  <div className="dd-status-line">
+                    <span>{scene.status}</span>
+                    {scene.status.includes("Connecting") && <span className="mini-spinner" />}
+                  </div>
                 </div>
 
                 <div className="dd-section-label">Listening Mode</div>
@@ -128,7 +187,11 @@ export function Hero() {
                 {MODES.map((m, i) => (
                   <button
                     key={m.id}
-                    className={"dd-mode" + (mode === i ? " is-active" : "")}
+                    className={
+                      "dd-mode" +
+                      (visibleMode === i ? " is-active" : "") +
+                      (scene.pendingMode === i ? " is-pending" : "")
+                    }
                     onClick={() => pickMode(i)}
                   >
                     <span className="dd-mode-icon">
@@ -138,52 +201,74 @@ export function Hero() {
                       <div className="dd-mode-name">{m.name}</div>
                       <div className="dd-mode-desc">{m.desc}</div>
                     </span>
-                    <span className="dd-mode-shortcut">{m.shortcut}</span>
+                    {scene.pendingMode === i && <span className="mini-spinner light" />}
                   </button>
                 ))}
 
                 <div className="dd-divider" />
 
-                <button className="dd-row">
-                  <Icon name="keyboard" size={13} />
-                  Hotkeys…
+                <div className="dd-section-label">Sound</div>
+                <button className="dd-toggle-row" onClick={() => setSceneIndex(1)}>
+                  <span className="dd-toggle-icon">
+                    <Icon name="bolt" size={13} />
+                  </span>
+                  <span>
+                    <span className="dd-toggle-title">AI Auto-EQ</span>
+                    <span className="dd-toggle-detail">{scene.autoEQ ? "On" : "Off"}</span>
+                  </span>
+                  <span className={"mock-switch" + (scene.autoEQ ? " is-on" : "")} />
+                </button>
+                <div className="dd-sound-card">
+                  <div className="dd-sound-top">
+                    <span>{scene.soundBadge}</span>
+                    <span>Sound Profile</span>
+                  </div>
+                  <div className="dd-wave">
+                    {bars.map((h, i) => (
+                      <span
+                        key={i + "-" + scene.id}
+                        className="wave-bar"
+                        style={
+                          {
+                            "--bar-h": h * 100 + "%",
+                            height: h * 100 + "%",
+                            animationDelay: i * 28 + "ms",
+                          } as React.CSSProperties
+                        }
+                      />
+                    ))}
+                  </div>
+                  <div className="dd-sound-values">{scene.soundText}</div>
+                  {scene.track && (
+                    <div className="dd-track">
+                      <span>{scene.soundDetail}</span>
+                      <strong>{scene.track}</strong>
+                    </div>
+                  )}
+                </div>
+
+                <div className="dd-divider" />
+                <div className="dd-section-label">General</div>
+                <button className="dd-toggle-row">
+                  <span className="dd-toggle-icon">
+                    <Icon name="arrow" size={13} />
+                  </span>
+                  <span>
+                    <span className="dd-toggle-title">Launch at Login</span>
+                    <span className="dd-toggle-detail">On</span>
+                  </span>
+                  <span className="mock-switch is-on" />
                 </button>
                 <button className="dd-row">
-                  <Icon name="command" size={13} />
-                  Preferences…
+                  <Icon name="arrow" size={13} />
+                  Check for Updates…
                 </button>
                 <button className="dd-row">
                   <Icon name="x-mark" size={13} />
-                  Quit ANCBuddy
+                  Quit
                 </button>
               </div>
             )}
-
-            <div className="wave-card">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--accent)" }}>{MODES[mode].name.toUpperCase()}</span>
-                <span>Current EQ</span>
-              </div>
-              <div className="wave">
-                {bars.map((h, i) => (
-                  <span
-                    key={i + "-" + mode}
-                    className="wave-bar"
-                    style={
-                      {
-                        "--bar-h": h * 100 + "%",
-                        height: h * 100 + "%",
-                        animationDelay: i * 30 + "ms",
-                      } as React.CSSProperties
-                    }
-                  />
-                ))}
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", color: "var(--fg-4)" }}>
-                <span>Waiting for music</span>
-                <span>No EQ yet</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>

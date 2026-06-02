@@ -24,9 +24,6 @@ export function Nav() {
           <a className="nav-link" href="#features">
             Features
           </a>
-          <a className="nav-link" href="#how">
-            How
-          </a>
           <a className="nav-link" href="#devices">
             Devices
           </a>
