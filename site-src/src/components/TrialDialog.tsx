@@ -16,7 +16,41 @@ const DMG_URL =
   "https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.2/ANCBuddy-2.0.2.dmg";
 const SUBMIT_TIMEOUT_MS = 8000;
 
-type Status = "idle" | "submitting" | "success" | "fallback";
+type Status = "idle" | "submitting" | "success";
+
+async function notifyTrialSignupByEmail(name: string, email: string) {
+  if (!WEB3FORMS_KEY) {
+    console.warn("Trial signup: Web3Forms key is not configured");
+    return;
+  }
+
+  try {
+    const res = await fetch(WEB3FORMS_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        name,
+        email,
+        subject: "New ANCBuddy Trial Signup",
+        from_name: "ANCBuddy Trial Form",
+        botcheck: "",
+      }),
+      keepalive: true,
+    });
+
+    if (!res.ok) throw new Error(`Web3Forms HTTP ${res.status}`);
+    const json = (await res.json()) as { success?: boolean; message?: string };
+    if (!json.success) {
+      throw new Error(json.message ?? "Web3Forms rejected submission");
+    }
+  } catch (error) {
+    console.warn("Trial signup: Web3Forms notification failed", error);
+  }
+}
 
 export function TrialDialog() {
   const { open, setOpen } = useTrialDialog();
@@ -26,7 +60,7 @@ export function TrialDialog() {
     setOpen(next);
     if (!next) {
       // Reset to the form view after the close animation so users see
-      // the normal dialog when they reopen, not a stale fallback state.
+      // the normal dialog when they reopen, not a stale success state.
       window.setTimeout(() => setStatus("idle"), 300);
     }
   }
@@ -44,6 +78,7 @@ export function TrialDialog() {
     if (!name || !email) return;
 
     setStatus("submitting");
+    void notifyTrialSignupByEmail(name, email);
 
     const controller = new AbortController();
     const timeoutId = window.setTimeout(
@@ -51,67 +86,33 @@ export function TrialDialog() {
       SUBMIT_TIMEOUT_MS,
     );
 
-    const web3formsPromise = WEB3FORMS_KEY
-      ? fetch(WEB3FORMS_ENDPOINT, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            access_key: WEB3FORMS_KEY,
-            name,
-            email,
-            subject: "New ANCBuddy Trial Signup",
-            from_name: "ANCBuddy Trial Form",
-            botcheck: "",
-          }),
-          signal: controller.signal,
-        }).then(async (res) => {
-          if (!res.ok) throw new Error(`Web3Forms HTTP ${res.status}`);
-          const json = (await res.json()) as { success?: boolean; message?: string };
-          if (!json.success) throw new Error(json.message ?? "Web3Forms rejected submission");
-          return json;
+    try {
+      if (!supabase) throw new Error("Supabase client is not configured");
+
+      await supabase
+        .from("trial_signups")
+        .insert({
+          name,
+          email,
+          user_agent:
+            typeof navigator !== "undefined" ? navigator.userAgent : null,
         })
-      : Promise.reject(new Error("VITE_WEB3FORMS_KEY is not set"));
-
-    const supabasePromise = supabase
-      ? supabase
-          .from("trial_signups")
-          .insert({
-            name,
-            email,
-            user_agent:
-              typeof navigator !== "undefined" ? navigator.userAgent : null,
-          })
-          .abortSignal(controller.signal)
-          .then((res) => {
-            if (res.error) throw res.error;
-            return res;
-          })
-      : Promise.reject(new Error("Supabase client is not configured"));
-
-    const [web3formsResult, supabaseResult] = await Promise.allSettled([
-      web3formsPromise,
-      supabasePromise,
-    ]);
-    window.clearTimeout(timeoutId);
-
-    if (supabaseResult.status === "rejected") {
-      console.warn("Trial signup: Supabase insert failed", supabaseResult.reason);
+        .abortSignal(controller.signal)
+        .then((res) => {
+          if (res.error) throw res.error;
+          return res;
+        });
+    } catch (error) {
+      console.warn("Trial signup: Supabase insert failed; allowing direct download", error);
+    } finally {
+      window.clearTimeout(timeoutId);
     }
 
-    if (web3formsResult.status === "fulfilled") {
-      setStatus("success");
-      // Trigger the DMG download. In most browsers this starts the
-      // download without navigating away, so we keep the dialog open
-      // showing a thank-you + a manual fallback link.
-      window.location.href = DMG_URL;
-      return;
-    }
-
-    console.warn("Trial signup: Web3Forms submit failed", web3formsResult.reason);
-    setStatus("fallback");
+    setStatus("success");
+    // Trigger the DMG download. In most browsers this starts the
+    // download without navigating away, so we keep the dialog open
+    // showing a confirmation + a manual download link.
+    window.location.href = DMG_URL;
   }
 
   const isSubmitting = status === "submitting";
@@ -125,35 +126,7 @@ export function TrialDialog() {
               <DialogTitle>Download started — check your Mac</DialogTitle>
               <DialogDescription>
                 If the download didn't begin automatically, click the button
-                below. We'll also email you the link as a backup.
-              </DialogDescription>
-            </DialogHeader>
-
-            <a
-              href={DMG_URL}
-              className="btn btn-accent"
-              style={{
-                width: "100%",
-                justifyContent: "center",
-                marginTop: 16,
-              }}
-              onClick={() => setOpen(false)}
-            >
-              <Icon name="bolt" size={15} />
-              Download ANCBuddy
-            </a>
-
-            <p className="trial-fineprint">
-              14‑day trial · then $9.99 to keep using.
-            </p>
-          </>
-        ) : status === "fallback" ? (
-          <>
-            <DialogHeader>
-              <DialogTitle>Email service is hiccuping</DialogTitle>
-              <DialogDescription>
-                We couldn't send the email right now, but here's your direct
-                download — grab it and you're set.
+                below to grab the DMG directly.
               </DialogDescription>
             </DialogHeader>
 
@@ -180,7 +153,7 @@ export function TrialDialog() {
             <DialogHeader>
               <DialogTitle>Try ANCBuddy free for 14 days</DialogTitle>
               <DialogDescription>
-                Drop your email and we'll send you the DMG. No spam —
+                Drop your details to start the DMG download. No spam —
                 unsubscribe anytime.
               </DialogDescription>
             </DialogHeader>
@@ -236,7 +209,7 @@ export function TrialDialog() {
                 disabled={isSubmitting}
               >
                 <Icon name="bolt" size={15} />
-                {isSubmitting ? "Sending…" : "Get the download"}
+                {isSubmitting ? "Starting…" : "Get the download"}
               </button>
             </form>
 
