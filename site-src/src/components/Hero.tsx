@@ -94,8 +94,7 @@ export function Hero() {
         <img
           className="hero-mascot"
           src="/buddy-hero.png"
-          alt=""
-          aria-hidden="true"
+          alt="ANCBuddy mascot"
           width="1024"
           height="1024"
         />
@@ -158,7 +157,7 @@ export function Hero() {
                 onClick={() => setOpen((o) => !o)}
                 aria-label="ANCBuddy"
               >
-                <img src="/logo.png" alt="" />
+                <img src="/logo.png" alt="ANCBuddy menu-bar icon" />
               </button>
               <span style={{ fontFamily: "var(--font-mono)", fontSize: 11 }}>9:41</span>
             </div>

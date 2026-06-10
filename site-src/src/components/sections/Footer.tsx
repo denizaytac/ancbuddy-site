@@ -33,9 +33,7 @@ export function Footer() {
           </div>
           <div className="footer-col">
             <h5>Resources</h5>
-            <a href="https://github.com/denizaytac/ancbuddy-site/blob/main/CHANGELOG.md">
-              Changelog
-            </a>
+            <a href="/changelog.html">Changelog</a>
             <button onClick={() => openTrial(true)}>Free trial</button>
             <a href="mailto:denoaytac62@gmail.com">Contact</a>
           </div>
