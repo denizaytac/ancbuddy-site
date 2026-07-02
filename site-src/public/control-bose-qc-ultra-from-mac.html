@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Yes, you can control Bose QC Ultra noise cancellation from a Mac. This guide covers what macOS supports natively, on-headphone controls, and ANCBuddy, a menu-bar app for switching Quiet, Aware, and Immersion modes." />
+  <meta name="theme-color" content="#0a0a0c" />
+  <link rel="canonical" href="https://ancbuddy.com/control-bose-qc-ultra-from-mac.html" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <title>How to Control Bose QC Ultra From Your Mac (Noise Cancellation, Modes, Battery)</title>
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://ancbuddy.com/control-bose-qc-ultra-from-mac.html" />
+  <meta property="og:title" content="How to Control Bose QC Ultra From Your Mac" />
+  <meta property="og:description" content="What macOS can and can't do with Bose QC Ultra, and how to switch noise cancelling modes without reaching for your phone." />
+  <meta property="og:image" content="https://ancbuddy.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How to Control Bose QC Ultra From Your Mac",
+    "description": "What macOS supports natively for Bose QC Ultra headphones and earbuds, and how to control noise cancelling modes, battery status, and EQ from the Mac menu bar.",
+    "datePublished": "2026-07-02",
+    "dateModified": "2026-07-02",
+    "mainEntityOfPage": "https://ancbuddy.com/control-bose-qc-ultra-from-mac.html",
+    "author": {
+      "@type": "Organization",
+      "name": "ANCBuddy",
+      "url": "https://ancbuddy.com/"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can I control Bose QC Ultra noise cancellation from my Mac?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. macOS itself only handles audio playback and Bluetooth pairing, but a third-party Mac app such as ANCBuddy can switch the QC Ultra's Quiet, Aware, and Immersion modes directly from the menu bar, without the phone app."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there an official Bose app for Mac?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The official Bose app is available for iOS and Android only. Bose does not offer a native macOS app for the QC Ultra line."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need my iPhone or the Bose app to switch listening modes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. ANCBuddy talks to the paired QC Ultra directly over Bluetooth from the Mac, so the Bose phone app does not need to be open or installed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does this work with Bose QC Ultra Earbuds?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. ANCBuddy supports Bose QC Ultra Headphones Gen 1 and Gen 2 as well as QC Ultra Earbuds 2nd Gen, on macOS 12 or newer (Apple Silicon and Intel)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I see the QC Ultra battery level on my Mac?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "macOS shows a basic Bluetooth battery indicator for some devices, but it is unreliable for the QC Ultra. ANCBuddy shows battery and connection status for the headphones in the menu bar."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+
+      --accent: #a78bfa;
+      --accent-2: #c4b5fd;
+      --accent-glow: rgba(167, 139, 250, 0.28);
+
+      --bg: #0a0a0c;
+      --bg-2: #0f0f12;
+      --surface: rgba(255, 255, 255, 0.03);
+      --surface-hi: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hi: rgba(255, 255, 255, 0.14);
+
+      --fg: #f5f5f7;
+      --fg-2: #c8c8d0;
+      --fg-3: #8b8b95;
+
+      --radius-sm: 8px;
+      --radius: 14px;
+      --radius-lg: 22px;
+
+      --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+      --font-serif: "Instrument Serif", Georgia, serif;
+
+      --pad-x: clamp(20px, 5vw, 64px);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+      font-feature-settings: "ss01", "cv11";
+      letter-spacing: -0.011em;
+    }
+    ::selection { background: var(--accent); color: #0a0a0c; }
+    a { color: inherit; text-decoration: none; }
+
+    .page-bg {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(1100px 700px at 50% -10%, var(--accent-glow), transparent 60%),
+        radial-gradient(800px 600px at 90% 30%, rgba(167, 139, 250, 0.08), transparent 70%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    }
+
+    /* Nav */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      padding: 14px var(--pad-x);
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .nav-inner {
+      pointer-events: auto;
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 8px 8px 18px;
+      background: color-mix(in oklch, var(--bg) 70%, transparent);
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 8px;
+      font-weight: 600; font-size: 15px; letter-spacing: -0.02em;
+      margin-right: 14px;
+    }
+    .nav-logo {
+      width: 26px; height: 26px; border-radius: 7px; display: block;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .nav-links { display: flex; gap: 2px; }
+    .nav-link {
+      padding: 7px 12px; font-size: 13.5px; color: var(--fg-3);
+      border-radius: 999px; transition: color .2s, background .2s;
+    }
+    .nav-link:hover { color: var(--fg); background: var(--surface-hi); }
+    .nav-cta {
+      padding: 8px 16px;
+      background: var(--fg); color: var(--bg);
+      border-radius: 999px;
+      font-size: 13.5px; font-weight: 500;
+      white-space: nowrap; flex-shrink: 0;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,255,255,0.15); }
+    @media (max-width: 720px) {
+      .nav-links { display: none; }
+      .nav { padding: 10px 12px; }
+      .nav-inner { padding: 6px 6px 6px 14px; gap: 6px; width: 100%; justify-content: space-between; }
+      .nav-brand { margin-right: 0; font-size: 14px; }
+      .nav-logo { width: 22px; height: 22px; }
+    }
+
+    /* Article layout */
+    main {
+      width: min(820px, calc(100% - 2 * var(--pad-x)));
+      margin: 0 auto;
+      padding: clamp(32px, 6vw, 72px) 0 clamp(64px, 10vw, 120px);
+    }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-bottom: 18px;
+    }
+    .eyebrow::before {
+      content: ""; display: inline-block;
+      width: 22px; height: 1px; background: var(--accent);
+    }
+    h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.02;
+      margin: 0 0 20px;
+      text-wrap: balance;
+    }
+    h1 em, h2 em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--accent-2);
+      letter-spacing: -0.02em;
+    }
+    .updated {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--fg-3);
+      margin: 0 0 28px;
+    }
+    .lead {
+      font-size: clamp(17px, 1.8vw, 20px);
+      line-height: 1.55;
+      color: var(--fg-2);
+      text-wrap: pretty;
+      margin: 0 0 8px;
+    }
+    .lead strong, p strong, li strong { color: var(--fg); font-weight: 600; }
+    h2 {
+      font-size: clamp(26px, 3.6vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin: clamp(48px, 7vw, 72px) 0 14px;
+      text-wrap: balance;
+    }
+    h3 { font-size: 17px; font-weight: 500; letter-spacing: -0.015em; margin: 0; }
+    p, li {
+      color: var(--fg-2);
+      font-size: 16px;
+      line-height: 1.7;
+      text-wrap: pretty;
+    }
+    p { margin: 0 0 14px; }
+    ul, ol { margin: 0 0 14px; padding-left: 1.25rem; }
+    li + li { margin-top: 8px; }
+    li::marker { color: var(--fg-3); }
+    a.inline { color: var(--accent-2); }
+    a.inline:hover { text-decoration: underline; }
+
+    /* Table card */
+    .table-card {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 20px 0 8px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      color: var(--fg-2);
+      vertical-align: top;
+      border-top: 1px solid var(--border);
+    }
+    thead th {
+      border-top: 0;
+      background: var(--surface-hi);
+      color: var(--fg);
+      font-weight: 500;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    td:first-child { color: var(--fg); }
+    .yes { color: var(--accent-2); }
+    .no { color: var(--fg-3); }
+    @media (max-width: 600px) {
+      .table-card { overflow-x: auto; }
+      table { min-width: 520px; }
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-size: 14.5px; font-weight: 500;
+      letter-spacing: -0.01em;
+      transition: transform .25s, box-shadow .25s, background .25s;
+      white-space: nowrap;
+      margin-top: 6px;
+    }
+    .btn-accent {
+      background: linear-gradient(180deg, var(--accent), #7c3aed);
+      color: #0a0a0c;
+      box-shadow: 0 1px 0 rgba(255,255,255,.3) inset, 0 10px 30px var(--accent-glow);
+    }
+    .btn-accent:hover { transform: translateY(-2px); box-shadow: 0 1px 0 rgba(255,255,255,.3) inset, 0 16px 50px var(--accent-glow); }
+
+    /* FAQ rows */
+    .faq-item {
+      border-top: 1px solid var(--border);
+      padding: 20px 0;
+    }
+    .faq-item:last-of-type { border-bottom: 1px solid var(--border); }
+    .faq-item p { margin: 8px 0 0; font-size: 15px; color: var(--fg-3); }
+
+    /* Disclaimer */
+    .note {
+      margin-top: clamp(48px, 7vw, 72px);
+      padding: 18px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      font-size: 13px;
+      color: var(--fg-3);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="/">
+        <img class="nav-logo" src="/logo.png" alt="ANCBuddy" />
+        ANCBuddy
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="/#features">Features</a>
+        <a class="nav-link" href="/#devices">Devices</a>
+        <a class="nav-link" href="/#pricing">Pricing</a>
+        <a class="nav-link" href="/changelog.html">Changelog</a>
+      </div>
+      <a class="nav-cta" href="/#pricing">Get ANCBuddy</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="eyebrow">Guide</div>
+    <h1>Bose QC Ultra control, <em>right from your Mac.</em></h1>
+    <p class="updated">Updated July 2, 2026 · QC Ultra Headphones (Gen 1 &amp; 2) · QC Ultra Earbuds (2nd Gen)</p>
+
+    <p class="lead"><strong>Short answer: yes, you can control Bose QC Ultra noise cancellation from a Mac</strong> — but not with anything Bose ships. The official Bose app exists only for iOS and Android, and macOS on its own can't switch listening modes. Your options are the buttons on the headphones themselves, or a third-party Mac app like <a class="inline" href="/">ANCBuddy</a> that controls the QC Ultra directly over Bluetooth.</p>
+
+    <h2>What macOS can and can't do <em>natively</em></h2>
+    <p>Paired to a Mac, the QC Ultra works as a normal Bluetooth headset. That covers less than most people expect:</p>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr><th>Task</th><th>macOS natively</th><th>With ANCBuddy</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pair / connect, audio in &amp; out, volume</td><td class="yes">Yes</td><td class="yes">Yes (via macOS)</td></tr>
+          <tr><td>Switch Quiet / Aware / Immersion modes</td><td class="no">No</td><td class="yes">Yes, one click in the menu bar</td></tr>
+          <tr><td>Reliable battery status</td><td class="no">Inconsistent</td><td class="yes">Yes, shown in the panel</td></tr>
+          <tr><td>EQ / sound profile</td><td class="no">No</td><td class="yes">Yes, incl. optional AI Auto-EQ</td></tr>
+          <tr><td>Firmware updates, multipoint management</td><td class="no">No</td><td class="no">No — use the Bose phone app</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Option 1: <em>On-headphone</em> controls</h2>
+    <p>Without any software, you can cycle listening modes with the QC Ultra's own controls (press-and-hold on the earbuds, or the mode button on the headphones). It works, but you can't pick a specific mode directly, you get no visual feedback, and there's no battery or EQ control. Fine occasionally; clumsy if you switch between Quiet and Aware many times a day at your desk.</p>
+
+    <h2>Option 2: ANCBuddy — a Mac <em>menu-bar app</em> for the QC Ultra</h2>
+    <p><a class="inline" href="/">ANCBuddy</a> is a native macOS menu-bar utility built specifically for the Bose QC Ultra line. It connects to the already-paired headphones over Bluetooth — no Bose app, no phone needed — and puts the daily controls where you're already working:</p>
+    <ul>
+      <li><strong>One-click listening modes</strong> — switch Quiet (full noise cancellation), Aware (transparency), and Immersion (spatial) from the menu bar.</li>
+      <li><strong>Battery and connection status</strong> — visible at a glance.</li>
+      <li><strong>AI Auto-EQ (optional)</strong> — a track-aware 3-band EQ profile generated for the song you're playing.</li>
+      <li><strong>Small-Mac-utility behavior</strong> — Launch at Login, built-in updates, signed and notarized.</li>
+    </ul>
+    <p>ANCBuddy supports macOS 12 Monterey and newer on Apple Silicon and Intel, costs <strong>$9.99 one-time</strong> (no subscription), and has a <strong>14-day free trial</strong>.</p>
+    <a class="btn btn-accent" href="/#pricing">Try ANCBuddy free for 14 days</a>
+
+    <h2>Is there an <em>official</em> Bose app for Mac?</h2>
+    <p>No. Bose offers the Bose app for <strong>iOS and Android only</strong> — there is no native macOS app from Bose for the QC Ultra. For settings that live in the phone app (firmware updates, shortcuts, multipoint device management), keep the Bose app on your phone. For everyday mode switching, battery, and EQ while you work on the Mac, that's the gap ANCBuddy fills.</p>
+
+    <h2>Recommended <em>setup</em></h2>
+    <ol>
+      <li>Pair the QC Ultra with your Mac via System Settings → Bluetooth (and with your phone, if you use multipoint).</li>
+      <li>Install ANCBuddy for modes, battery, and EQ from the menu bar.</li>
+      <li>Keep the Bose phone app around for firmware updates and one-time configuration.</li>
+    </ol>
+
+    <h2>Questions, <em>answered.</em></h2>
+    <div class="faq-item">
+      <h3>Can I control Bose QC Ultra noise cancellation from my Mac?</h3>
+      <p>Yes. macOS alone only handles audio and pairing, but ANCBuddy switches Quiet, Aware, and Immersion directly from the Mac menu bar.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Is there an official Bose app for Mac?</h3>
+      <p>No. The official Bose app is iOS and Android only.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Do I need my iPhone or the Bose app to switch modes?</h3>
+      <p>No. ANCBuddy talks to the paired headphones directly over Bluetooth from the Mac.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Does this work with QC Ultra Earbuds?</h3>
+      <p>Yes — QC Ultra Earbuds 2nd Gen are supported, alongside QC Ultra Headphones Gen 1 and Gen 2.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can I see the battery level on my Mac?</h3>
+      <p>macOS's Bluetooth battery readout is unreliable for the QC Ultra; ANCBuddy shows battery and connection status in its panel.</p>
+    </div>
+
+    <div class="note">
+      This guide is published by the developer of ANCBuddy. ANCBuddy is an independent project and is not affiliated with, endorsed by, or sponsored by Bose Corporation. Bose, QuietComfort, and QC Ultra are trademarks of Bose Corporation, used only to describe compatible hardware.
+    </div>
+  </main>
+</body>
+</html>

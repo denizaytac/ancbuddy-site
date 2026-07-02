@@ -5,6 +5,7 @@
 ## Links
 
 - [Website](https://ancbuddy.com/)
+- [Guide: How to control Bose QC Ultra from your Mac](https://ancbuddy.com/control-bose-qc-ultra-from-mac.html)
 - [Changelog](https://ancbuddy.com/changelog.html)
 - [Checkout](https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2)
 - [Download DMG](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.2/ANCBuddy-2.0.2.dmg)

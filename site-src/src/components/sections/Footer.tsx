@@ -33,6 +33,7 @@ export function Footer() {
           </div>
           <div className="footer-col">
             <h5>Resources</h5>
+            <a href="/control-bose-qc-ultra-from-mac.html">Mac control guide</a>
             <a href="/changelog.html">Changelog</a>
             <button onClick={() => openTrial(true)}>Free trial</button>
             <a href="mailto:denoaytac62@gmail.com">Contact</a>
