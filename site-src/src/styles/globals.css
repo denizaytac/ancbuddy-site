@@ -68,7 +68,11 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
+}
 body {
   font-family: var(--font-sans);
   background: var(--bg);
@@ -78,6 +82,10 @@ body {
   overflow-x: hidden;
   font-feature-settings: "ss01", "cv11";
   letter-spacing: -0.011em;
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0 !important;
 }
 
 ::selection { background: var(--accent); color: #0a0a0c; }

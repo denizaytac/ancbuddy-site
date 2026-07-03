@@ -1,8 +1,19 @@
+import type { MouseEvent } from "react";
+import { useTrialDialog } from "@/hooks/useTrialDialog";
+
 export function Nav() {
+  const { setOpen: openTrial } = useTrialDialog();
+
+  function handleTrialClick(event: MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+    window.history.replaceState(null, "", "#trial");
+    openTrial(true);
+  }
+
   return (
     <nav className="nav">
       <div className="nav-inner">
-        <div className="nav-brand">
+        <a className="nav-brand" href="/">
           <span className="nav-mark" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
               <path
@@ -19,7 +30,7 @@ export function Nav() {
             </svg>
           </span>
           ANCBuddy
-        </div>
+        </a>
         <div className="nav-links">
           <a className="nav-link" href="#features">
             Features
@@ -27,15 +38,15 @@ export function Nav() {
           <a className="nav-link" href="#devices">
             Devices
           </a>
+          <a className="nav-link" href="/guides.html">
+            Guides
+          </a>
           <a className="nav-link" href="#pricing">
             Pricing
           </a>
-          <a className="nav-link" href="#faq">
-            FAQ
-          </a>
         </div>
-        <a className="nav-cta" href="#pricing">
-          Get ANCBuddy
+        <a className="nav-cta" href="#trial" onClick={handleTrialClick}>
+          Try 14 days for free
         </a>
       </div>
     </nav>

@@ -117,7 +117,7 @@ export function Hero() {
             Buy ANCBuddy — $9.99
           </a>
           <button className="btn btn-ghost" onClick={() => openTrial(true)}>
-            Try free for 14 days
+            Try 14 days for free
             <Icon name="arrow" size={15} />
           </button>
         </div>

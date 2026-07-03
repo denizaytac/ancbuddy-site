@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { Hero } from "./components/Hero";
 import { Nav } from "./components/Nav";
 import { TrialDialog } from "./components/TrialDialog";
 import { TrialDialogProvider } from "./hooks/TrialDialogProvider";
+import { useTrialDialog } from "./hooks/useTrialDialog";
 import { useReveal } from "./hooks/useReveal";
 import { Problem } from "./components/sections/Problem";
 import { Features } from "./components/sections/Features";
@@ -14,6 +16,19 @@ import { Footer } from "./components/sections/Footer";
 
 function AppShell() {
   useReveal();
+  const { setOpen: openTrial } = useTrialDialog();
+
+  useEffect(() => {
+    function syncTrialHash() {
+      if (window.location.hash === "#trial") {
+        openTrial(true);
+      }
+    }
+
+    syncTrialHash();
+    window.addEventListener("hashchange", syncTrialHash);
+    return () => window.removeEventListener("hashchange", syncTrialHash);
+  }, [openTrial]);
 
   return (
     <>

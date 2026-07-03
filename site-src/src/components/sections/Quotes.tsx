@@ -8,9 +8,9 @@ export function Quotes() {
             Zoom call is the killer feature."
           </p>
           <div className="quote-meta">
-            <span>Beta tester</span>
+            <span>Early beta feedback</span>
             <span className="quote-meta-dot" />
-            <span>r/bose</span>
+            <span>Source on file</span>
           </div>
         </div>
         <div
@@ -19,7 +19,7 @@ export function Quotes() {
         >
           <p>"Tiny, native, does one thing well. The kind of mac app I keep paying for."</p>
           <div className="quote-meta">
-            <span>Lemon Squeezy customer</span>
+            <span>Early customer feedback</span>
             <span className="quote-meta-dot" />
             <span>April 2026</span>
           </div>
@@ -30,9 +30,9 @@ export function Quotes() {
         >
           <p>"Worked first try with my QC Ultra Earbuds 2nd Gen."</p>
           <div className="quote-meta">
-            <span>QC Ultra Earbuds user</span>
+            <span>Earbuds tester feedback</span>
             <span className="quote-meta-dot" />
-            <span>r/bose</span>
+            <span>Source on file</span>
           </div>
         </div>
       </div>
