@@ -1,9 +1,7 @@
 import { Icon } from "../Icon";
 import { Eyebrow, SectionTitle } from "./Section";
 import { useTrialDialog } from "@/hooks/useTrialDialog";
-
-const LEMON_SQUEEZY_URL =
-  "https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2";
+import { LEMON_SQUEEZY_URL, prepareCheckoutLink } from "@/lib/attribution";
 
 export function Pricing() {
   const { setOpen: openTrial } = useTrialDialog();
@@ -46,6 +44,7 @@ export function Pricing() {
         <a
           className="btn btn-accent"
           href={LEMON_SQUEEZY_URL}
+          onClick={(event) => prepareCheckoutLink(event.currentTarget)}
           style={{ width: "100%", justifyContent: "center" }}
         >
           <Icon name="bolt" size={15} /> Buy ANCBuddy — $9.99

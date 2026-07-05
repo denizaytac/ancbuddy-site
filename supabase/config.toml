@@ -1,2 +1,5 @@
 [functions.eq-recommend]
 verify_jwt = false
+
+[functions.lemon-order-webhook]
+verify_jwt = false

@@ -9,6 +9,8 @@ const distDir = resolve(siteRoot, "dist");
 const contentDir = resolve(siteRoot, "content/pages");
 const factsPath = resolve(siteRoot, "content/product-facts.json");
 const siteUrl = "https://ancbuddy.com";
+const supabaseUrl = process.env.VITE_SUPABASE_URL ?? "";
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? "";
 
 const facts = JSON.parse(await readFile(factsPath, "utf8"));
 const requiredFields = [
@@ -221,6 +223,7 @@ function renderPage(page) {
     <aside class="note">${escapeHtml(facts.independenceDisclaimer)}</aside>
   </main>
   ${staticFooter()}
+  ${staticAttributionScript()}
 </body>
 </html>`;
 }
@@ -636,8 +639,146 @@ function render404() {
     </article>
   </main>
   ${staticFooter()}
+  ${staticAttributionScript()}
 </body>
 </html>`;
+}
+
+function staticAttributionScript() {
+  return `<script>
+(() => {
+  const SUPABASE_URL = ${JSON.stringify(supabaseUrl)};
+  const SUPABASE_ANON_KEY = ${JSON.stringify(supabaseAnonKey)};
+  const CHECKOUT_HOST = "ancbuddy.lemonsqueezy.com";
+  const DOWNLOAD_URL = ${JSON.stringify(facts.downloadUrl)};
+  const ATTRIBUTION_KEY = "ancbuddy_attribution_v1";
+  const SESSION_ID_KEY = "ancbuddy_session_id_v1";
+  const CAMPAIGN_KEYS = ["utm_source", "utm_medium", "utm_campaign"];
+
+  function pathWithSearch() {
+    return window.location.pathname + window.location.search;
+  }
+
+  function readStored() {
+    try {
+      const raw = window.sessionStorage.getItem(ATTRIBUTION_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function writeStored(value) {
+    try {
+      window.sessionStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(value));
+    } catch {
+      // Storage can be disabled; tracking must never block navigation.
+    }
+  }
+
+  function sessionId() {
+    try {
+      const existing = window.sessionStorage.getItem(SESSION_ID_KEY);
+      if (existing) return existing;
+      const next = window.crypto?.randomUUID
+        ? window.crypto.randomUUID()
+        : "anc_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2);
+      window.sessionStorage.setItem(SESSION_ID_KEY, next);
+      return next;
+    } catch {
+      return "anc_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2);
+    }
+  }
+
+  function referrerHost() {
+    if (!document.referrer) return null;
+    try {
+      const host = new URL(document.referrer).host;
+      return host === window.location.host ? null : host;
+    } catch {
+      return null;
+    }
+  }
+
+  function attribution() {
+    const params = new URLSearchParams(window.location.search);
+    const stored = readStored();
+    const next = {
+      ...stored,
+      landing_path: stored.landing_path || pathWithSearch(),
+      referrer_host: stored.referrer_host || referrerHost() || undefined,
+    };
+    for (const key of CAMPAIGN_KEYS) {
+      const value = params.get(key);
+      if (value) next[key] = value;
+    }
+    writeStored(next);
+    return {
+      session_id: sessionId(),
+      utm_source: next.utm_source || null,
+      utm_medium: next.utm_medium || null,
+      utm_campaign: next.utm_campaign || null,
+      referrer_host: next.referrer_host || null,
+      landing_path: next.landing_path || pathWithSearch(),
+      current_path: pathWithSearch(),
+    };
+  }
+
+  function track(eventName, metadata) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return;
+    const payload = {
+      event_name: eventName,
+      ...attribution(),
+      metadata: metadata || {},
+      user_agent: window.navigator.userAgent,
+    };
+    window.fetch(SUPABASE_URL.replace(/\\/$/, "") + "/rest/v1/site_events", {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: "Bearer " + SUPABASE_ANON_KEY,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    }).catch(() => {});
+  }
+
+  function checkoutUrl(href) {
+    const url = new URL(href, window.location.href);
+    const data = attribution();
+    for (const [key, value] of Object.entries(data)) {
+      if (value) url.searchParams.set("checkout[custom][" + key + "]", value);
+    }
+    return url.toString();
+  }
+
+  track("page_view");
+
+  document.addEventListener("click", (event) => {
+    const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
+    if (!link) return;
+    const href = link.getAttribute("href") || "";
+    const url = new URL(href, window.location.href);
+
+    if (url.host === CHECKOUT_HOST) {
+      link.href = checkoutUrl(url.toString());
+      track("checkout_click", { href: link.href, placement: "static_page" });
+      return;
+    }
+
+    if (url.toString().startsWith(DOWNLOAD_URL)) {
+      track("download_click", { href: url.toString(), placement: "static_page" });
+      return;
+    }
+
+    if (href === "/#trial" || href === "#trial") {
+      track("trial_open", { placement: "static_page" });
+    }
+  }, { capture: true });
+})();
+</script>`;
 }
 
 function sitemap(pages) {

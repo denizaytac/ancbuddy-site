@@ -2,9 +2,9 @@
 {
   "slug": "privacy.html",
   "title": "ANCBuddy Privacy",
-  "description": "Privacy details for ANCBuddy trial signup, license validation, Bluetooth control, and optional AI Auto-EQ.",
+  "description": "Privacy details for ANCBuddy trial signup, first-party attribution, license validation, Bluetooth control, and optional AI Auto-EQ.",
   "kind": "privacy",
-  "lastmod": "2026-07-02",
+  "lastmod": "2026-07-05",
   "priority": 0.7,
   "h1": "ANCBuddy privacy",
   "faqs": [
@@ -22,7 +22,11 @@
     },
     {
       "q": "What is collected for the trial?",
-      "a": "The trial form collects the name and email address entered by the user so the developer can support the download and occasional product updates."
+      "a": "The trial form collects the name and email address entered by the user, plus privacy-light first-party attribution such as campaign parameters and referrer host."
+    },
+    {
+      "q": "Does ANCBuddy use analytics or ad pixels?",
+      "a": "No. The website does not use a third-party analytics SDK, ad pixels, or cross-site tracking. It logs first-party campaign and event data only for distribution measurement."
     }
   ],
   "breadcrumbs": [
@@ -37,7 +41,7 @@
 }
 ---
 
-ANCBuddy's everyday Bose QC Ultra controls are local Mac-to-headphones Bluetooth actions; only the trial form, license checks, update checks, and optional AI Auto-EQ use network services.
+ANCBuddy's everyday Bose QC Ultra controls are local Mac-to-headphones Bluetooth actions; only the trial form, first-party distribution measurement, license checks, update checks, and optional AI Auto-EQ use network services.
 
 ## Local controls
 
@@ -45,7 +49,9 @@ Switching Quiet, Aware, and Immersion modes is handled from your Mac to your pai
 
 ## Trial and license data
 
-The trial form asks for a name and email address before the DMG download starts. License purchases and license validation are handled through Lemon Squeezy. ANCBuddy stores license state locally so existing users do not need to re-enter keys on every launch.
+The trial form asks for a name and email address before the DMG download starts. To understand which launch channels work, the website also stores first-party attribution fields: UTM source, medium, campaign, referrer host, landing path, current path, and a generated session ID. The same fields can be passed to Lemon Squeezy checkout as custom checkout data.
+
+ANCBuddy does not use a third-party analytics SDK, ad pixels, or cross-site tracking. The first-party site events are limited to page view, trial open, trial start, download click, and checkout click. License purchases and license validation are handled through Lemon Squeezy. For purchase-source measurement, Lemon Squeezy can send signed order webhooks to ANCBuddy's Supabase project; ANCBuddy stores the order ID, amount, status, first-party attribution fields, and a hashed customer email for matching purchases back to prior trial signups without storing the raw purchase email in the measurement table. ANCBuddy stores license state locally so existing users do not need to re-enter keys on every launch.
 
 ## AI Auto-EQ
 

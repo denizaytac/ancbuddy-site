@@ -4,7 +4,7 @@
   "title": "Free Trial and Install ANCBuddy for Mac",
   "description": "Start the ANCBuddy free trial for macOS, then install the signed and notarized app for Bose QC Ultra Headphones and Earbuds.",
   "kind": "download",
-  "lastmod": "2026-07-02",
+  "lastmod": "2026-07-03",
   "priority": 0.9,
   "h1": "Free trial and install ANCBuddy for Mac",
   "faqs": [
@@ -39,6 +39,8 @@
 
 Start ANCBuddy with a 14-day free trial, then install the signed and notarized Mac app for Bose QC Ultra Headphones Gen 1, QC Ultra Headphones Gen 2, and QC Ultra Earbuds 2nd Gen.
 
+[Download ANCBuddy 2.0.2 DMG directly](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.2/ANCBuddy-2.0.2.dmg)
+
 [Try ANCBuddy free for 14 days](/#trial)
 
 ## Current release
@@ -53,8 +55,8 @@ Start ANCBuddy with a 14-day free trial, then install the signed and notarized M
 
 ## Install steps
 
-1. Start the free trial.
-2. Open it and move ANCBuddy to Applications.
+1. Download the DMG directly, or start the free trial if you want email support and product updates.
+2. Open the DMG and move ANCBuddy to Applications.
 3. Launch ANCBuddy and allow Bluetooth access if macOS asks.
 4. Pair your Bose QC Ultra in macOS Bluetooth settings if it is not already paired.
 5. Use the ANCBuddy menu-bar panel to switch Quiet, Aware, and Immersion.
@@ -63,4 +65,4 @@ Apple's Mac Bluetooth setup flow is documented in [Apple Support](https://suppor
 
 ## Manual download
 
-If the trial flow does not start the download, use the [direct ANCBuddy 2.0.2 DMG link](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.2/ANCBuddy-2.0.2.dmg). The trial still runs for 14 days. If ANCBuddy belongs in your menu bar, buy a permanent license through [Lemon Squeezy](https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2).
+The direct DMG link is available without entering an email. The trial still runs for 14 days. If ANCBuddy belongs in your menu bar, buy a permanent license through [Lemon Squeezy](https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2).

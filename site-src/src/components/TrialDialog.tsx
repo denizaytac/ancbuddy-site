@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,13 +7,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useTrialDialog } from "@/hooks/useTrialDialog";
+import { DMG_URL, getAttributionPayload, trackSiteEvent } from "@/lib/attribution";
 import { supabase } from "@/lib/supabase";
 import { Icon } from "./Icon";
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY as string | undefined;
-const DMG_URL =
-  "https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.2/ANCBuddy-2.0.2.dmg";
 const SUBMIT_TIMEOUT_MS = 8000;
 
 type Status = "idle" | "submitting" | "success";
@@ -55,6 +54,14 @@ async function notifyTrialSignupByEmail(name: string, email: string) {
 export function TrialDialog() {
   const { open, setOpen } = useTrialDialog();
   const [status, setStatus] = useState<Status>("idle");
+  const wasOpen = useRef(false);
+
+  useEffect(() => {
+    if (open && !wasOpen.current) {
+      trackSiteEvent("trial_open");
+    }
+    wasOpen.current = open;
+  }, [open]);
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
@@ -85,6 +92,7 @@ export function TrialDialog() {
       () => controller.abort(),
       SUBMIT_TIMEOUT_MS,
     );
+    const attribution = getAttributionPayload();
 
     try {
       if (!supabase) throw new Error("Supabase client is not configured");
@@ -94,6 +102,7 @@ export function TrialDialog() {
         .insert({
           name,
           email,
+          ...attribution,
           user_agent:
             typeof navigator !== "undefined" ? navigator.userAgent : null,
         })
@@ -108,6 +117,8 @@ export function TrialDialog() {
       window.clearTimeout(timeoutId);
     }
 
+    trackSiteEvent("trial_start");
+    trackSiteEvent("download_click", { placement: "trial_submit_auto" });
     setStatus("success");
     // Trigger the DMG download. In most browsers this starts the
     // download without navigating away, so we keep the dialog open
@@ -138,7 +149,10 @@ export function TrialDialog() {
                 justifyContent: "center",
                 marginTop: 16,
               }}
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                trackSiteEvent("download_click", { placement: "trial_success" });
+                setOpen(false);
+              }}
             >
               <Icon name="bolt" size={15} />
               Download ANCBuddy

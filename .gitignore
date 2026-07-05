@@ -9,6 +9,11 @@ site-src/node_modules/
 *.log
 npm-debug.log*
 
+# Local secrets / environment
+site-src/.env.local
+supabase/.env
+supabase/.env.local
+
 # Local Claude harness config
 site-src/.claude/
 

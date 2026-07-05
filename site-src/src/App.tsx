@@ -5,6 +5,7 @@ import { TrialDialog } from "./components/TrialDialog";
 import { TrialDialogProvider } from "./hooks/TrialDialogProvider";
 import { useTrialDialog } from "./hooks/useTrialDialog";
 import { useReveal } from "./hooks/useReveal";
+import { trackPageView } from "./lib/attribution";
 import { Problem } from "./components/sections/Problem";
 import { Features } from "./components/sections/Features";
 import { Quotes } from "./components/sections/Quotes";
@@ -17,6 +18,10 @@ import { Footer } from "./components/sections/Footer";
 function AppShell() {
   useReveal();
   const { setOpen: openTrial } = useTrialDialog();
+
+  useEffect(() => {
+    trackPageView();
+  }, []);
 
   useEffect(() => {
     function syncTrialHash() {
