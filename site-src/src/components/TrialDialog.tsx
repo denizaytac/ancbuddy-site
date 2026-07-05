@@ -24,20 +24,18 @@ async function notifyTrialSignupByEmail(name: string, email: string) {
   }
 
   try {
+    const body = new FormData();
+    body.append("access_key", WEB3FORMS_KEY);
+    body.append("name", name);
+    body.append("email", email);
+    body.append("subject", "New ANCBuddy Trial Signup");
+    body.append("from_name", "ANCBuddy Trial Form");
+    body.append("botcheck", "");
+
     const res = await fetch(WEB3FORMS_ENDPOINT, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        access_key: WEB3FORMS_KEY,
-        name,
-        email,
-        subject: "New ANCBuddy Trial Signup",
-        from_name: "ANCBuddy Trial Form",
-        botcheck: "",
-      }),
+      headers: { Accept: "application/json" },
+      body,
       keepalive: true,
     });
 
@@ -76,13 +74,19 @@ export function TrialDialog() {
     event.preventDefault();
     if (status === "submitting") return;
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+
+    const formData = new FormData(form);
     const name = (formData.get("name") ?? "").toString().trim();
     const email = (formData.get("email") ?? "").toString().trim();
     const honey = (formData.get("_honey") ?? "").toString();
 
     if (honey) return;
-    if (!name || !email) return;
+    if (!name || !email) {
+      form.reportValidity();
+      return;
+    }
 
     setStatus("submitting");
     void notifyTrialSignupByEmail(name, email);
@@ -172,7 +176,7 @@ export function TrialDialog() {
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} className="trial-form" noValidate>
+            <form onSubmit={handleSubmit} className="trial-form">
               <div>
                 <label htmlFor="trial-name">Name</label>
                 <input
