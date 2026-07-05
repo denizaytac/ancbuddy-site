@@ -231,6 +231,7 @@ function labelForKind(kind) {
   if (kind === "privacy") return "Privacy";
   if (kind === "support") return "Support";
   if (kind === "facts") return "Facts";
+  if (kind === "trust") return "Trust";
   return "Resources";
 }
 
@@ -280,6 +281,7 @@ function staticFooter() {
           <a href="/guides.html">Guides</a>
           <a href="/control-bose-qc-ultra-from-mac.html">Mac control guide</a>
           <a href="/support.html">Support</a>
+          <a href="/trust.html">Trust</a>
           <a href="/privacy.html">Privacy</a>
           <a href="/facts.html">Facts</a>
           <a href="/changelog.html">Changelog</a>
@@ -689,6 +691,7 @@ function llms(pages) {
 - [Download](${facts.siteUrl}/download.html)
 - [Guides](${facts.siteUrl}/guides.html)
 - [Support](${facts.siteUrl}/support.html)
+- [Trust](${facts.siteUrl}/trust.html)
 - [Privacy](${facts.siteUrl}/privacy.html)
 - [Changelog](${facts.siteUrl}/changelog.html)
 - [Facts](${facts.siteUrl}/facts.html)

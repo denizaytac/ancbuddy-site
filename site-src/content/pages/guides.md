@@ -27,6 +27,7 @@
   ],
   "relatedLinks": [
     { "title": "Download ANCBuddy", "href": "/download.html", "description": "Get the current signed and notarized DMG." },
+    { "title": "Trust", "href": "/trust.html", "description": "Review privacy, signing, refunds, and independence details." },
     { "title": "Support", "href": "/support.html", "description": "Contact the developer and get setup help." },
     { "title": "Changelog", "href": "/changelog.html", "description": "See the current public release notes." }
   ]
@@ -52,4 +53,4 @@ ANCBuddy guides help Bose QC Ultra users understand what a Mac can do natively, 
 - [AI Auto-EQ for Bose QC Ultra](/ai-auto-eq-bose-qc-ultra.html)
 - [BoseControl to ANCBuddy migration](/bosecontrol-to-ancbuddy.html)
 
-For installation and trust details, use the [download page](/download.html), [privacy page](/privacy.html), and [support page](/support.html).
+For installation and trust details, use the [download page](/download.html), [trust page](/trust.html), [privacy page](/privacy.html), and [support page](/support.html).

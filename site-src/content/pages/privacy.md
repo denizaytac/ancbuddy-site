@@ -34,6 +34,7 @@
     { "name": "Privacy", "url": "/privacy.html" }
   ],
   "relatedLinks": [
+    { "title": "Trust", "href": "/trust.html", "description": "Review signing, refunds, network paths, and maintenance rationale." },
     { "title": "AI Auto-EQ guide", "href": "/ai-auto-eq-bose-qc-ultra.html", "description": "What the optional EQ feature does." },
     { "title": "Download", "href": "/download.html", "description": "Get the current Mac app release." },
     { "title": "Support", "href": "/support.html", "description": "Ask a privacy or setup question." }
@@ -42,6 +43,8 @@
 ---
 
 ANCBuddy's everyday Bose QC Ultra controls are local Mac-to-headphones Bluetooth actions; only the trial form, first-party distribution measurement, license checks, update checks, and optional AI Auto-EQ use network services.
+
+For the broader installation and trust checklist, use the [trust and safety page](/trust.html).
 
 ## Local controls
 

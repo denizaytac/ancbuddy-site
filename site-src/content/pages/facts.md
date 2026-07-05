@@ -27,6 +27,7 @@
   ],
   "relatedLinks": [
     { "title": "Download", "href": "/download.html", "description": "Get the current DMG." },
+    { "title": "Trust", "href": "/trust.html", "description": "Signing, privacy, refunds, independence, and maintenance rationale." },
     { "title": "Guides", "href": "/guides.html", "description": "Read Bose QC Ultra Mac guides." },
     { "title": "Privacy", "href": "/privacy.html", "description": "Review AI Auto-EQ and trial data handling." }
   ]
@@ -55,3 +56,5 @@ ANCBuddy puts daily Bose QC Ultra controls in the Mac menu bar: Quiet, Aware, Im
 ## Independence
 
 ANCBuddy is not affiliated with, endorsed by, or sponsored by Bose Corporation. Bose, QuietComfort, QC Ultra, and related marks are trademarks of Bose Corporation, used only to describe compatible hardware.
+
+For signing, refunds, network paths, and closed-source maintenance rationale, see [ANCBuddy trust and safety](/trust.html).
