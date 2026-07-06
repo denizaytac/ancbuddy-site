@@ -9,7 +9,29 @@ export function Footer() {
         <div className="footer-grid">
           <div className="footer-col">
             <div className="nav-brand" style={{ marginBottom: 16 }}>
-              <img className="footer-logo" src="/logo.png" alt="ANCBuddy" />
+              <picture className="footer-logo-picture">
+                <source
+                  type="image/avif"
+                  srcSet="/logo-40.avif 40w, /logo-80.avif 80w"
+                  sizes="28px"
+                />
+                <source
+                  type="image/webp"
+                  srcSet="/logo-40.webp 40w, /logo-80.webp 80w"
+                  sizes="28px"
+                />
+                <img
+                  className="footer-logo"
+                  src="/logo-40.png"
+                  srcSet="/logo-40.png 40w, /logo-80.png 80w"
+                  sizes="28px"
+                  alt="ANCBuddy"
+                  width="40"
+                  height="40"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
               ANCBuddy
             </div>
             <p
@@ -25,14 +47,14 @@ export function Footer() {
             </p>
           </div>
           <div className="footer-col">
-            <h5>Product</h5>
+            <div className="footer-heading">Product</div>
             <a href="#features">Features</a>
             <a href="#devices">Devices</a>
             <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
           </div>
           <div className="footer-col">
-            <h5>Resources</h5>
+            <div className="footer-heading">Resources</div>
             <a href="/guides.html">Guides</a>
             <a href="/control-bose-qc-ultra-from-mac.html">Mac control guide</a>
             <a href="/support.html">Support</a>

@@ -194,9 +194,6 @@ function renderPage(page) {
   <meta name="twitter:description" content="${escapeHtml(page.description)}" />
   <meta name="twitter:image" content="${siteUrl}/og-image-v2.png" />
   <title>${escapeHtml(page.title)}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   ${schemas(page)
     .map((schema) => `<script type="application/ld+json">${jsonLd(schema)}</script>`)
     .join("\n  ")}
@@ -269,18 +266,18 @@ function staticFooter() {
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
-          <a class="footer-brand" href="/"><img class="footer-logo" src="/logo.png" alt="ANCBuddy" />ANCBuddy</a>
+          <a class="footer-brand" href="/"><img class="footer-logo" src="/logo-40.png" srcset="/logo-40.png 40w, /logo-80.png 80w" sizes="28px" alt="ANCBuddy" width="40" height="40" loading="lazy" decoding="async" />ANCBuddy</a>
           <p>A tiny menu-bar app for Bose QC Ultra, built for quick Mac control.</p>
         </div>
         <div class="footer-col">
-          <h5>Product</h5>
+          <div class="footer-heading">Product</div>
           <a href="/#features">Features</a>
           <a href="/#devices">Devices</a>
           <a href="/#pricing">Pricing</a>
           <a href="/#faq">FAQ</a>
         </div>
         <div class="footer-col">
-          <h5>Resources</h5>
+          <div class="footer-heading">Resources</div>
           <a href="/guides.html">Guides</a>
           <a href="/control-bose-qc-ultra-from-mac.html">Mac control guide</a>
           <a href="/support.html">Support</a>
@@ -303,6 +300,27 @@ function staticFooter() {
 
 function staticCss() {
   return `
+    @font-face {
+      font-family: "Geist";
+      font-style: normal;
+      font-weight: 300 800;
+      font-display: swap;
+      src: url("/fonts/geist-latin.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Geist Mono";
+      font-style: normal;
+      font-weight: 400 500;
+      font-display: swap;
+      src: url("/fonts/geist-mono-latin.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Instrument Serif";
+      font-style: italic;
+      font-weight: 400;
+      font-display: swap;
+      src: url("/fonts/instrument-serif-italic-latin.woff2") format("woff2");
+    }
     :root {
       color-scheme: dark;
       --accent: #a78bfa;
@@ -554,7 +572,7 @@ function staticCss() {
       line-height: 1.5;
       max-width: 36ch;
     }
-    .footer-col h5 {
+    .footer-heading {
       font-size: 12px;
       font-weight: 500;
       text-transform: uppercase;

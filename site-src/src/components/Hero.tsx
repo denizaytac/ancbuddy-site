@@ -91,13 +91,29 @@ export function Hero() {
   return (
     <section className="hero container">
       <div className="hero-stack">
-        <img
-          className="hero-mascot"
-          src="/buddy-hero.png"
-          alt="ANCBuddy mascot"
-          width="1024"
-          height="1024"
-        />
+        <picture>
+          <source
+            type="image/avif"
+            srcSet="/buddy-hero-160.avif 160w, /buddy-hero-320.avif 320w"
+            sizes="(max-width: 600px) 112px, 132px"
+          />
+          <source
+            type="image/webp"
+            srcSet="/buddy-hero-160.webp 160w, /buddy-hero-320.webp 320w"
+            sizes="(max-width: 600px) 112px, 132px"
+          />
+          <img
+            className="hero-mascot"
+            src="/buddy-hero-160.png"
+            srcSet="/buddy-hero-160.png 160w, /buddy-hero-320.png 320w"
+            sizes="(max-width: 600px) 112px, 132px"
+            alt="ANCBuddy mascot"
+            width="160"
+            height="160"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
         <span className="pill">
           <span className="pill-dot" />
           <span>Bose QC Ultra + AI Auto-EQ</span>
@@ -157,7 +173,27 @@ export function Hero() {
                 onClick={() => setOpen((o) => !o)}
                 aria-label="ANCBuddy"
               >
-                <img src="/logo.png" alt="ANCBuddy menu-bar icon" />
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcSet="/logo-40.avif 40w, /logo-80.avif 80w"
+                    sizes="40px"
+                  />
+                  <source
+                    type="image/webp"
+                    srcSet="/logo-40.webp 40w, /logo-80.webp 80w"
+                    sizes="40px"
+                  />
+                  <img
+                    src="/logo-40.png"
+                    srcSet="/logo-40.png 40w, /logo-80.png 80w"
+                    sizes="40px"
+                    alt="ANCBuddy menu-bar icon"
+                    width="40"
+                    height="40"
+                    decoding="async"
+                  />
+                </picture>
               </button>
               <span style={{ fontFamily: "var(--font-mono)", fontSize: 11 }}>9:41</span>
             </div>

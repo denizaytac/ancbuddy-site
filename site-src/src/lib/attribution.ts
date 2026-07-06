@@ -1,5 +1,3 @@
-import { supabase } from "./supabase";
-
 export const DMG_URL =
   "https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.2/ANCBuddy-2.0.2.dmg";
 
@@ -9,6 +7,8 @@ export const LEMON_SQUEEZY_URL =
 const ATTRIBUTION_KEY = "ancbuddy_attribution_v1";
 const SESSION_ID_KEY = "ancbuddy_session_id_v1";
 const CAMPAIGN_KEYS = ["utm_source", "utm_medium", "utm_campaign"] as const;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
 type CampaignKey = (typeof CAMPAIGN_KEYS)[number];
 
@@ -134,30 +134,68 @@ function compactMetadata(metadata?: Record<string, string | number | boolean | n
   );
 }
 
+function scheduleIdle(task: () => void) {
+  if (!isBrowser()) return;
+  if (window.requestIdleCallback) {
+    window.requestIdleCallback(task, { timeout: 2500 });
+    return;
+  }
+  window.setTimeout(task, 600);
+}
+
+export async function insertSupabaseRow(
+  table: "site_events" | "trial_signups",
+  payload: Record<string, unknown>,
+  options: { signal?: AbortSignal; keepalive?: boolean } = {},
+) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !isBrowser()) return;
+
+  const response = await fetch(
+    `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${table}`,
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify(payload),
+      keepalive: options.keepalive,
+      signal: options.signal,
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Supabase ${table} insert failed: HTTP ${response.status}`);
+  }
+}
+
 export function trackSiteEvent(
   eventName: SiteEventName,
   metadata?: Record<string, string | number | boolean | null>,
 ) {
-  if (!supabase || !isBrowser()) return;
+  if (!isBrowser()) return;
 
   const attribution = getAttributionPayload();
-  void supabase
-    .from("site_events")
-    .insert({
+  void insertSupabaseRow(
+    "site_events",
+    {
       event_name: eventName,
       ...attribution,
       metadata: compactMetadata(metadata),
       user_agent: navigator.userAgent,
-    })
-    .then(({ error }) => {
-      if (error) console.warn(`Site event ${eventName} failed`, error);
-    });
+    },
+    { keepalive: true },
+  ).catch((error) => {
+    console.warn(`Site event ${eventName} failed`, error);
+  });
 }
 
 export function trackPageView() {
   if (pageViewTracked) return;
   pageViewTracked = true;
-  trackSiteEvent("page_view");
+  scheduleIdle(() => trackSiteEvent("page_view"));
 }
 
 export function buildCheckoutUrl(baseUrl = LEMON_SQUEEZY_URL) {

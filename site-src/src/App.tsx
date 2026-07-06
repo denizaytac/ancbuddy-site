@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Hero } from "./components/Hero";
 import { Nav } from "./components/Nav";
-import { TrialDialog } from "./components/TrialDialog";
 import { TrialDialogProvider } from "./hooks/TrialDialogProvider";
 import { useTrialDialog } from "./hooks/useTrialDialog";
 import { useReveal } from "./hooks/useReveal";
@@ -15,9 +14,15 @@ import { FAQ } from "./components/sections/FAQ";
 import { CTA } from "./components/sections/CTA";
 import { Footer } from "./components/sections/Footer";
 
+const TrialDialog = lazy(() =>
+  import("./components/TrialDialog").then((module) => ({
+    default: module.TrialDialog,
+  })),
+);
+
 function AppShell() {
   useReveal();
-  const { setOpen: openTrial } = useTrialDialog();
+  const { shouldMount, setOpen: openTrial } = useTrialDialog();
 
   useEffect(() => {
     trackPageView();
@@ -54,7 +59,11 @@ function AppShell() {
       </main>
 
       <Footer />
-      <TrialDialog />
+      {shouldMount && (
+        <Suspense fallback={null}>
+          <TrialDialog />
+        </Suspense>
+      )}
     </>
   );
 }

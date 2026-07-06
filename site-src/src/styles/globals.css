@@ -4,6 +4,35 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url("/fonts/geist-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/geist-mono-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/instrument-serif-italic-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/instrument-serif-latin.woff2") format("woff2");
+}
+
 /* ========== ANCBuddy design tokens ========== */
 :root {
   /* Brand */
@@ -44,7 +73,7 @@
   /* Tweaks defaults */
   --motion: 1;
 
-  /* shadcn HSL tokens — used by ui/dialog.tsx + ui/accordion.tsx */
+  /* shadcn HSL tokens — used by ui/dialog.tsx */
   --background: 240 6% 4%;
   --foreground: 240 9% 96%;
   --card: 240 7% 9%;

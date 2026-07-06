@@ -7,8 +7,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useTrialDialog } from "@/hooks/useTrialDialog";
-import { DMG_URL, getAttributionPayload, trackSiteEvent } from "@/lib/attribution";
-import { supabase } from "@/lib/supabase";
+import {
+  DMG_URL,
+  getAttributionPayload,
+  insertSupabaseRow,
+  trackSiteEvent,
+} from "@/lib/attribution";
 import { Icon } from "./Icon";
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
@@ -99,22 +103,17 @@ export function TrialDialog() {
     const attribution = getAttributionPayload();
 
     try {
-      if (!supabase) throw new Error("Supabase client is not configured");
-
-      await supabase
-        .from("trial_signups")
-        .insert({
+      await insertSupabaseRow(
+        "trial_signups",
+        {
           name,
           email,
           ...attribution,
           user_agent:
             typeof navigator !== "undefined" ? navigator.userAgent : null,
-        })
-        .abortSignal(controller.signal)
-        .then((res) => {
-          if (res.error) throw res.error;
-          return res;
-        });
+        },
+        { signal: controller.signal },
+      );
     } catch (error) {
       console.warn("Trial signup: Supabase insert failed; allowing direct download", error);
     } finally {

@@ -18,7 +18,7 @@ export function Devices() {
             <Icon name="headphones" size={52} />
           </div>
           <div>
-            <h4>QC Ultra Headphones — Gen 1</h4>
+            <h3>QC Ultra Headphones — Gen 1</h3>
             <div className="device-meta">Quiet, Aware, Immersion + AI Auto‑EQ</div>
           </div>
           <span className="device-status">Supported</span>
@@ -32,7 +32,7 @@ export function Devices() {
             <Icon name="headphones" size={52} />
           </div>
           <div>
-            <h4>QC Ultra Headphones — Gen 2</h4>
+            <h3>QC Ultra Headphones — Gen 2</h3>
             <div className="device-meta">Quiet, Aware, Immersion + AI Auto‑EQ</div>
           </div>
           <span className="device-status">Supported</span>
@@ -46,7 +46,7 @@ export function Devices() {
             <Icon name="earbud" size={52} />
           </div>
           <div>
-            <h4>QC Ultra Earbuds — 2nd Gen</h4>
+            <h3>QC Ultra Earbuds — 2nd Gen</h3>
             <div className="device-meta">Quiet, Aware, Immersion + AI Auto‑EQ</div>
           </div>
           <span className="device-status">Supported</span>
