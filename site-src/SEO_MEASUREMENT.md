@@ -28,9 +28,9 @@ Measurement stays privacy-light: no third-party analytics script, ad pixel, or c
 - Trial starts from `trial_signups`, separated from direct Lemon Squeezy purchases
 - Purchases from `lemon_orders`, split into `direct` vs `trial_led`
 
-## 14-day Reddit-sourced sprint sources
+## Distribution plan sources (revised 2026-07-06)
 
-Use these exact source/campaign labels for the first distribution sprint:
+Use these exact source/campaign labels:
 
 | Source | Use |
 | --- | --- |
@@ -40,6 +40,8 @@ Use these exact source/campaign labels for the first distribution sprint:
 | `community_warmup` | Helpful non-promotional Reddit/community participation. |
 | `direct_outreach` | Targeted outreach to reviewers, Mac utility curators, writers, or guide authors. |
 | `owned_guide` | Existing or new ANCBuddy guide/support/trust pages. |
+| `listings` | Directory listings (AlternativeTo, MacUpdate, awesome-mac, MacMenuBar). |
+| `waitlist_probe` | Wider-device-support waitlist elements. |
 
 Do not send broader traffic until `trial_start`, `download_click`, `checkout_click`, and Lemon order attribution can be reviewed. If the Lemon Squeezy webhook or `lemon_orders` split is not reliable, treat purchase attribution as unknown instead of guessing.
 

@@ -130,6 +130,14 @@ export function TrialDialog() {
     window.location.href = DMG_URL;
   }
 
+  function handleSkip() {
+    if (status === "submitting") return;
+    // Honest event split: a skip is a download, not a trial signup.
+    trackSiteEvent("download_click", { placement: "trial_skip" });
+    setStatus("success");
+    window.location.href = DMG_URL;
+  }
+
   const isSubmitting = status === "submitting";
 
   return (
@@ -171,8 +179,9 @@ export function TrialDialog() {
             <DialogHeader>
               <DialogTitle>Try ANCBuddy free for 14 days</DialogTitle>
               <DialogDescription>
-                Drop your details to start the DMG download. No spam —
-                unsubscribe anytime.
+                Download the DMG right away — or leave your email first for
+                setup tips and a trial-end reminder. No spam, unsubscribe
+                anytime.
               </DialogDescription>
             </DialogHeader>
 
@@ -231,8 +240,23 @@ export function TrialDialog() {
               </button>
             </form>
 
+            <button
+              type="button"
+              className="btn btn-ghost"
+              style={{
+                width: "100%",
+                justifyContent: "center",
+                marginTop: 10,
+              }}
+              disabled={isSubmitting}
+              onClick={handleSkip}
+            >
+              Skip — just download the trial
+            </button>
+
             <p className="trial-fineprint">
-              By downloading you agree to receive occasional product updates.
+              If you leave your email, you agree to receive occasional product
+              updates.
               <br />
               14‑day trial · then $9.99 to keep using.
             </p>
