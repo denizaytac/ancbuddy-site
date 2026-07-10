@@ -38,6 +38,8 @@ jobs:
           VITE_WEB3FORMS_KEY: ${{ secrets.WEB3FORMS_KEY }}
           VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VITE_GROWTH_AGENT_API_URL: ${{ vars.GROWTH_AGENT_PUBLIC_URL }}
+          VITE_GROWTH_DEMO: "false"
         run: npm run build
 
       - name: Setup Pages

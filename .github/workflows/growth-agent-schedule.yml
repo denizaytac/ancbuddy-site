@@ -1,0 +1,120 @@
+name: Run ANCBuddy Growth Agent
+
+on:
+  schedule:
+    # The weekly strategy run replaces the daily observation run on Mondays.
+    - cron: "15 5 * * 0,2-6"
+    - cron: "15 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      run_kind:
+        description: Agent run to enqueue
+        required: true
+        default: daily
+        type: choice
+        options:
+          - daily
+          - weekly
+          - manual
+
+permissions: {}
+
+concurrency:
+  group: growth-agent-scheduler
+  cancel-in-progress: false
+
+jobs:
+  enqueue:
+    name: Enqueue agent run
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Select run kind
+        id: select
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+          REQUESTED_KIND: ${{ inputs.run_kind }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            run_kind="$REQUESTED_KIND"
+          elif [[ "$EVENT_SCHEDULE" == "15 6 * * 1" ]]; then
+            run_kind="weekly"
+          else
+            run_kind="daily"
+          fi
+
+          case "$run_kind" in
+            daily|weekly|manual) ;;
+            *)
+              echo "::error::Unsupported Growth Agent run kind."
+              exit 1
+              ;;
+          esac
+
+          echo "run_kind=$run_kind" >> "$GITHUB_OUTPUT"
+
+      - name: Enqueue authenticated run
+        shell: bash
+        env:
+          GROWTH_AGENT_BASE_URL: ${{ secrets.GROWTH_AGENT_BASE_URL }}
+          GROWTH_AGENT_API_TOKEN: ${{ secrets.GROWTH_AGENT_API_TOKEN }}
+          RUN_KIND: ${{ steps.select.outputs.run_kind }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$GROWTH_AGENT_BASE_URL" || -z "$GROWTH_AGENT_API_TOKEN" ]]; then
+            echo "::error::Growth Agent repository secrets are not configured."
+            exit 1
+          fi
+
+          if [[ "$GROWTH_AGENT_BASE_URL" != https://* ]]; then
+            echo "::error::GROWTH_AGENT_BASE_URL must use HTTPS."
+            exit 1
+          fi
+
+          response_file="$(mktemp)"
+          trap 'rm -f "$response_file"' EXIT
+
+          endpoint="${GROWTH_AGENT_BASE_URL%/}/api/runs/${RUN_KIND}"
+          idempotency_key="github-${GITHUB_RUN_ID}-${RUN_KIND}"
+
+          if ! http_code="$(
+            curl \
+              --silent \
+              --output "$response_file" \
+              --write-out "%{http_code}" \
+              --connect-timeout 10 \
+              --max-time 180 \
+              --retry 2 \
+              --retry-delay 2 \
+              --retry-max-time 30 \
+              --retry-connrefused \
+              --request POST \
+              --header "Authorization: Bearer ${GROWTH_AGENT_API_TOKEN}" \
+              --header "Accept: application/json" \
+              --header "Content-Type: application/json" \
+              --header "Idempotency-Key: ${idempotency_key}" \
+              --data '{"trigger":"github_actions"}' \
+              "$endpoint"
+          )"; then
+            echo "::error::The Growth Agent request failed before a valid response was received."
+            exit 1
+          fi
+
+          case "$http_code" in
+            200|202)
+              echo "Growth Agent ${RUN_KIND} run accepted (HTTP ${http_code})."
+              ;;
+            401|403)
+              echo "::error::The Growth Agent rejected the scheduler credentials (HTTP ${http_code})."
+              exit 1
+              ;;
+            *)
+              echo "::error::The Growth Agent returned HTTP ${http_code}. Response content is intentionally hidden."
+              exit 1
+              ;;
+          esac
