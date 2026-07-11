@@ -1,20 +1,21 @@
 # ANCBuddy Growth Agent
 
 A small FastAPI service that turns ANCBuddy funnel data into a maximum of five CEO decisions. It
-uses one OpenAI Agents SDK agent for analysis and public research. External actions are handled by
-deterministic adapters only after an exact-version approval.
+uses one OpenAI Agents SDK agent for analysis and public research. Website draft PRs are handled by
+a durable deterministic worker only after an exact-version approval. Email remains manual.
 
 Architecture: [agent interactions](docs/agent-interactions.png) · [approval sequence](docs/agent-sequence.png) · [runtime prompt](docs/prompt.md)
 
 ## Safety model
 
-`EXECUTION_MODE=simulation` is the default. In that mode an approval is recorded, but the executor
-does not claim the action and never calls SMTP, GitHub, or a webhook. Switch to `live` only after the
-two-week simulation review.
+`EXECUTION_MODE=simulation` is the default. In that mode a website action cannot be approved and no
+execution job is created. Email drafts can still be approved because approval only freezes their
+text. The CEO opens the exact draft in Gmail and presses Send manually.
 
-In live mode the executor atomically claims an action only when all of these still match the approval
-snapshot: action ID, version, status, canonical SHA-256 content hash, and full content JSON. Adapters
-consume the approved snapshot, not mutable current text. A changed action requires a new approval.
+In live mode, website approval and durable job creation are one Supabase transaction. The worker
+claims only queued jobs, with an expiring lease, and never scans old approvals. It verifies action
+ID, version, canonical SHA-256 content hash, and full content JSON. Retries reconcile a deterministic
+branch and existing pull request, so a lost HTTP response cannot create a duplicate PR.
 
 `BLOCKED_CHANNELS=reddit` adds an operator-controlled hard block before proposals are persisted.
 The same blocklist is included in the agent prompt, but enforcement does not rely on the model:
@@ -22,10 +23,11 @@ proposal fields are scanned deterministically. The Reddit block also rejects `su
 aliases. Configure multiple channels as a comma-separated list, for example
 `BLOCKED_CHANNELS=reddit,linkedin`.
 
-- Email uses SMTP only when `SMTP_HOST` and `SMTP_FROM` are configured.
-- Website changes create a draft GitHub PR only when the GitHub integration is configured.
-- Other channels use the generic signed webhook when configured; otherwise the action becomes
-  `integration_required` for manual completion.
+- Email produces one individual Gmail compose link; sending and outcomes stay with the CEO.
+- Website changes create one draft GitHub PR. There is no merge or publish endpoint.
+- GitHub credentials are supplied in the CEO inbox, validated against only
+  `denizaytac/ancbuddy-site`, and encrypted with AES-256-GCM before storage.
+- The first website execution can run in one-shot canary mode, which pauses itself after success.
 - No provider secret, customer email, or raw Supabase row is returned by `/health` or the dashboard.
 
 ## Local setup
@@ -44,8 +46,9 @@ exposes `GET /health`. Production must use an Argon2 `CEO_PASSWORD_HASH`, a uniq
 
 The frontend origin is the exact `CEO_ORIGIN`; credentialed CORS never uses `*`. Login accepts
 `POST /api/auth/login {"token":"..."}` and sets a host-only, HttpOnly, SameSite=Strict cookie.
-The token may be the CEO password or `CEO_API_TOKEN`. API clients can alternatively send the CEO
-token as `Authorization: Bearer ...`.
+The token may be the CEO password or `CEO_API_TOKEN`. A temporary token can be bounded with
+`CEO_API_TOKEN_EXPIRES_AT`; both login and bearer use stop at that time, and its session is capped to
+the same expiry. API clients can alternatively send the token as `Authorization: Bearer ...`.
 
 ## API
 
@@ -57,13 +60,18 @@ token as `Authorization: Bearer ...`.
   stable `Idempotency-Key`; duplicates return the existing run with `200` and do not run twice.
 - `POST /api/actions/{id}/decisions` — body contains `decision` (`approve`, `reject`, `change`),
   `expected_version`, and optional `feedback`. A stale version returns `409`.
+- `GET|PUT|DELETE /api/integrations/github` — inspect, validate/store, or remove the encrypted PAT.
+- `POST /api/integrations/github/enable` — explicitly enable `canary` or `live` mode.
+- `GET /api/executions/{job_id}` — current durable execution state and external draft-PR link.
+- `POST /api/actions/{id}/manual-outcomes` — record `sent`, `reply`, `positive`, or `negative` for
+  an approved email draft.
 
 `SCHEDULER_API_TOKEN` is accepted only on run endpoints. It cannot read the dashboard or approve an
 action. Internal scheduling is optional; Monday weekly analysis replaces that day's daily run. Run
 one service worker so queued model work is serialized. Queued/running work is recovered after a
 restart, and proposal IDs are deterministic per run slot so recovery cannot duplicate CEO cards.
-Outbound actions are never retried automatically; an uncertain partial provider failure remains a
-manual reconciliation task, which prevents accidental duplicate email or publishing.
+Only draft-PR jobs are retried. Their branch name is deterministic and GitHub is reconciled before
+every write. Email is never sent by the service.
 
 ## Persistence and metrics
 

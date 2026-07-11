@@ -5,6 +5,7 @@ description = "Approval-gated growth operations service for ANCBuddy"
 requires-python = ">=3.12"
 dependencies = [
   "argon2-cffi>=23.1.0,<26",
+  "cryptography>=41.0.0,<46",
   "fastapi>=0.116.0,<1",
   "httpx>=0.28.0,<1",
   "openai-agents>=0.2.0,<1",

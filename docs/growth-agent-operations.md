@@ -1,136 +1,104 @@
 # ANCBuddy Growth Agent operations
 
-This is the production contract for the Growth Agent scheduler, service, approval inbox, and audit trail. The system may research, analyze, prioritize, and draft on its own. It must not create an externally visible effect without a version-specific CEO approval.
+This is the production contract for the scheduler, CEO inbox, durable executor, and feedback loop. The agent may research, analyze, rank, and draft. It cannot approve itself, send email, merge a pull request, publish, or spend money.
 
-## Architecture and request sequence
+## Runtime flow
 
 ```mermaid
 sequenceDiagram
-    autonumber
     participant GH as GitHub Actions scheduler
-    participant API as Growth Agent service
-    participant DB as Supabase and audit store
+    participant API as Growth Agent API
+    participant DB as Supabase
     participant AI as OpenAI agent
     participant CEO as CEO inbox
-    participant EXT as External channel
+    participant W as VPS executor
+    participant EXT as GitHub or Gmail
 
-    GH->>API: POST /api/runs/daily or weekly<br/>Bearer token + Idempotency-Key
-    API->>DB: Create or reuse idempotent run
-    API-->>GH: 202 queued or 200 existing
-    API->>DB: Read funnel, experiment, and action state
-    API->>AI: Analyze and prepare proposals
-    AI->>DB: Save versioned drafts awaiting approval
-    CEO->>API: Approve, reject, or request change
-    API->>DB: Record decision, actor, version, and timestamp
-    alt exact version approved and simulation disabled
-        API->>EXT: Execute approved payload once
-        API->>DB: Record execution and observed outcomes
-    else rejected, changed, stale, or simulation enabled
-        API->>DB: Keep external execution blocked
+    GH->>API: Enqueue daily or weekly run
+    API->>DB: Create/reuse idempotent run
+    API->>AI: Analyze metrics, decisions, and outcomes
+    AI->>DB: Save at most five decision-ready drafts
+    CEO->>API: Approve, reject, or request changes
+    alt approved website draft
+        API->>DB: Approval + durable job in one transaction
+        W->>DB: Claim expiring lease
+        W->>EXT: Reconcile branch and create one draft PR
+        W->>DB: Store PR URL and terminal result
+    else approved email draft
+        API-->>CEO: Exact Gmail compose link
+        CEO->>EXT: Press Send manually
+        CEO->>API: Record sent/reply/positive/negative
+        API->>DB: Immutable outcome for next agent run
     end
 ```
 
-GitHub Actions is only a scheduler. Its scoped bearer token can enqueue analysis runs; it cannot read the dashboard or approve actions. Supabase remains the source for funnel and attribution data and the durable store for runs, actions, decisions, executions, and observations.
+GitHub Actions is only a scheduler. It cannot read the dashboard or approve work. The executor reads only durable jobs; it never scans or replays approvals.
 
-## Deployment contract
+## Production endpoints
 
-The existing GitHub Pages workflow continues to deploy the public website only; it cannot host this Python service. Deploy `growth-agent/` to the VPS as one HTTPS service with persistent access to its production data store. Run exactly one service replica until run serialization uses a distributed lock; the current process lock serializes work only inside one replica. Start it from the `growth-agent/` directory with:
-
-```bash
-uv run python main.py
-```
-
-The process listens on `0.0.0.0:$PORT`. The platform must terminate TLS, preserve the client-facing HTTPS origin in `PUBLIC_BASE_URL`, restart failed processes, and retain the configured production store across deploys. Set `SCHEDULER_ENABLED=false` and do not add a platform cron: `.github/workflows/growth-agent-schedule.yml` is the sole scheduler.
-
-Required HTTP behavior:
-
-| Endpoint | Authentication | Contract |
+| Endpoint | Authentication | Purpose |
 | --- | --- | --- |
-| `GET /health` | Public | Return `200` with service and store readiness. Never expose secrets. |
-| `POST /api/runs/daily` | Scoped scheduler token or CEO session | Queue a daily observation run. |
-| `POST /api/runs/weekly` | Scoped scheduler token or CEO session | Queue the weekly strategy run. |
-| `POST /api/runs/manual` | Scoped scheduler token or CEO session | Queue a manually requested run. |
-| `POST /api/auth/login` | Password | Create the `HttpOnly` CEO session cookie. |
-| `GET /api/dashboard` | CEO session or CEO API token | Return the approval inbox and summary. |
-| `POST /api/actions/{id}/decisions` | CEO session or CEO API token | Apply `approve`, `reject`, or `change` with `expected_version`. |
+| `GET /health` | Public | Store, agent, execution mode, and executor liveness/readiness. No secrets. |
+| `POST /api/auth/login` | CEO password or temporary code | Create the secure CEO session. |
+| `GET /api/dashboard` | CEO | Approval inbox, execution state, goal, and metrics. |
+| `POST /api/runs/daily|weekly|manual` | Scheduler or CEO | Create/reuse an idempotent analysis run. |
+| `POST /api/actions/{id}/decisions` | CEO | Approve, reject, or request changes for one exact version. |
+| `GET|PUT|DELETE /api/integrations/github` | CEO | Inspect, validate/store, or safely remove the encrypted PAT. |
+| `POST /api/integrations/github/enable` | CEO | Enable one-PR `canary` or ongoing `live` draft-PR mode. |
+| `GET /api/executions/{job_id}` | CEO | Durable job status and confirmed draft-PR URL. |
+| `POST /api/actions/{id}/manual-outcomes` | CEO | Record `sent`, `reply`, `positive`, or `negative` for manual email. |
 
-Run requests accept `{ "trigger": "github_actions" }` and an `Idempotency-Key` header. A new run returns `202`; a duplicate key returns the existing run with `200` and must not invoke the agent twice. A non-`200`/`202` response makes the workflow fail. Response bodies are deliberately not printed in GitHub logs. A green workflow confirms enqueueing, not completion; completion and agent failures belong in the dashboard and service audit log.
+The API allows credentialed CORS only from the exact `CEO_ORIGIN`. Validation responses redact rejected raw inputs, so passwords and PATs are never reflected.
 
-`GET /health` should report `status`, `service`, `store`, `agent_ready`, and `execution_mode`. Before enabling the scheduler, require `status=ok`, `store=supabase`, `agent_ready=true`, and `execution_mode=simulation`. Prefer a same-origin reverse proxy for the CEO inbox and API. If they use different origins, the API allows credentialed CORS only for the exact `CEO_ORIGIN`; never combine cookies with `Access-Control-Allow-Origin: *`. Keep both HTTPS origins on the same site, for example `https://ancbuddy.com` and `https://agent.ancbuddy.com`, so the host-only, `HttpOnly`, `SameSite=Strict`, `Secure` CEO cookie is sent. A truly cross-site API is outside the current contract; it would require a reviewed `SameSite=None; Secure` change and remains subject to third-party-cookie blocking.
+## Required VPS configuration
 
-### Runtime secrets and configuration
-
-Configure service values in the hosting platform, never in Git or build logs:
+Secrets belong in root-owned `/etc/ancbuddy-growth-agent.env` (mode `0600`), never Git or browser `VITE_*` values.
 
 | Name | Purpose |
 | --- | --- |
-| `APP_ENV=production` | Enforce production-only validation. |
-| `OPENAI_API_KEY` | Agent reasoning and drafting. |
-| `BLOCKED_CHANNELS=reddit` | Comma-separated hard blocklist applied in both the agent prompt and deterministic proposal policy. Reddit matching includes `subreddit` and `r/...`. |
-| `CEO_PASSWORD_HASH` | Preferred Argon2 hash for CEO browser login. Do not use a plaintext production password. |
-| `CEO_API_TOKEN` | Optional long random token for CEO API access. Never give it to the scheduler. |
-| `SCHEDULER_API_TOKEN` | Separate long random token accepted only by the run endpoints. |
-| `SESSION_SECRET` | Long random secret used to protect CEO sessions. |
-| `PUBLIC_BASE_URL` | Canonical HTTPS URL of the deployed service. |
-| `CEO_ORIGIN` | Exact HTTPS origin of the CEO inbox; no wildcard or path. |
-| `PORT` | Port exposed by the hosting platform. |
-| `COOKIE_SECURE=true` | Send the CEO session cookie only over HTTPS. |
-| `STORE_BACKEND=supabase` | Require durable production persistence. |
-| `SUPABASE_URL` | Supabase project origin used by the agent store. |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server-only database credential; never expose it to a browser. |
-| `EXECUTION_MODE=simulation` | Hard-block every outbound adapter during initial rollout. |
-| `SCHEDULER_ENABLED=false` | Disable the service's optional in-process scheduler. |
+| `APP_ENV=production` | Enforce production safeguards. |
+| `OPENAI_API_KEY` | Agent analysis and public research. |
+| `BLOCKED_CHANNELS=reddit` | Deterministic channel block plus prompt constraint. |
+| `CEO_PASSWORD_HASH` | Argon2 browser-login secret. |
+| `CEO_API_TOKEN`, `CEO_API_TOKEN_EXPIRES_AT` | Optional temporary mobile code with hard expiry. |
+| `SCHEDULER_API_TOKEN` | Run-only GitHub Actions credential. |
+| `SESSION_SECRET` | Signed CEO sessions. |
+| `PUBLIC_BASE_URL`, `CEO_ORIGIN` | Exact HTTPS API and website origins. |
+| `STORE_BACKEND=supabase` | Durable production store. |
+| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Server-only database access. |
+| `INTEGRATION_ENCRYPTION_KEY` | 32-byte key for AES-256-GCM credential envelopes. |
+| `GITHUB_REPOSITORY=denizaytac/ancbuddy-site` | Only allowed repository. |
+| `EXECUTION_MODE=simulation|live` | Global draft-PR worker gate. |
+| `SCHEDULER_ENABLED=false` | GitHub Actions remains the only scheduler. |
 
-Use a separate least-privilege database credential when the data layer supports it. Do not put customer email addresses, raw event payloads, API responses, or secret values in GitHub logs.
+The GitHub fine-grained PAT is entered only in the CEO inbox and must target this repository with Metadata read, Contents read/write, and Pull requests read/write. It is encrypted before Supabase storage and never returned by GET.
 
-Leave outbound integration credentials unset during the simulation period. Later, enable one adapter at a time: `SMTP_*` for approved email, a fine-grained `GITHUB_TOKEN` plus `GITHUB_REPOSITORY` for approved website pull requests, or `GROWTH_WEBHOOK_*` for an explicitly reviewed integration. Credentials make an adapter available; they never authorize an action by themselves.
+## Scheduling
 
-Keep `reddit` in `BLOCKED_CHANNELS` while the Reddit account is suspended. The service discards any
-proposal that references Reddit, a subreddit, or an `r/...` destination before it reaches the CEO
-inbox. The agent must not suggest alternate accounts or other suspension workarounds.
+The repository workflow runs:
 
-Configure these GitHub repository Actions secrets:
+- daily Tuesday through Sunday at `05:15 UTC`;
+- weekly Monday at `06:15 UTC`.
 
-| Repository secret | Value |
-| --- | --- |
-| `GROWTH_AGENT_BASE_URL` | The service's public HTTPS origin, with no endpoint path. |
-| `GROWTH_AGENT_API_TOKEN` | The same random value as the service's scoped `SCHEDULER_API_TOKEN`. |
+Repository secrets `GROWTH_AGENT_BASE_URL` and `GROWTH_AGENT_API_TOKEN` authenticate enqueue requests. Repository variable `GROWTH_AGENT_PUBLIC_URL` supplies the public API origin to the Pages build.
 
-Also configure the GitHub Actions repository variable `GROWTH_AGENT_PUBLIC_URL` with the service's
-public HTTPS origin, for example `https://agent.ancbuddy.com`. The Pages workflow injects this as
-`VITE_GROWTH_AGENT_API_URL` when it builds the CEO inbox. This URL is configuration, not a
-credential; no bearer or database secret belongs in a `VITE_*` value.
+## Rollout and rollback
 
-The workflow runs the daily observation pass Tuesday through Sunday at `05:15 UTC`; the weekly strategy pass replaces it on Monday at `06:15 UTC`. `workflow_dispatch` can enqueue `daily`, `weekly`, or `manual`. All invocations share one non-cancelling concurrency group, and the single service replica serializes queued runs.
+1. Apply the database migration while the runtime remains in simulation.
+2. Deploy the API and verify `/health`, protected endpoints, RLS, and executor liveness.
+3. Switch global runtime and DB execution flags to live. This alone authorizes nothing.
+4. In the CEO inbox, save/test the repo-scoped PAT and enable the one-PR canary.
+5. Create a fresh Product Hunt action under `docs/growth/product-hunt/**`; old simulation approvals remain closed and have no jobs.
+6. CEO approves the exact displayed files. Verify exactly one draft PR, no merge, no Pages publish, and automatic integration pause.
+7. CEO may explicitly enable future approved draft PRs. Every new PR still requires a fresh exact-version approval.
 
-## Simulation-first rollout
-
-1. **Configure and verify:** deploy the service, set runtime secrets, configure the two GitHub secrets, and confirm every protected API endpoint rejects unauthenticated requests. After the workflow is on the repository's default branch, manually dispatch one daily run; scheduled workflows run only from that branch.
-2. **Run two weeks in simulation:** keep `EXECUTION_MODE=simulation`. Allow real analytics reads, agent calls, proposals, CEO decisions, and audit writes. Verify that no email, post, listing, purchase, merge, or publish adapter is called.
-3. **Review the evidence:** check duplicate suppression, proposal quality, attribution keys, API cost, rejection learning, PII handling, and stale-version protection. Reconcile every attempted execution with its approval record.
-4. **Enable one channel at a time:** set `EXECUTION_MODE=live` only after email, listings, and website pull-request adapters pass a dry-run and a single approved canary. Keep unconfigured channels unavailable; an integration credential alone never counts as approval.
-5. **Rollback safely:** restore `EXECUTION_MODE=simulation` before investigating unexpected behavior. Rotating `SCHEDULER_API_TOKEN` immediately stops future scheduled calls until the matching GitHub secret is updated.
-
-Simulation affects execution only: scheduled analysis, drafting, approvals, and audit records remain realistic so the two-week review is meaningful. An approval in simulation records the approved version and a `simulation_blocked` audit event, but never calls an adapter.
-
-## Approval and audit boundaries
-
-The agent may autonomously read approved data sources, research public information, analyze the funnel, rank experiments, draft content, and create internal proposals. It may not autonomously:
-
-- send email or messages;
-- publish posts, comments, listings, videos, or website changes;
-- merge pull requests or trigger production releases;
-- spend money, accept commercial terms, or alter pricing;
-- approve its own proposal or broaden a prior approval.
-
-An approval is valid only for the recorded action ID, version, channel, target, and payload. `expected_version` prevents a stale browser tab from approving changed content. Any content or recipient change creates a new version and returns the action to `awaiting_approval`. Rejections and change requests are learning signals, not permission to execute a revised draft.
-
-Every state transition must record the action and run IDs, old and new state, content version, actor, timestamp, and relevant result metadata. Execution must be idempotent, and an action must never have more than one successful external execution for the same approved version. Audit records are append-oriented; corrections are new events rather than silent rewrites.
+Rollback: pause/remove the GitHub integration first, then restore `EXECUTION_MODE=simulation` and DB execution flags. Removal cancels queued jobs and refuses while a call is in flight, avoiding an untracked partial result.
 
 ## Operational checks
 
-- **Every day:** the scheduled workflow is green, `/health` is healthy, and no action bypassed `awaiting_approval`.
-- **Every week:** reconcile funnel attribution and executed actions, inspect failures and costs, and confirm the open CEO queue remains at five decisions or fewer.
-- **On scheduler authentication failure:** rotate `SCHEDULER_API_TOKEN`, update the service and GitHub secret, then manually dispatch one daily run.
-- **On repeated server errors:** leave failed runs visible, keep execution in simulation, and inspect service logs without copying response bodies into GitHub issues.
-- **Before enabling an adapter:** test missing approval, stale version, duplicate delivery, timeout after delivery, unsubscribe/negative response, and secret-redaction behavior.
+- `/health` must be `200`, `store=supabase`, `executor_alive=true`, and `executor_ready=true`.
+- A queued/running action must progress or expose a clear failed/unknown state; the worker catches transient DB errors and retries instead of silently dying.
+- A failed or unknown GitHub result pauses the provider. Reconcile the deterministic branch/PR before enabling it again.
+- The CEO must see the complete paths and text of every proposed PR file before approval.
+- Gmail compose is shown only before `sent` is recorded, preventing accidental duplicate sends.
+- Outcomes and CEO feedback must appear in the next agent context; rejected work never becomes future authorization.
