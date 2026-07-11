@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       confirmation:
-        description: Type agent.ancbuddy.com to confirm the DNS change
+        description: Type UPSERT agent.ancbuddy.com TO 204.168.129.208
         required: true
         type: string
 
@@ -33,8 +33,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          [[ "${CONFIRMATION}" == "agent.ancbuddy.com" ]] || {
-            echo "Confirmation did not match agent.ancbuddy.com." >&2
+          [[ "${CONFIRMATION}" == "UPSERT agent.ancbuddy.com TO 204.168.129.208" ]] || {
+            echo "Confirmation did not match the exact DNS mutation." >&2
             exit 1
           }
           [[ -n "${PORKBUN_API_KEY}" && -n "${PORKBUN_SECRET_API_KEY}" ]] || {
@@ -88,8 +88,22 @@ jobs:
                 -H "Idempotency-Key: ancbuddy-agent-a-dry-run" \
                 --data "${dry_run_payload}"
             )
-            [[ "$(jq -r '.status // empty' <<<"${dry_run}")" == "SUCCESS" ]] || {
+            jq -e \
+              '.status == "SUCCESS" and .dryRun == true and .wouldSucceed == true' \
+              <<<"${dry_run}" >/dev/null || {
               echo "Porkbun rejected the DNS dry-run." >&2
+              exit 1
+            }
+
+            after_dry_run=$(
+              curl --fail --silent --show-error "${retrieve_url}" \
+                -H "X-API-Key: ${PORKBUN_API_KEY}" \
+                -H "X-Secret-API-Key: ${PORKBUN_SECRET_API_KEY}"
+            )
+            jq -e \
+              '.status == "SUCCESS" and (.records | length) == 0' \
+              <<<"${after_dry_run}" >/dev/null || {
+              echo "DNS state changed during the create dry-run; refusing the live request." >&2
               exit 1
             }
 
@@ -102,7 +116,8 @@ jobs:
             )
           else
             current_content=$(jq -r '.records[0].content' <<<"${records}")
-            if [[ "${current_content}" == "${DNS_CONTENT}" ]]; then
+            current_ttl=$(jq -r '.records[0].ttl | tostring' <<<"${records}")
+            if [[ "${current_content}" == "${DNS_CONTENT}" && "${current_ttl}" == "${DNS_TTL}" ]]; then
               echo "The exact A record already exists."
               exit 0
             fi
@@ -110,6 +125,36 @@ jobs:
             record_id=$(jq -r '.records[0].id' <<<"${records}")
             [[ "${record_id}" =~ ^[0-9]+$ ]] || {
               echo "Porkbun returned an invalid record ID." >&2
+              exit 1
+            }
+            dry_run_payload=$(jq '. + {dryRun:true}' <<<"${base_payload}")
+            dry_run=$(
+              curl --fail --silent --show-error \
+                -X POST "${api_base}/dns/edit/${DNS_DOMAIN}/${record_id}" \
+                -H "Content-Type: application/json" \
+                -H "Idempotency-Key: ancbuddy-agent-a-edit-dry-run-${record_id}" \
+                --data "${dry_run_payload}"
+            )
+            jq -e \
+              '.status == "SUCCESS" and .dryRun == true and .wouldSucceed == true' \
+              <<<"${dry_run}" >/dev/null || {
+              echo "Porkbun rejected the DNS edit dry-run." >&2
+              exit 1
+            }
+
+            after_dry_run=$(
+              curl --fail --silent --show-error "${retrieve_url}" \
+                -H "X-API-Key: ${PORKBUN_API_KEY}" \
+                -H "X-Secret-API-Key: ${PORKBUN_SECRET_API_KEY}"
+            )
+            jq -e \
+              --arg expected_id "${record_id}" \
+              --arg expected_content "${current_content}" \
+              '.status == "SUCCESS" and (.records | length) == 1 and
+               (.records[0].id | tostring) == $expected_id and
+               .records[0].content == $expected_content' \
+              <<<"${after_dry_run}" >/dev/null || {
+              echo "DNS state changed during the edit dry-run; refusing the live request." >&2
               exit 1
             }
             mutation=$(
@@ -133,6 +178,9 @@ jobs:
           )
           jq -e \
             --arg expected "${DNS_CONTENT}" \
-            '.status == "SUCCESS" and (.records | length) == 1 and .records[0].content == $expected' \
+            --arg expected_ttl "${DNS_TTL}" \
+            '.status == "SUCCESS" and (.records | length) == 1 and
+             .records[0].content == $expected and
+             (.records[0].ttl | tostring) == $expected_ttl' \
             <<<"${verified}" >/dev/null
           echo "agent.ancbuddy.com A record verified."
