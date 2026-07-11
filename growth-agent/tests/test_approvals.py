@@ -104,7 +104,7 @@ async def test_simulation_never_claims_or_calls_adapter(settings):
 
 
 @pytest.mark.asyncio
-async def test_live_mode_without_smtp_marks_integration_required(settings):
+async def test_live_mode_never_executes_approval_without_durable_job(settings):
     live = settings.model_copy(update={"execution_mode": "live"})
     store = InMemoryGrowthStore()
     created = (await store.create_actions([action()]))[0]
@@ -113,4 +113,5 @@ async def test_live_mode_without_smtp_marks_integration_required(settings):
     )
     assert snapshot
     await ExecutionService(live, store).execute(created.id, approved.version, snapshot.content_hash)
-    assert (await store.get_action(created.id)).status == "integration_required"
+    assert (await store.get_action(created.id)).status == "approved"
+    assert (await store.list_activity())[0].event_type == "execution_blocked"

@@ -1,39 +1,46 @@
 # Growth Agent database
 
-Migration `20260710090000_create_growth_agent_schema.sql` adds durable agent state, a five-item CEO approval inbox, append-only decision/outcome history, and privacy-safe funnel reporting.
+The Growth Agent uses two migrations:
 
-## Access and lifecycle
+- `20260710090000_create_growth_agent_schema.sql` creates versioned actions, immutable approvals/outcomes/audit rows, runs, settings, and attribution views.
+- `20260711230000_add_durable_growth_execution.sql` adds encrypted integrations and the durable, approval-bound execution queue.
 
-- Only the Supabase `service_role` can access growth tables, views, and RPCs. Browser roles have no grants or RLS policies.
-- `growth_actions` follows `idea → researched → drafted → awaiting_approval → approved/rejected/needs_changes → executed → observed → evaluated`.
-- `growth_approvals`, `growth_outcome_events`, and `growth_audit_log` are append-only. Each decision stores the exact reviewed JSON and its canonical SHA-256 hash.
-- `growth_settings.max_pending_actions` defaults to `5`. A serialized trigger prevents concurrent inserts from overflowing the CEO inbox.
-- `growth_settings.simulation_mode` starts enabled and external execution starts disabled.
-- Changes to `type`, `title`, `channel`, `expected_upside`, `evidence`, `risk`, or `content` must increment the action version exactly once. Execution-only status/timestamp updates keep the version unchanged.
-- An unavailable channel adapter ends at `integration_required`; approved adapters may claim an action as `executing` only while its exact content approval is still valid.
+## Access and safety
 
-## Approval RPC
+- Growth tables are service-role only. `anon` and `authenticated` have no read or write grants.
+- `growth_approvals`, `growth_outcome_events`, and `growth_audit_log` are append-only.
+- Provider credentials reach Postgres only as AES-256-GCM ciphertext and nonce.
+- Integration writes use `save_growth_integration`, `enable_growth_integration`, and `remove_growth_integration`; direct browser or service-role table mutation is not granted.
+- At most five actions may await CEO approval, and at most three new email drafts may be created per UTC day.
 
-Call `decide_growth_action(p_action_id, p_expected_version, p_decision, p_feedback, p_edited_content)` only from the server with the service-role key.
+## Approval and execution
 
-- `approve` snapshots the current content, records an expiring approval, and locks `approved_content_hash` to the reviewed hash.
-- `reject` records the reviewed snapshot and closes the action.
-- `change` requires feedback or replacement JSON, records the reviewed version, moves the action to `needs_changes`, and increments its version. The revised action must be submitted and approved again.
-- Stale `p_expected_version` values fail with `growth_action_version_conflict`; no partial decision is stored.
+`decide_growth_action_v2(...)` records the exact CEO decision and, for a newly approved `site_pr`, creates its execution job in the same transaction. It creates a job only when global execution is live and the GitHub integration is both ready and in `canary` or `live` mode.
 
-The RPC returns `action_id`, resulting `status` and `version`, `approval_id`, `decision`, resulting `content_hash`, resulting `content`, and `decided_at`.
+The worker never scans approvals. It can process only rows in `growth_execution_jobs` and must use:
 
-Import outcome events with `INSERT ... ON CONFLICT (source, external_event_id) DO NOTHING`; outcome rows cannot be updated or deleted later.
+1. `claim_growth_execution_job` for an exclusive expiring lease;
+2. `heartbeat_growth_execution_job` while calling GitHub;
+3. `complete_growth_execution_job` for a confirmed terminal result; or
+4. `retry_growth_execution_job` for an ambiguous/retryable result.
 
-## Attribution and dashboard
+Claim verifies the action version, current and approved content hashes, full JSON snapshot, approval row, TTL, integration mode, global execution flags, and retry budget. `(action_id, action_version)` is unique. Old approvals have no job and are never backfilled or replayed.
 
-Use each action's `attribution_key` as its exact `utm_campaign`. Existing `site_events`, `trial_signups`, and `lemon_orders` then feed:
+Canary mode reserves exactly one job. Success pauses the integration automatically. A failed or unknown result also pauses the provider for review. Credential replacement is blocked while a job is queued or running. Removing an integration cancels queued work and refuses removal during a running external call.
 
-- `growth_funnel_daily_v`: daily privacy-safe funnel totals.
-- `growth_campaign_attribution_v`: results by UTM source, medium, and campaign.
-- `growth_action_attribution_v`: UTM results plus explicit outcome events by action.
-- `get_growth_dashboard(p_since, p_until)`: a privacy-safe JSON summary for a window up to 366 days.
+## Manual email feedback
 
-Revenue reporting uses Lemon Squeezy `amount_usd` in minor USD units; it only falls back to `amount_total` when the order currency is explicitly USD. Names, emails, contact addresses, user agents, and raw webhook data are never exposed by the reporting views/RPC.
+Email approval never creates an executor job. The CEO sends the frozen draft manually from Gmail, then calls `record_growth_manual_outcome` with `sent`, `reply`, `positive`, or `negative`.
 
-`growth_settings.revenue_baseline_minor` is intentionally `0`; set it only for historical revenue not represented in `lemon_orders`, and keep its units aligned with `goal_currency`.
+The RPC is idempotent and maps these to immutable `email_sent`, `reply`, `positive_reply`, and `negative_reply` events. A manual send is a fresh human action and can be recorded after the original approval TTL. Subsequent feedback advances the action through `executed`, `observed`, and `evaluated` and is included in the next agent run.
+
+## Attribution
+
+Use each action's `attribution_key` as its exact `utm_campaign`. Existing `site_events`, `trial_signups`, and `lemon_orders` feed:
+
+- `growth_funnel_daily_v`
+- `growth_campaign_attribution_v`
+- `growth_action_attribution_v`
+- `get_growth_dashboard(p_since, p_until)`
+
+The reporting views expose aggregated funnel and revenue values, not names, email addresses, user agents, credentials, or raw provider responses.

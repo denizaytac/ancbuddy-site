@@ -10,6 +10,9 @@ def test_health_is_public_and_safe(client):
         "store": "memory",
         "agent_ready": False,
         "execution_mode": "simulation",
+        "executor_alive": True,
+        "executor_ready": True,
+        "executor_last_error": None,
     }
 
 
@@ -24,6 +27,22 @@ def test_login_sets_httponly_cookie_and_me_works(client):
 def test_invalid_login_and_unauthenticated_dashboard_are_rejected(client):
     assert client.post("/api/auth/login", json={"token": "wrong"}).status_code == 401
     assert client.get("/api/dashboard").status_code == 401
+
+
+def test_sensitive_validation_errors_never_reflect_tokens(client, auth_headers):
+    marker = "BADTOKEN_SUPER_SECRET_DO_NOT_REFLECT"
+    integration = client.put(
+        "/api/integrations/github",
+        headers=auth_headers,
+        json={"token": marker},
+    )
+    assert integration.status_code == 422
+    assert marker not in integration.text
+
+    oversized = marker * 30
+    login = client.post("/api/auth/login", json={"token": oversized})
+    assert login.status_code == 422
+    assert marker not in login.text
 
 
 def test_dashboard_contract(client, auth_headers):

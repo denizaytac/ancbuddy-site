@@ -4,7 +4,7 @@ from datetime import UTC, datetime
 from typing import Any, Literal
 from uuid import uuid4
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, SecretStr, field_validator
 
 
 RunKind = Literal["daily", "weekly", "manual"]
@@ -26,6 +26,11 @@ ActionStatus = Literal[
     "failed",
     "integration_required",
 ]
+ExecutionJobStatus = Literal[
+    "queued", "running", "succeeded", "failed", "unknown", "cancelled"
+]
+IntegrationMode = Literal["disabled", "canary", "live", "paused"]
+IntegrationStatus = Literal["unconfigured", "validating", "ready", "invalid", "error"]
 
 
 def utc_now() -> datetime:
@@ -93,6 +98,65 @@ class GrowthAction(BaseModel):
     content_hash: str = ""
     created_at: datetime = Field(default_factory=utc_now)
     updated_at: datetime = Field(default_factory=utc_now)
+    execution: ExecutionJobSummary | None = None
+    gmail_compose_url: str | None = None
+    approval_ready: bool = True
+    approval_blocker: str | None = None
+
+
+class ExecutionJobSummary(BaseModel):
+    id: str
+    status: ExecutionJobStatus
+    provider: str
+    attempts: int = 0
+    external_id: str | None = None
+    external_url: str | None = None
+    error: str | None = None
+    created_at: datetime
+    updated_at: datetime
+
+
+class ExecutionJob(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    action_id: str
+    approval_id: str | None = None
+    action_version: int = Field(ge=1)
+    content_hash: str
+    content_snapshot: dict[str, Any] = Field(default_factory=dict)
+    provider: str
+    status: ExecutionJobStatus = "queued"
+    attempts: int = Field(default=0, ge=0)
+    max_attempts: int = Field(default=3, ge=1)
+    available_at: datetime = Field(default_factory=utc_now)
+    authorization_expires_at: datetime | None = None
+    lease_owner: str | None = None
+    lease_token: str | None = None
+    lease_expires_at: datetime | None = None
+    last_heartbeat_at: datetime | None = None
+    external_id: str | None = None
+    external_url: str | None = None
+    error: str | None = None
+    created_at: datetime = Field(default_factory=utc_now)
+    updated_at: datetime = Field(default_factory=utc_now)
+    started_at: datetime | None = None
+    completed_at: datetime | None = None
+
+    def summary(self) -> ExecutionJobSummary:
+        return ExecutionJobSummary.model_validate(
+            self.model_dump(
+                include={
+                    "id",
+                    "status",
+                    "provider",
+                    "attempts",
+                    "external_id",
+                    "external_url",
+                    "error",
+                    "created_at",
+                    "updated_at",
+                }
+            )
+        )
 
 
 class ActivityItem(BaseModel):
@@ -169,10 +233,58 @@ class ApprovalSnapshot(BaseModel):
 
 
 class ExecutionResult(BaseModel):
-    status: Literal["executed", "integration_required", "failed"]
+    status: Literal["executed", "integration_required", "failed", "unknown"]
     provider: str
     external_id: str | None = None
     details: dict[str, Any] = Field(default_factory=dict)
+
+
+class IntegrationRecord(BaseModel):
+    provider: str
+    credential_ciphertext: str | None = None
+    credential_nonce: str | None = None
+    credential_key_version: int = 1
+    configuration: dict[str, Any] = Field(default_factory=dict)
+    mode: IntegrationMode = "disabled"
+    status: IntegrationStatus = "unconfigured"
+    canary_limit: int = Field(default=1, ge=0)
+    reserved_count: int = Field(default=0, ge=0)
+    succeeded_count: int = Field(default=0, ge=0)
+    metadata: dict[str, Any] = Field(default_factory=dict)
+    last_validated_at: datetime | None = None
+    last_error: str | None = None
+    paused_at: datetime | None = None
+    created_at: datetime = Field(default_factory=utc_now)
+    updated_at: datetime = Field(default_factory=utc_now)
+
+
+class IntegrationView(BaseModel):
+    provider: str
+    configured: bool
+    repository: str | None = None
+    mode: IntegrationMode
+    status: IntegrationStatus
+    succeeded_count: int = 0
+    last_tested_at: datetime | None = None
+    last_error: str | None = None
+
+
+class GitHubIntegrationUpdate(BaseModel):
+    token: SecretStr
+
+
+class EnableIntegrationRequest(BaseModel):
+    mode: Literal["canary", "live"] = "canary"
+
+
+class ManualOutcomeRequest(BaseModel):
+    event_type: Literal["sent", "reply", "positive", "negative"]
+    note: str | None = Field(default=None, max_length=2000)
+
+    @field_validator("note")
+    @classmethod
+    def trim_note(cls, value: str | None) -> str | None:
+        return value.strip() if value else None
 
 
 class AgentProposal(BaseModel):

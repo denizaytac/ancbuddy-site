@@ -7,6 +7,7 @@ import {
   ChevronRight,
   Inbox,
   Menu,
+  PlugZap,
   RefreshCw,
   Sparkles,
   TrendingUp,
@@ -49,13 +50,26 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { ApprovalDetail } from "./ApprovalDetail";
 import { ApprovalQueue } from "./ApprovalQueue";
-import { loadDashboard, submitDecision } from "./api";
+import {
+  loadDashboard,
+  loadGithubIntegration,
+  submitDecision,
+  submitManualOutcome,
+} from "./api";
 import { demoDashboard } from "./demo";
+import { IntegrationsView } from "./IntegrationsView";
 import { LoginGate } from "./LoginGate";
 import { MetricsRail } from "./MetricsRail";
-import type { ApiState, Dashboard, Decision, GrowthAction } from "./types";
+import type {
+  ApiState,
+  Dashboard,
+  Decision,
+  GithubIntegration,
+  GrowthAction,
+  ManualOutcome,
+} from "./types";
 
-type View = "inbox" | "outcomes" | "learning";
+type View = "inbox" | "outcomes" | "learning" | "integrations";
 
 const demoMode = import.meta.env.VITE_GROWTH_DEMO === "true";
 
@@ -63,6 +77,7 @@ const navigation = [
   { id: "inbox" as const, label: "Inbox", icon: Inbox },
   { id: "outcomes" as const, label: "Outcomes", icon: TrendingUp },
   { id: "learning" as const, label: "Learning", icon: BookOpen },
+  { id: "integrations" as const, label: "Integrations", icon: PlugZap },
 ];
 
 function money(value: number, currency: string) {
@@ -172,16 +187,31 @@ export function CeoInbox() {
   const [feedback, setFeedback] = useState("");
   const [announcement, setAnnouncement] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [githubIntegration, setGithubIntegration] = useState<GithubIntegration | null>(
+    demoMode
+      ? {
+          provider: "github",
+          configured: true,
+          repository: "denizaytac/ancbuddy-site",
+          mode: "canary",
+          status: "ready",
+        }
+      : null,
+  );
 
-  const fetchDashboard = useCallback(async () => {
+  const fetchDashboard = useCallback(async (showLoading = true) => {
     if (demoMode) {
       setApiState({ kind: "ready", dashboard: demoDashboard });
       return;
     }
-    setApiState({ kind: "loading" });
+    if (showLoading) setApiState({ kind: "loading" });
     try {
-      const dashboard = await loadDashboard();
+      const [dashboard, integration] = await Promise.all([
+        loadDashboard(),
+        loadGithubIntegration().catch(() => null),
+      ]);
       setApiState({ kind: "ready", dashboard });
+      if (integration) setGithubIntegration(integration);
     } catch (error) {
       if (error instanceof Error && error.message === "AUTH_REQUIRED") {
         setApiState({ kind: "login" });
@@ -193,20 +223,21 @@ export function CeoInbox() {
 
   useEffect(() => {
     if (demoMode) return;
-    loadDashboard()
-      .then((dashboard) => setApiState({ kind: "ready", dashboard }))
-      .catch((error: unknown) => {
-        if (error instanceof Error && error.message === "AUTH_REQUIRED") {
-          setApiState({ kind: "login" });
-        } else {
-          setApiState({ kind: "error", message: error instanceof Error ? error.message : "Unable to load the inbox." });
-        }
-      });
-  }, []);
+    const timer = window.setTimeout(() => void fetchDashboard(), 0);
+    return () => window.clearTimeout(timer);
+  }, [fetchDashboard]);
 
   const dashboard = apiState.kind === "ready" ? apiState.dashboard : null;
   const actions = useMemo(
-    () => dashboard?.actions.filter((action) => action.status === "awaiting_approval") ?? [],
+    () => dashboard?.actions.filter((action) =>
+      action.status === "awaiting_approval"
+      || Boolean(action.execution)
+      || Boolean(action.gmail_compose_url)
+      || (
+        action.type === "email"
+        && ["approved", "executed", "observed", "evaluated"].includes(action.status)
+      ),
+    ) ?? [],
     [dashboard],
   );
   const effectiveSelectedId = actions.some((action) => action.id === selectedId)
@@ -217,18 +248,53 @@ export function CeoInbox() {
     () => actions.find((action) => action.id === effectiveSelectedId) ?? actions[0],
     [actions, effectiveSelectedId],
   );
+  const pendingCount = actions.filter((action) => action.status === "awaiting_approval").length;
+
+  const selectedApprovalBlocker = useMemo(() => {
+    if (!selectedAction || selectedAction.status !== "awaiting_approval") return undefined;
+    const backendBlocker = selectedAction.approval_blocker ?? selectedAction.approval_block_reason;
+    if (backendBlocker) return backendBlocker;
+    if (selectedAction.approval_ready === false) return "This draft is not ready for approval yet.";
+    if (selectedAction.type === "site_pr" && selectedAction.approval_ready !== true) {
+      if (!githubIntegration?.configured) return "Connect and test GitHub in Integrations before approval.";
+      if (githubIntegration.status !== "ready") return githubIntegration.last_error ?? "Save and test a GitHub token for this repository before approval.";
+      if (githubIntegration.mode === "disabled" || githubIntegration.mode === "paused") return "Enable the one-PR canary in Integrations before approval.";
+    }
+    if (selectedAction.type === "email" && (!selectedAction.content.to || !selectedAction.content.subject || !selectedAction.content.body)) {
+      return "The email needs one exact recipient, subject, and body before approval.";
+    }
+    return undefined;
+  }, [githubIntegration, selectedAction]);
 
   const decide = useCallback(async (decision: Decision, action: GrowthAction, note?: string) => {
     setSubmitting(true);
     setAnnouncement("");
     try {
       if (demoMode && dashboard) {
-        const remaining = dashboard.actions.filter((item) => item.id !== action.id);
+        const nextActions = dashboard.actions.flatMap((item) => {
+          if (item.id !== action.id) return [item];
+          if (decision !== "approve") return [];
+          if (item.type === "email") {
+            return [{ ...item, status: "approved", gmail_compose_url: undefined }];
+          }
+          if (item.type === "site_pr") {
+            return [{
+              ...item,
+              status: "approved",
+              execution: {
+                id: `demo-${item.id}`,
+                status: "queued" as const,
+                provider: "github",
+              },
+            }];
+          }
+          return [];
+        });
         setApiState({
           kind: "ready",
           dashboard: {
             ...dashboard,
-            actions: remaining,
+            actions: nextActions,
             activity: {
               ...dashboard.activity,
               agent_note: decision === "change"
@@ -241,24 +307,77 @@ export function CeoInbox() {
         const response = await submitDecision(action.id, decision, action.version, note);
         setApiState({ kind: "ready", dashboard: response.dashboard });
       }
-      setAnnouncement(decision === "approve" ? "Approved and queued." : decision === "change" ? "Feedback sent to the agent." : "Action rejected.");
+      setAnnouncement(
+        decision === "approve"
+          ? action.type === "email"
+            ? "Email draft approved. Open it in Gmail and press Send."
+            : action.type === "site_pr"
+              ? "Approved. The draft PR is queued for the VPS executor."
+              : "Approved and queued."
+          : decision === "change"
+            ? "Feedback sent to the agent."
+            : "Action rejected.",
+      );
       setFeedback("");
       setChangeOpen(false);
       setRejectOpen(false);
     } catch (error) {
       setAnnouncement(error instanceof Error ? error.message : "The decision could not be saved.");
-      if (!demoMode) await fetchDashboard();
+      if (!demoMode) await fetchDashboard(false);
     } finally {
       setSubmitting(false);
     }
   }, [dashboard, fetchDashboard]);
+
+  const recordOutcome = useCallback(async (action: GrowthAction, outcome: ManualOutcome) => {
+    setSubmitting(true);
+    setAnnouncement("");
+    try {
+      if (demoMode && dashboard) {
+        setAnnouncement(`${outcome.charAt(0).toUpperCase() + outcome.slice(1)} recorded.`);
+        return;
+      }
+      const response = await submitManualOutcome(action.id, outcome);
+      setApiState({ kind: "ready", dashboard: response.dashboard });
+      setAnnouncement(`${outcome.charAt(0).toUpperCase() + outcome.slice(1)} recorded for the feedback loop.`);
+    } catch (error) {
+      setAnnouncement(error instanceof Error ? error.message : "The outcome could not be recorded.");
+      if (!demoMode) await fetchDashboard(false);
+    } finally {
+      setSubmitting(false);
+    }
+  }, [dashboard, fetchDashboard]);
+
+  const hasActiveExecution = dashboard?.actions.some((action) =>
+    action.execution?.status === "queued"
+    || action.execution?.status === "running",
+  ) ?? false;
+
+  useEffect(() => {
+    if (demoMode || !hasActiveExecution) return;
+    const timer = window.setInterval(() => {
+      void (async () => {
+        try {
+          const nextDashboard = await loadDashboard();
+          setApiState({ kind: "ready", dashboard: nextDashboard });
+          // Read the provider after the terminal job state so the final poll
+          // cannot miss the transaction's automatic canary pause.
+          const integration = await loadGithubIntegration().catch(() => null);
+          if (integration) setGithubIntegration(integration);
+        } catch {
+          // A later poll or manual refresh will retry without disrupting review.
+        }
+      })();
+    }, 2500);
+    return () => window.clearInterval(timer);
+  }, [hasActiveExecution]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (!selectedAction || view !== "inbox" || event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
       if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
         event.preventDefault();
-        void decide("approve", selectedAction);
+        if (selectedAction.status === "awaiting_approval" && !selectedApprovalBlocker) void decide("approve", selectedAction);
       }
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "e") {
         event.preventDefault();
@@ -267,7 +386,7 @@ export function CeoInbox() {
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [decide, selectedAction, view]);
+  }, [decide, selectedAction, selectedApprovalBlocker, view]);
 
   if (apiState.kind === "loading") {
     return <main className="ceo-loading"><RefreshCw aria-hidden="true" /><p>Loading CEO Inbox…</p></main>;
@@ -325,7 +444,7 @@ export function CeoInbox() {
             <div className="ceo-workspace">
               <ApprovalQueue actions={actions} selectedId={selectedAction.id} onSelect={setSelectedId} />
               <div className="ceo-mobile-pager" aria-label="Approval queue position">
-                <h2>{actions.length} decisions need you</h2>
+                <h2>{pendingCount > 0 ? `${pendingCount} decisions need you` : "Recent actions"}</h2>
                 <div>
                   <button type="button" aria-label="Previous decision" onClick={() => {
                     const current = actions.findIndex((action) => action.id === selectedAction.id);
@@ -344,6 +463,8 @@ export function CeoInbox() {
                 onApprove={() => void decide("approve", selectedAction)}
                 onChange={() => setChangeOpen(true)}
                 onReject={() => setRejectOpen(true)}
+                onOutcome={(outcome) => void recordOutcome(selectedAction, outcome)}
+                approvalBlocker={selectedApprovalBlocker}
               />
               <MetricsRail
                 goal={apiState.dashboard.goal}
@@ -355,8 +476,17 @@ export function CeoInbox() {
           ) : <EmptyInbox />
         ) : view === "outcomes" ? (
           <OutcomesView dashboard={apiState.dashboard} />
-        ) : (
+        ) : view === "learning" ? (
           <LearningView dashboard={apiState.dashboard} />
+        ) : (
+          <IntegrationsView
+            integration={githubIntegration}
+            onChange={(integration) => {
+              setGithubIntegration(integration);
+              if (!demoMode) void fetchDashboard(false);
+            }}
+            onAnnouncement={setAnnouncement}
+          />
         )}
       </main>
 

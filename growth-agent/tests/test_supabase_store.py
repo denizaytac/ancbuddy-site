@@ -6,7 +6,7 @@ import httpx
 import pytest
 
 from growth_agent.config import Settings
-from growth_agent.models import DecisionRequest, GrowthRun
+from growth_agent.models import DecisionRequest, GrowthRun, IntegrationRecord
 from growth_agent.store import SupabaseGrowthStore
 
 
@@ -119,4 +119,116 @@ async def test_supabase_run_summary_is_stored_as_json_object():
     assert was_created is True
     assert "summary" not in posted
     assert created.id == run.id
+    await client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_supabase_integration_removal_uses_guarded_rpc():
+    seen: dict[str, object] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["method"] = request.method
+        seen["path"] = request.url.path
+        seen["payload"] = __import__("json").loads(request.content)
+        return httpx.Response(200, json=[])
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    settings = Settings(
+        app_env="test",
+        openai_api_key="",
+        store_backend="supabase",
+        supabase_url="https://example.supabase.co",
+        supabase_service_role_key="test-role-key",
+    )
+    store = SupabaseGrowthStore(settings, client=client)
+
+    await store.delete_integration("github")
+
+    assert seen == {
+        "method": "POST",
+        "path": "/rest/v1/rpc/remove_growth_integration",
+        "payload": {"p_provider": "github"},
+    }
+    await client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_supabase_token_replacement_preserves_canary_counters():
+    posted: dict[str, object] = {}
+    calls: list[tuple[str, str]] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append((request.method, request.url.path))
+        if request.method == "GET":
+            return httpx.Response(
+                200,
+                json=[
+                    {
+                        "provider": "github",
+                        "status": "ready",
+                        "mode": "paused",
+                        "credential_ciphertext": (
+                            "new-ciphertext" if posted else "old-ciphertext"
+                        ),
+                        "credential_nonce": "new-nonce" if posted else "old-nonce",
+                        "credential_key_version": 1,
+                        "configuration": {"repository": "denizaytac/ancbuddy-site"},
+                        "metadata": {},
+                        "canary_limit": 1,
+                        "canary_reserved_count": 1,
+                        "canary_succeeded_count": 1,
+                    }
+                ],
+            )
+        posted.update(__import__("json").loads(request.content))
+        return httpx.Response(
+            200,
+            json=[
+                {
+                    "provider": "github",
+                    "status": "ready",
+                    "mode": "paused",
+                    "credentials_configured": True,
+                }
+            ],
+        )
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    store = SupabaseGrowthStore(
+        Settings(
+            app_env="test",
+            store_backend="supabase",
+            supabase_url="https://example.supabase.co",
+            supabase_service_role_key="test-role-key",
+        ),
+        client=client,
+    )
+    saved = await store.save_integration(
+        IntegrationRecord(
+            provider="github",
+            status="ready",
+            mode="disabled",
+            credential_ciphertext="new-ciphertext",
+            credential_nonce="new-nonce",
+            configuration={"repository": "denizaytac/ancbuddy-site"},
+        )
+    )
+    assert calls == [
+        ("GET", "/rest/v1/growth_integrations"),
+        ("POST", "/rest/v1/rpc/save_growth_integration"),
+        ("GET", "/rest/v1/growth_integrations"),
+    ]
+    assert posted == {
+        "p_provider": "github",
+        "p_status": "ready",
+        "p_credential_ciphertext": "new-ciphertext",
+        "p_credential_nonce": "new-nonce",
+        "p_credential_key_version": 1,
+        "p_configuration": {"repository": "denizaytac/ancbuddy-site"},
+        "p_metadata": {},
+        "p_last_validated_at": None,
+        "p_last_error": None,
+    }
+    assert saved.reserved_count == 1
+    assert saved.succeeded_count == 1
     await client.aclose()

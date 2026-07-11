@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
+from datetime import datetime
 from typing import Annotated, Literal
 
 from pydantic import Field, field_validator, model_validator
@@ -27,6 +28,7 @@ class Settings(BaseSettings):
     ceo_password_hash: str | None = None
     ceo_password: str | None = None
     ceo_api_token: str | None = None
+    ceo_api_token_expires_at: datetime | None = None
     scheduler_api_token: str | None = None
     session_secret: str = "development-only-change-me"
     session_ttl_seconds: int = Field(default=43_200, ge=300, le=604_800)
@@ -43,9 +45,12 @@ class Settings(BaseSettings):
     supabase_service_role_key: str | None = None
 
     scheduler_enabled: bool = False
-    daily_run_hour_utc: int = Field(default=7, ge=0, le=23)
+    daily_run_hour_utc: int = Field(default=5, ge=0, le=23)
+    daily_run_minute_utc: int = Field(default=15, ge=0, le=59)
+    daily_excluded_weekday: int = Field(default=0, ge=0, le=6)
     weekly_run_weekday: int = Field(default=0, ge=0, le=6)
-    weekly_run_hour_utc: int = Field(default=8, ge=0, le=23)
+    weekly_run_hour_utc: int = Field(default=6, ge=0, le=23)
+    weekly_run_minute_utc: int = Field(default=15, ge=0, le=59)
 
     smtp_host: str | None = None
     smtp_port: int = Field(default=587, ge=1, le=65535)
@@ -55,8 +60,11 @@ class Settings(BaseSettings):
     smtp_starttls: bool = True
 
     github_token: str | None = None
-    github_repository: str | None = None
+    github_repository: str = "denizaytac/ancbuddy-site"
     github_base_branch: str = "main"
+    integration_encryption_key: str | None = None
+    execution_worker_poll_seconds: float = Field(default=2.0, ge=0.1, le=60)
+    execution_job_lease_seconds: int = Field(default=300, ge=30, le=900)
 
     growth_webhook_url: str | None = None
     growth_webhook_secret: str | None = None
