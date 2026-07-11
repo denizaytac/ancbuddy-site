@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Collection
 from email.utils import parseaddr
 from typing import Protocol
 from uuid import NAMESPACE_URL, uuid5
@@ -51,11 +52,55 @@ audience in content.to. If no exact recipient is known, propose a non-email expe
 
 
 PAID_ACTION = re.compile(r"\b(paid ad|advertis(?:e|ing)|sponsor|media buy|spend)\b", re.I)
+REDDIT_ALIAS = re.compile(
+    r"(?:\breddit(?:\.com)?\b|\bsubreddits?\b|(?<![A-Za-z0-9_])r/[A-Za-z0-9_]*)",
+    re.I,
+)
 
 
-def proposal_is_safe(proposal: AgentProposal) -> bool:
+def blocked_channel_instruction(blocked_channels: Collection[str]) -> str:
+    normalized = [channel.strip().lower() for channel in blocked_channels if channel.strip()]
+    if not normalized:
+        return "No channels are currently blocked by operator configuration."
+    channels = ", ".join(normalized)
+    reddit_detail = (
+        " Reddit aliases such as subreddit and r/... count as Reddit."
+        if "reddit" in normalized
+        else ""
+    )
+    return (
+        f"Hard channel blocklist: {channels}. Never research, recommend, draft, or route an "
+        "action through a blocked channel, and never suggest alternate accounts or workarounds."
+        f"{reddit_detail}"
+    )
+
+
+def proposal_mentions_blocked_channel(
+    proposal: AgentProposal, blocked_channels: Collection[str]
+) -> bool:
+    serialized = proposal.model_dump_json()
+    for raw_channel in blocked_channels:
+        channel = raw_channel.strip().lower()
+        if not channel:
+            continue
+        if channel == "reddit" and REDDIT_ALIAS.search(serialized):
+            return True
+        pattern = re.compile(
+            rf"(?<![A-Za-z0-9_]){re.escape(channel)}(?![A-Za-z0-9_])",
+            re.I,
+        )
+        if pattern.search(serialized):
+            return True
+    return False
+
+
+def proposal_is_safe(
+    proposal: AgentProposal, blocked_channels: Collection[str] = ("reddit",)
+) -> bool:
     """Deterministic boundary applied after model output and before persistence."""
     content = proposal.content
+    if proposal_mentions_blocked_channel(proposal, blocked_channels):
+        return False
     if proposal.type == "email":
         recipient = (content.to or "").strip()
         _, parsed = parseaddr(recipient)
@@ -92,7 +137,10 @@ class AgentsSDKPlanner:
             set_default_openai_key(settings.openai_api_key)
         self.agent = Agent(
             name="ANCBuddy Growth Operator",
-            instructions=AGENT_INSTRUCTIONS,
+            instructions=(
+                f"{AGENT_INSTRUCTIONS}\n\n"
+                f"{blocked_channel_instruction(settings.blocked_channels)}"
+            ),
             model=settings.openai_model,
             tools=[WebSearchTool()],
             output_type=AgentPlan,
@@ -134,6 +182,7 @@ class AgentsSDKPlanner:
             ),
             "existing_actions": action_context,
             "ceo_decision_feedback": feedback_context[:30],
+            "blocked_channels": self.settings.blocked_channels,
             "instruction": "Return a decision-ready plan. Do not perform any external action.",
         }
         result = await Runner.run(
@@ -146,7 +195,11 @@ class AgentsSDKPlanner:
             if isinstance(result.final_output, AgentPlan)
             else AgentPlan.model_validate(result.final_output)
         )
-        filtered = [proposal for proposal in plan.actions if proposal_is_safe(proposal)]
+        filtered = [
+            proposal
+            for proposal in plan.actions
+            if proposal_is_safe(proposal, self.settings.blocked_channels)
+        ]
         if len(filtered) != len(plan.actions):
             removed = len(plan.actions) - len(filtered)
             return plan.model_copy(

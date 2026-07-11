@@ -66,6 +66,7 @@ Configure service values in the hosting platform, never in Git or build logs:
 | --- | --- |
 | `APP_ENV=production` | Enforce production-only validation. |
 | `OPENAI_API_KEY` | Agent reasoning and drafting. |
+| `BLOCKED_CHANNELS=reddit` | Comma-separated hard blocklist applied in both the agent prompt and deterministic proposal policy. Reddit matching includes `subreddit` and `r/...`. |
 | `CEO_PASSWORD_HASH` | Preferred Argon2 hash for CEO browser login. Do not use a plaintext production password. |
 | `CEO_API_TOKEN` | Optional long random token for CEO API access. Never give it to the scheduler. |
 | `SCHEDULER_API_TOKEN` | Separate long random token accepted only by the run endpoints. |
@@ -83,6 +84,10 @@ Configure service values in the hosting platform, never in Git or build logs:
 Use a separate least-privilege database credential when the data layer supports it. Do not put customer email addresses, raw event payloads, API responses, or secret values in GitHub logs.
 
 Leave outbound integration credentials unset during the simulation period. Later, enable one adapter at a time: `SMTP_*` for approved email, a fine-grained `GITHUB_TOKEN` plus `GITHUB_REPOSITORY` for approved website pull requests, or `GROWTH_WEBHOOK_*` for an explicitly reviewed integration. Credentials make an adapter available; they never authorize an action by themselves.
+
+Keep `reddit` in `BLOCKED_CHANNELS` while the Reddit account is suspended. The service discards any
+proposal that references Reddit, a subreddit, or an `r/...` destination before it reaches the CEO
+inbox. The agent must not suggest alternate accounts or other suspension workarounds.
 
 Configure these GitHub repository Actions secrets:
 

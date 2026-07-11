@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import Field, model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field, field_validator, model_validator
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     ceo_origin: str = "http://localhost:5173"
     openai_api_key: str | None = None
     openai_model: str = "gpt-5-mini"
+    blocked_channels: Annotated[list[str], NoDecode] = Field(
+        default_factory=lambda: ["reddit"]
+    )
 
     ceo_password_hash: str | None = None
     ceo_password: str | None = None
@@ -57,6 +60,21 @@ class Settings(BaseSettings):
 
     growth_webhook_url: str | None = None
     growth_webhook_secret: str | None = None
+
+    @field_validator("blocked_channels", mode="before")
+    @classmethod
+    def parse_blocked_channels(cls, value: object) -> list[str]:
+        if value is None:
+            return []
+        raw_values = value.split(",") if isinstance(value, str) else value
+        if not isinstance(raw_values, (list, tuple, set)):
+            raise ValueError("BLOCKED_CHANNELS must be a comma-separated list")
+        normalized: list[str] = []
+        for raw_value in raw_values:
+            channel = str(raw_value).strip().lower()
+            if channel and channel not in normalized:
+                normalized.append(channel)
+        return normalized
 
     @model_validator(mode="after")
     def validate_runtime(self) -> "Settings":

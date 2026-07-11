@@ -25,3 +25,11 @@ def test_production_rejects_plaintext_password_and_unsafe_cookie():
 def test_agent_output_schema_is_strict():
     schema = AgentOutputSchema(AgentPlan)
     assert schema.is_strict_json_schema() is True
+
+
+def test_blocked_channels_default_to_reddit_and_parse_csv():
+    defaults = Settings(_env_file=None)
+    configured = Settings(_env_file=None, blocked_channels=" Reddit, LINKEDIN, reddit ")
+
+    assert defaults.blocked_channels == ["reddit"]
+    assert configured.blocked_channels == ["reddit", "linkedin"]

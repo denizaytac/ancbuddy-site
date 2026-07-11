@@ -16,6 +16,12 @@ In live mode the executor atomically claims an action only when all of these sti
 snapshot: action ID, version, status, canonical SHA-256 content hash, and full content JSON. Adapters
 consume the approved snapshot, not mutable current text. A changed action requires a new approval.
 
+`BLOCKED_CHANNELS=reddit` adds an operator-controlled hard block before proposals are persisted.
+The same blocklist is included in the agent prompt, but enforcement does not rely on the model:
+proposal fields are scanned deterministically. The Reddit block also rejects `subreddit` and `r/...`
+aliases. Configure multiple channels as a comma-separated list, for example
+`BLOCKED_CHANNELS=reddit,linkedin`.
+
 - Email uses SMTP only when `SMTP_HOST` and `SMTP_FROM` are configured.
 - Website changes create a draft GitHub PR only when the GitHub integration is configured.
 - Other channels use the generic signed webhook when configured; otherwise the action becomes
@@ -76,3 +82,10 @@ uv run python evals/run_local.py  # makes real model/web-search calls
 
 Unit tests do not call OpenAI or any external action adapter. The eval harness calls the real planner
 and writes its ignored report to `evals/results/latest.json`.
+
+## VPS service
+
+The production unit template is `deploy/ancbuddy-growth-agent.service`. It runs one sandboxed
+replica as the dedicated `ancbuddy-growth` user and binds only to the VPS Docker bridge on port
+3015, where the existing Caddy container can reach it. Runtime secrets belong in the root-owned
+`/etc/ancbuddy-growth-agent.env`, never in this repository.
