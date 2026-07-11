@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "node:url";
+import { resolve } from "node:path";
 
 export default defineConfig({
   plugins: [react()],
@@ -14,7 +15,13 @@ export default defineConfig({
     assetsDir: "assets",
     cssCodeSplit: false,
     sourcemap: false,
-    rollupOptions: { output: { manualChunks: undefined } },
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        ceo: resolve(__dirname, "ceo/index.html"),
+      },
+      output: { manualChunks: undefined },
+    },
     target: "es2020",
   },
 });

@@ -1,0 +1,33 @@
+[Unit]
+Description=ANCBuddy approval-gated Growth Agent
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ancbuddy-growth
+Group=ancbuddy-growth
+WorkingDirectory=/opt/ancbuddy-growth-agent
+EnvironmentFile=/etc/ancbuddy-growth-agent.env
+Environment=HOME=/nonexistent
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/ancbuddy-growth-agent/.venv/bin/uvicorn growth_agent.app:app --host 172.18.0.1 --port 3015
+Restart=always
+RestartSec=5
+UMask=0077
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

@@ -10,9 +10,20 @@ site-src/node_modules/
 npm-debug.log*
 
 # Local secrets / environment
+/.env.local
 site-src/.env.local
 supabase/.env
 supabase/.env.local
+
+# Growth Agent local environment and runtime artifacts
+/growth-agent/.env
+/growth-agent/.env.local
+/growth-agent/.venv/
+/growth-agent/.pytest_cache/
+/growth-agent/.ruff_cache/
+/growth-agent/**/__pycache__/
+/growth-agent/evals/results/*.json
+!/growth-agent/evals/results/.gitignore
 
 # Local Claude harness config
 site-src/.claude/

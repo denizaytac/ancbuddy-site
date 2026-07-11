@@ -1,0 +1,30 @@
+[project]
+name = "ancbuddy-growth-agent"
+version = "0.1.0"
+description = "Approval-gated growth operations service for ANCBuddy"
+requires-python = ">=3.12"
+dependencies = [
+  "argon2-cffi>=23.1.0,<26",
+  "fastapi>=0.116.0,<1",
+  "httpx>=0.28.0,<1",
+  "openai-agents>=0.2.0,<1",
+  "pydantic-settings>=2.10.0,<3",
+  "python-multipart>=0.0.20,<1",
+  "uvicorn[standard]>=0.35.0,<1",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.4.0,<9",
+  "pytest-asyncio>=1.1.0,<2",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
