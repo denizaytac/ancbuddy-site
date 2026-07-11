@@ -1,0 +1,138 @@
+name: Configure ANCBuddy agent DNS
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type agent.ancbuddy.com to confirm the DNS change
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ancbuddy-porkbun-dns
+  cancel-in-progress: false
+
+jobs:
+  upsert-agent-record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      CONFIRMATION: ${{ inputs.confirmation }}
+      PORKBUN_API_KEY: ${{ secrets.PORKBUN_API_KEY }}
+      PORKBUN_SECRET_API_KEY: ${{ secrets.PORKBUN_SECRET_API_KEY }}
+      DNS_DOMAIN: ancbuddy.com
+      DNS_NAME: agent
+      DNS_TYPE: A
+      DNS_CONTENT: 204.168.129.208
+      DNS_TTL: "600"
+    steps:
+      - name: Validate confirmation and credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "${CONFIRMATION}" == "agent.ancbuddy.com" ]] || {
+            echo "Confirmation did not match agent.ancbuddy.com." >&2
+            exit 1
+          }
+          [[ -n "${PORKBUN_API_KEY}" && -n "${PORKBUN_SECRET_API_KEY}" ]] || {
+            echo "Required Porkbun repository secrets are missing." >&2
+            exit 1
+          }
+          echo "::add-mask::${PORKBUN_API_KEY}"
+          echo "::add-mask::${PORKBUN_SECRET_API_KEY}"
+
+      - name: Create or update the exact A record
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          api_base="https://api.porkbun.com/api/json/v3"
+          retrieve_url="${api_base}/dns/retrieveByNameType/${DNS_DOMAIN}/${DNS_TYPE}/${DNS_NAME}"
+          records=$(
+            curl --fail --silent --show-error "${retrieve_url}" \
+              -H "X-API-Key: ${PORKBUN_API_KEY}" \
+              -H "X-Secret-API-Key: ${PORKBUN_SECRET_API_KEY}"
+          )
+
+          [[ "$(jq -r '.status // empty' <<<"${records}")" == "SUCCESS" ]] || {
+            echo "Porkbun did not accept the record lookup." >&2
+            exit 1
+          }
+
+          record_count=$(jq '.records | length' <<<"${records}")
+          if [[ "${record_count}" -gt 1 ]]; then
+            echo "Multiple agent A records exist; refusing an ambiguous update." >&2
+            exit 1
+          fi
+
+          base_payload=$(
+            jq -nc \
+              --arg apikey "${PORKBUN_API_KEY}" \
+              --arg secretapikey "${PORKBUN_SECRET_API_KEY}" \
+              --arg name "${DNS_NAME}" \
+              --arg type "${DNS_TYPE}" \
+              --arg content "${DNS_CONTENT}" \
+              --argjson ttl "${DNS_TTL}" \
+              '{apikey:$apikey,secretapikey:$secretapikey,name:$name,type:$type,content:$content,ttl:$ttl}'
+          )
+
+          if [[ "${record_count}" -eq 0 ]]; then
+            dry_run_payload=$(jq '. + {dryRun:true}' <<<"${base_payload}")
+            dry_run=$(
+              curl --fail --silent --show-error \
+                -X POST "${api_base}/dns/create/${DNS_DOMAIN}" \
+                -H "Content-Type: application/json" \
+                -H "Idempotency-Key: ancbuddy-agent-a-dry-run" \
+                --data "${dry_run_payload}"
+            )
+            [[ "$(jq -r '.status // empty' <<<"${dry_run}")" == "SUCCESS" ]] || {
+              echo "Porkbun rejected the DNS dry-run." >&2
+              exit 1
+            }
+
+            mutation=$(
+              curl --fail --silent --show-error \
+                -X POST "${api_base}/dns/create/${DNS_DOMAIN}" \
+                -H "Content-Type: application/json" \
+                -H "Idempotency-Key: ancbuddy-agent-a-create" \
+                --data "${base_payload}"
+            )
+          else
+            current_content=$(jq -r '.records[0].content' <<<"${records}")
+            if [[ "${current_content}" == "${DNS_CONTENT}" ]]; then
+              echo "The exact A record already exists."
+              exit 0
+            fi
+
+            record_id=$(jq -r '.records[0].id' <<<"${records}")
+            [[ "${record_id}" =~ ^[0-9]+$ ]] || {
+              echo "Porkbun returned an invalid record ID." >&2
+              exit 1
+            }
+            mutation=$(
+              curl --fail --silent --show-error \
+                -X POST "${api_base}/dns/edit/${DNS_DOMAIN}/${record_id}" \
+                -H "Content-Type: application/json" \
+                -H "Idempotency-Key: ancbuddy-agent-a-edit-${record_id}" \
+                --data "${base_payload}"
+            )
+          fi
+
+          [[ "$(jq -r '.status // empty' <<<"${mutation}")" == "SUCCESS" ]] || {
+            echo "Porkbun rejected the DNS mutation." >&2
+            exit 1
+          }
+
+          verified=$(
+            curl --fail --silent --show-error "${retrieve_url}" \
+              -H "X-API-Key: ${PORKBUN_API_KEY}" \
+              -H "X-Secret-API-Key: ${PORKBUN_SECRET_API_KEY}"
+          )
+          jq -e \
+            --arg expected "${DNS_CONTENT}" \
+            '.status == "SUCCESS" and (.records | length) == 1 and .records[0].content == $expected' \
+            <<<"${verified}" >/dev/null
+          echo "agent.ancbuddy.com A record verified."
