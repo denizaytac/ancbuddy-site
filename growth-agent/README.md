@@ -45,8 +45,9 @@ exposes `GET /health`. Production must use an Argon2 `CEO_PASSWORD_HASH`, a uniq
 `SESSION_SECRET`, `COOKIE_SECURE=true`, and the Supabase store.
 
 The frontend origin is the exact `CEO_ORIGIN`; credentialed CORS never uses `*`. Login accepts
-`POST /api/auth/login {"token":"..."}` and sets a host-only, HttpOnly, SameSite=Strict cookie.
-The token may be the CEO password or `CEO_API_TOKEN`. A temporary token can be bounded with
+`POST /api/auth/login {"password":"..."}` and sets a host-only, HttpOnly, SameSite=Strict cookie.
+For zero-downtime upgrades, the API still accepts the former `token` JSON key as an alias. The
+password may also match an optional `CEO_API_TOKEN`. A temporary token can be bounded with
 `CEO_API_TOKEN_EXPIRES_AT`; both login and bearer use stop at that time, and its session is capped to
 the same expiry. API clients can alternatively send the token as `Authorization: Bearer ...`.
 

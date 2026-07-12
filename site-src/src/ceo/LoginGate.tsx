@@ -11,27 +11,27 @@ type LoginGateProps = {
 };
 
 export function LoginGate({ initialError, onSuccess }: LoginGateProps) {
-  const [token, setToken] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(initialError ?? "");
   const [isSubmitting, setSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!token.trim()) {
-      setError("Enter the CEO access token.");
+    if (!password) {
+      setError("Enter the CEO password.");
       return;
     }
 
     setSubmitting(true);
     setError("");
     try {
-      await login(token);
-      setToken("");
+      await login(password);
+      setPassword("");
       onSuccess();
     } catch (loginError) {
       setError(loginError instanceof Error && loginError.message !== "AUTH_REQUIRED"
         ? loginError.message
-        : "That access token was not accepted.");
+        : "That password was not accepted.");
     } finally {
       setSubmitting(false);
     }
@@ -51,17 +51,17 @@ export function LoginGate({ initialError, onSuccess }: LoginGateProps) {
         <form onSubmit={handleSubmit}>
           <FieldGroup>
             <Field data-invalid={Boolean(error)}>
-              <FieldLabel htmlFor="ceo-access-token">CEO access token</FieldLabel>
+              <FieldLabel htmlFor="ceo-password">Password</FieldLabel>
               <Input
-                id="ceo-access-token"
+                id="ceo-password"
                 type="password"
-                value={token}
-                onChange={(event) => setToken(event.target.value)}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 autoComplete="current-password"
                 aria-invalid={Boolean(error)}
                 autoFocus
               />
-              <FieldDescription>The token is exchanged for an HTTP-only session cookie.</FieldDescription>
+              <FieldDescription>A secure HTTP-only session cookie keeps this device signed in.</FieldDescription>
               {error ? <FieldError>{error}</FieldError> : null}
             </Field>
           </FieldGroup>

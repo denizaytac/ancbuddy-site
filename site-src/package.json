@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && vite build --ssr src/prerender.tsx --outDir dist-ssr && node scripts/prerender-html.mjs && node scripts/build-changelog.mjs && node scripts/build-seo-pages.mjs && node scripts/validate-seo-build.mjs",
+    "build": "tsc -b && vite build && vite build --ssr src/prerender.tsx --outDir dist-ssr && node scripts/prerender-html.mjs && node scripts/build-changelog.mjs && node scripts/build-seo-pages.mjs && node scripts/validate-seo-build.mjs && node scripts/validate-ceo-pwa.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

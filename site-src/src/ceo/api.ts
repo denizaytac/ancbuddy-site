@@ -28,10 +28,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-export async function login(token: string): Promise<void> {
+export async function login(password: string): Promise<void> {
   await request<{ ok: true }>("/api/auth/login", {
     method: "POST",
-    body: JSON.stringify({ token }),
+    body: JSON.stringify({ password }),
   });
 }
 

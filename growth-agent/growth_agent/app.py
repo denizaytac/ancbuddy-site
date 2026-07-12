@@ -137,9 +137,10 @@ def create_app(
 
     @app.post("/api/auth/login")
     async def login(payload: LoginRequest, response: Response):
-        if not auth.verify_password(payload.token):
+        password = payload.password.get_secret_value()
+        if not auth.verify_password(password):
             raise HTTPException(status_code=401, detail="Invalid credentials")
-        token = auth.issue_session(api_token_login=auth.is_valid_api_token(payload.token))
+        token = auth.issue_session(api_token_login=auth.is_valid_api_token(password))
         response.set_cookie(
             settings.cookie_name,
             token,
