@@ -8,6 +8,7 @@ from urllib.parse import parse_qs, urlparse
 
 import httpx
 import pytest
+from argon2 import PasswordHasher
 import growth_agent.service as service_module
 from growth_agent.adapters.github import (
     GitHubClient,
@@ -28,6 +29,7 @@ from growth_agent.models import (
     GrowthAction,
     GrowthRun,
     IntegrationRecord,
+    LoginRequest,
     ManualOutcomeRequest,
 )
 from growth_agent.security import AuthService
@@ -113,6 +115,22 @@ def test_aes_gcm_round_trip_and_ciphertext_has_no_plaintext():
 def test_pat_model_repr_is_redacted():
     payload = GitHubIntegrationUpdate(token="github_pat_a-long-enough-secret-token")
     assert "long-enough" not in repr(payload)
+
+
+def test_login_request_repr_redacts_password():
+    payload = LoginRequest(password="a-permanent-password")
+    assert "permanent-password" not in repr(payload)
+
+
+def test_permanent_password_hash_works_without_temporary_api_token():
+    settings = Settings(
+        app_env="test",
+        ceo_password_hash=PasswordHasher().hash("a-permanent-password"),
+        ceo_api_token=None,
+    )
+    auth = AuthService(settings)
+    assert auth.verify_password("a-permanent-password") is True
+    assert auth.verify_password("temporary-code") is False
 
 
 @pytest.mark.parametrize(

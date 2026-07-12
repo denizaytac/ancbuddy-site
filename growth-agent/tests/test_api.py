@@ -17,7 +17,7 @@ def test_health_is_public_and_safe(client):
 
 
 def test_login_sets_httponly_cookie_and_me_works(client):
-    response = client.post("/api/auth/login", json={"token": "correct-horse"})
+    response = client.post("/api/auth/login", json={"password": "correct-horse"})
     assert response.status_code == 200
     assert "HttpOnly" in response.headers["set-cookie"]
     assert "SameSite=strict" in response.headers["set-cookie"]
@@ -25,8 +25,13 @@ def test_login_sets_httponly_cookie_and_me_works(client):
 
 
 def test_invalid_login_and_unauthenticated_dashboard_are_rejected(client):
-    assert client.post("/api/auth/login", json={"token": "wrong"}).status_code == 401
+    assert client.post("/api/auth/login", json={"password": "wrong"}).status_code == 401
     assert client.get("/api/dashboard").status_code == 401
+
+
+def test_login_keeps_legacy_token_field_for_zero_downtime_deploys(client):
+    response = client.post("/api/auth/login", json={"token": "correct-horse"})
+    assert response.status_code == 200
 
 
 def test_sensitive_validation_errors_never_reflect_tokens(client, auth_headers):
@@ -40,7 +45,7 @@ def test_sensitive_validation_errors_never_reflect_tokens(client, auth_headers):
     assert marker not in integration.text
 
     oversized = marker * 30
-    login = client.post("/api/auth/login", json={"token": oversized})
+    login = client.post("/api/auth/login", json={"password": oversized})
     assert login.status_code == 422
     assert marker not in login.text
 

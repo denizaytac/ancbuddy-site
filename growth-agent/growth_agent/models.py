@@ -4,7 +4,7 @@ from datetime import UTC, datetime
 from typing import Any, Literal
 from uuid import uuid4
 
-from pydantic import BaseModel, Field, SecretStr, field_validator
+from pydantic import AliasChoices, BaseModel, Field, SecretStr, field_validator
 
 
 RunKind = Literal["daily", "weekly", "manual"]
@@ -181,7 +181,11 @@ class Dashboard(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    token: str = Field(min_length=1, max_length=512)
+    password: SecretStr = Field(
+        min_length=1,
+        max_length=512,
+        validation_alias=AliasChoices("password", "token"),
+    )
 
 
 class RunRequest(BaseModel):
