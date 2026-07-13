@@ -1,0 +1,1 @@
+Control ANC and battery for Bose QC Ultra from your macOS menu bar — fast activation and one-screen setup.
