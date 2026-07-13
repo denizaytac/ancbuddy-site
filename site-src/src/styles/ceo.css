@@ -7,7 +7,7 @@ body:has(.ceo-login-shell),
 body:has(.ceo-loading) {
   min-height: 100dvh;
   background: #0a0a0c;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .ceo-app {
@@ -18,6 +18,9 @@ body:has(.ceo-loading) {
   --ceo-border-high: rgba(255, 255, 255, 0.17);
   --ceo-muted: #a4a4ad;
   --ceo-faint: #71717b;
+  --ceo-safe-area-top: env(safe-area-inset-top, 0px);
+  --ceo-safe-area-right: env(safe-area-inset-right, 0px);
+  --ceo-safe-area-left: env(safe-area-inset-left, 0px);
   min-height: 100dvh;
   display: grid;
   grid-template-columns: 242px minmax(0, 1fr);
@@ -1335,8 +1338,12 @@ body:has(.ceo-loading) {
     position: sticky;
     top: 0;
     z-index: 40;
-    min-height: 64px;
-    padding: 0 16px;
+    min-height: calc(64px + var(--ceo-safe-area-top));
+    padding:
+      var(--ceo-safe-area-top)
+      max(16px, var(--ceo-safe-area-right))
+      0
+      max(16px, var(--ceo-safe-area-left));
   }
 
   .ceo-topbar h1 {
