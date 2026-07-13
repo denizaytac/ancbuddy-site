@@ -1,0 +1,1 @@
+ANCBuddy puts ANC mode and battery status for Bose QuietComfort Ultra devices into the macOS menu bar so you can toggle modes and monitor battery without opening another app. Free trial available; designed for commuters and focus-first workflows. Looking for feedback from QC Ultra users on macOS.
