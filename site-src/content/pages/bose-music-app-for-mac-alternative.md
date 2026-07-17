@@ -27,7 +27,7 @@
     { "name": "Bose Music App for Mac Alternative", "url": "/bose-music-app-for-mac-alternative.html" }
   ],
   "relatedLinks": [
-    { "title": "Download ANCBuddy", "href": "/download.html", "description": "Try the Mac menu-bar utility." },
+    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore the Mac menu-bar utility." },
     { "title": "Privacy", "href": "/privacy.html", "description": "Understand local controls and AI Auto-EQ." },
     { "title": "Support", "href": "/support.html", "description": "Contact the developer." }
   ],

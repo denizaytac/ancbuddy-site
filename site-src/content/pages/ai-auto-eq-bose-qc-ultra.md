@@ -32,7 +32,7 @@
   ],
   "relatedLinks": [
     { "title": "Privacy", "href": "/privacy.html", "description": "Read the data handling details." },
-    { "title": "Download", "href": "/download.html", "description": "Try ANCBuddy." },
+    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore ANCBuddy." },
     { "title": "Bose QC Ultra Mac app", "href": "/bose-qc-ultra-mac-app.html", "description": "See all product features." }
   ]
 }

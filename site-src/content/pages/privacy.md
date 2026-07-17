@@ -2,7 +2,7 @@
 {
   "slug": "privacy.html",
   "title": "ANCBuddy Privacy",
-  "description": "Privacy details for ANCBuddy trial signup, first-party attribution, license validation, Bluetooth control, and optional AI Auto-EQ.",
+  "description": "Privacy details for ANCBuddy local Bluetooth control, website operation, update checks, and optional AI Auto-EQ.",
   "kind": "privacy",
   "lastmod": "2026-07-05",
   "priority": 0.7,
@@ -21,12 +21,12 @@
       "a": "No. AI Auto-EQ results are cached by a hashed track key, and raw song names are not stored."
     },
     {
-      "q": "What is collected for the trial?",
-      "a": "The trial form collects the name and email address entered by the user, plus privacy-light first-party attribution such as campaign parameters and referrer host."
+      "q": "Does the website create attribution identifiers?",
+      "a": "No. The website does not create an attribution session, store campaign parameters, or send site events during normal browsing."
     },
     {
       "q": "Does ANCBuddy use analytics or ad pixels?",
-      "a": "No. The website does not use a third-party analytics SDK, ad pixels, or cross-site tracking. It logs first-party campaign and event data only for distribution measurement."
+      "a": "No. The website does not use a third-party analytics SDK, ad pixels, cross-site tracking, or first-party distribution measurement."
     }
   ],
   "breadcrumbs": [
@@ -34,15 +34,15 @@
     { "name": "Privacy", "url": "/privacy.html" }
   ],
   "relatedLinks": [
-    { "title": "Trust", "href": "/trust.html", "description": "Review signing, refunds, network paths, and maintenance rationale." },
+    { "title": "Trust", "href": "/trust.html", "description": "Review signing, network paths, and maintenance rationale." },
     { "title": "AI Auto-EQ guide", "href": "/ai-auto-eq-bose-qc-ultra.html", "description": "What the optional EQ feature does." },
-    { "title": "Download", "href": "/download.html", "description": "Get the current Mac app release." },
+    { "title": "Features", "href": "/#features", "description": "Explore the Mac app controls." },
     { "title": "Support", "href": "/support.html", "description": "Ask a privacy or setup question." }
   ]
 }
 ---
 
-ANCBuddy's everyday Bose QC Ultra controls are local Mac-to-headphones Bluetooth actions; only the trial form, first-party distribution measurement, license checks, update checks, and optional AI Auto-EQ use network services.
+ANCBuddy's everyday Bose QC Ultra controls are local Mac-to-headphones Bluetooth actions. Update checks and optional AI Auto-EQ use network services.
 
 For the broader installation and trust checklist, use the [trust and safety page](/trust.html).
 
@@ -50,11 +50,9 @@ For the broader installation and trust checklist, use the [trust and safety page
 
 Switching Quiet, Aware, and Immersion modes is handled from your Mac to your paired Bose QC Ultra device over Bluetooth. ANCBuddy does not need the Bose phone app to be open for these daily controls.
 
-## Trial and license data
+## Website data
 
-The trial form asks for a name and email address before the DMG download starts. To understand which launch channels work, the website also stores first-party attribution fields: UTM source, medium, campaign, referrer host, landing path, current path, and a generated session ID. The same fields can be passed to Lemon Squeezy checkout as custom checkout data.
-
-ANCBuddy does not use a third-party analytics SDK, ad pixels, or cross-site tracking. The first-party site events are limited to page view, trial open, trial start, download click, and checkout click. License purchases and license validation are handled through Lemon Squeezy. For purchase-source measurement, Lemon Squeezy can send signed order webhooks to ANCBuddy's Supabase project; ANCBuddy stores the order ID, amount, status, first-party attribution fields, and a hashed customer email for matching purchases back to prior trial signups without storing the raw purchase email in the measurement table. ANCBuddy stores license state locally so existing users do not need to re-enter keys on every launch.
+Normal website browsing does not create an attribution session, save UTM or referrer details in browser storage, or send site events to Supabase. The website does not use a third-party analytics SDK, ad pixels, or cross-site tracking.
 
 ## AI Auto-EQ
 

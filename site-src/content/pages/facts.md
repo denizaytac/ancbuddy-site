@@ -26,10 +26,10 @@
     { "name": "Facts", "url": "/facts.html" }
   ],
   "relatedLinks": [
-    { "title": "Download", "href": "/download.html", "description": "Get the current DMG." },
-    { "title": "Trust", "href": "/trust.html", "description": "Signing, privacy, refunds, independence, and maintenance rationale." },
+    { "title": "Features", "href": "/#features", "description": "Explore ANCBuddy capabilities." },
+    { "title": "Trust", "href": "/trust.html", "description": "Review privacy, signing, independence, and maintenance details." },
     { "title": "Guides", "href": "/guides.html", "description": "Read Bose QC Ultra Mac guides." },
-    { "title": "Privacy", "href": "/privacy.html", "description": "Review AI Auto-EQ and trial data handling." }
+    { "title": "Privacy", "href": "/privacy.html", "description": "Review local controls and AI Auto-EQ data handling." }
   ]
 }
 ---
@@ -40,14 +40,10 @@ ANCBuddy is an independent macOS menu-bar utility for Bose QC Ultra users who wa
 
 - Product name: ANCBuddy
 - Developer: Deniz Aytac
-- Current public version: 2.0.2
+- Documented version: 2.0.2
 - Platform: macOS 12 Monterey and newer
 - Macs: Apple Silicon and Intel
-- Price: $9.99 one-time
-- Trial: 14-day free trial
 - Supported devices: Bose QuietComfort Ultra Headphones Gen 1, Bose QuietComfort Ultra Headphones Gen 2, Bose QuietComfort Ultra Earbuds 2nd Gen
-- Download: [ANCBuddy 2.0.2 DMG](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.2/ANCBuddy-2.0.2.dmg)
-- Checkout: [Lemon Squeezy](https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2)
 
 ## What ANCBuddy does
 
@@ -57,4 +53,4 @@ ANCBuddy puts daily Bose QC Ultra controls in the Mac menu bar: Quiet, Aware, Im
 
 ANCBuddy is not affiliated with, endorsed by, or sponsored by Bose Corporation. Bose, QuietComfort, QC Ultra, and related marks are trademarks of Bose Corporation, used only to describe compatible hardware.
 
-For signing, refunds, network paths, and closed-source maintenance rationale, see [ANCBuddy trust and safety](/trust.html).
+For signing, network paths, and closed-source maintenance rationale, see [ANCBuddy trust and safety](/trust.html).

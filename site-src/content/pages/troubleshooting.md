@@ -31,7 +31,7 @@
   ],
   "relatedLinks": [
     { "title": "Support", "href": "/support.html", "description": "Contact the developer." },
-    { "title": "Download", "href": "/download.html", "description": "Install the current release." },
+    { "title": "ANCBuddy features", "href": "/#features", "description": "Review the product controls." },
     { "title": "Mac control guide", "href": "/control-bose-qc-ultra-from-mac.html", "description": "Understand what macOS and ANCBuddy can do." }
   ],
   "sources": [

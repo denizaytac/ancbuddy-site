@@ -8,8 +8,26 @@ const siteRoot = resolve(here, "..");
 const repoRoot = resolve(siteRoot, "..");
 const changelogPath = resolve(repoRoot, "CHANGELOG.md");
 const outputPath = resolve(siteRoot, "dist/changelog.html");
+const commercialModePath = resolve(siteRoot, "src/config/commercial-mode.json");
 
-const markdown = await readFile(changelogPath, "utf8");
+const { commercialMode } = JSON.parse(await readFile(commercialModePath, "utf8"));
+const isCommercialModeActive = commercialMode === "active";
+const sourceMarkdown = await readFile(changelogPath, "utf8");
+const commercialReleaseLine = /\b(license|trial|lemon\s*squeezy|buyers?|buy link|dmg installer)\b/i;
+
+function pausedChangelog(markdown) {
+  const [title, ...releaseSections] = markdown.split("\n## ");
+  const safeSections = releaseSections.flatMap((section) => {
+    const [heading, ...lines] = section.split("\n");
+    const safeLines = lines.filter((line) => !commercialReleaseLine.test(line));
+    const hasReleaseDetails = safeLines.some((line) => line.startsWith("- "));
+    return hasReleaseDetails ? [`## ${heading}\n${safeLines.join("\n")}`] : [];
+  });
+
+  return [title.trim(), ...safeSections].join("\n\n");
+}
+
+const markdown = isCommercialModeActive ? sourceMarkdown : pausedChangelog(sourceMarkdown);
 const body = marked.parse(markdown);
 
 const html = `<!doctype html>

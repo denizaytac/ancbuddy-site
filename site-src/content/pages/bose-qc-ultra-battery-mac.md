@@ -27,7 +27,7 @@
     { "name": "Bose QC Ultra Battery on Mac", "url": "/bose-qc-ultra-battery-mac.html" }
   ],
   "relatedLinks": [
-    { "title": "Download", "href": "/download.html", "description": "Try ANCBuddy for battery/status visibility." },
+    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore battery and status visibility." },
     { "title": "Troubleshooting", "href": "/troubleshooting.html", "description": "Fix connection issues." },
     { "title": "Mac control guide", "href": "/control-bose-qc-ultra-from-mac.html", "description": "Understand the full workflow." }
   ],

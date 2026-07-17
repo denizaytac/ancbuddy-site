@@ -27,7 +27,7 @@
     { "name": "QC Ultra Earbuds 2nd Gen on Mac", "url": "/qc-ultra-earbuds-2nd-gen-mac.html" }
   ],
   "relatedLinks": [
-    { "title": "Download", "href": "/download.html", "description": "Try ANCBuddy on macOS." },
+    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore ANCBuddy on macOS." },
     { "title": "Mac control guide", "href": "/control-bose-qc-ultra-from-mac.html", "description": "Understand the control workflow." },
     { "title": "Support", "href": "/support.html", "description": "Ask a device-specific question." }
   ]
@@ -47,4 +47,4 @@ Pair the earbuds with macOS Bluetooth, then use ANCBuddy from the menu bar for d
 - Optional AI Auto-EQ for the current track
 - A small native utility instead of a phone-app detour
 
-Start with the [download page](/download.html) or read the full [Mac control guide](/control-bose-qc-ultra-from-mac.html).
+Start with the [feature overview](/#features) or read the full [Mac control guide](/control-bose-qc-ultra-from-mac.html).

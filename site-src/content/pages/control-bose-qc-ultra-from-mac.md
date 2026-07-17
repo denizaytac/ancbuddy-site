@@ -35,7 +35,7 @@
     { "name": "Control Bose QC Ultra from Mac", "url": "/control-bose-qc-ultra-from-mac.html" }
   ],
   "relatedLinks": [
-    { "title": "Download ANCBuddy", "href": "/download.html", "description": "Try the Mac app for 14 days." },
+    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore the Mac menu-bar controls." },
     { "title": "Bose Music app for Mac alternative", "href": "/bose-music-app-for-mac-alternative.html", "description": "Understand the Bose app gap on Mac." },
     { "title": "Troubleshooting", "href": "/troubleshooting.html", "description": "Fix setup and Bluetooth issues." }
   ],
@@ -65,4 +65,4 @@ ANCBuddy is a native Mac menu-bar app for the QC Ultra line. It connects to alre
 - Optional AI Auto-EQ for track-aware 3-band EQ profiles
 - Launch at Login and built-in update checks
 
-ANCBuddy supports macOS 12 Monterey and newer on Apple Silicon and Intel Macs. It includes a [14-day free trial](/download.html), then costs [$9.99 one-time](https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2).
+ANCBuddy supports macOS 12 Monterey and newer on Apple Silicon and Intel Macs. See the [feature overview](/#features) and [device compatibility](/#devices) for more detail.

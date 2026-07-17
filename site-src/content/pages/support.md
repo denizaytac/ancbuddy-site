@@ -2,7 +2,7 @@
 {
   "slug": "support.html",
   "title": "ANCBuddy Support",
-  "description": "Get support for ANCBuddy setup, Bose QC Ultra connection issues, trial downloads, licenses, and AI Auto-EQ.",
+  "description": "Get support for ANCBuddy setup, Bose QC Ultra connection issues, updates, and AI Auto-EQ.",
   "kind": "support",
   "lastmod": "2026-07-02",
   "priority": 0.7,
@@ -17,8 +17,8 @@
       "a": "Include whether the device is paired in macOS Bluetooth settings, whether audio works, and which QC Ultra model you use."
     },
     {
-      "q": "Where can I download the current version?",
-      "a": "Use the ANCBuddy download page for the current signed and notarized DMG."
+      "q": "Where can I review product changes?",
+      "a": "Use the ANCBuddy changelog for documented product changes."
     }
   ],
   "breadcrumbs": [
@@ -27,13 +27,13 @@
   ],
   "relatedLinks": [
     { "title": "Troubleshooting", "href": "/troubleshooting.html", "description": "Fix common setup and Bluetooth issues." },
-    { "title": "Download", "href": "/download.html", "description": "Get the latest public DMG." },
+    { "title": "Changelog", "href": "/changelog.html", "description": "Review documented product changes." },
     { "title": "Privacy", "href": "/privacy.html", "description": "Review data handling details." }
   ]
 }
 ---
 
-ANCBuddy support is handled directly by the developer for setup, Bose QC Ultra connection issues, trial downloads, license questions, and AI Auto-EQ questions.
+ANCBuddy support is handled directly by the developer for setup, Bose QC Ultra connection issues, update questions, and AI Auto-EQ questions.
 
 ## Contact
 
@@ -49,7 +49,7 @@ For faster support, include:
 
 ## Useful pages
 
-- [Download ANCBuddy](/download.html)
+- [ANCBuddy features](/#features)
 - [Troubleshooting](/troubleshooting.html)
 - [Bose QC Ultra Mac control guide](/control-bose-qc-ultra-from-mac.html)
 - [BoseControl migration guide](/bosecontrol-to-ancbuddy.html)

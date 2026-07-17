@@ -27,7 +27,7 @@
     { "name": "Bose QC Ultra Mac App", "url": "/bose-qc-ultra-mac-app.html" }
   ],
   "relatedLinks": [
-    { "title": "Download", "href": "/download.html", "description": "Get ANCBuddy for Mac." },
+    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore ANCBuddy for Mac." },
     { "title": "Mac control guide", "href": "/control-bose-qc-ultra-from-mac.html", "description": "Learn what ANCBuddy adds." },
     { "title": "Support", "href": "/support.html", "description": "Ask setup questions." }
   ]
@@ -50,4 +50,4 @@ It is not a generic Bluetooth utility for every headphone brand. It is focused o
 
 The core workflow is simple: pair the headphones with your Mac, open ANCBuddy from the menu bar, and choose Quiet, Aware, or Immersion. Battery and connection status stay visible in the same panel.
 
-For setup steps, use the [download page](/download.html) and [troubleshooting guide](/troubleshooting.html).
+For product details, use the [feature overview](/#features) and [troubleshooting guide](/troubleshooting.html).

@@ -14,25 +14,42 @@ import { FAQ } from "./components/sections/FAQ";
 import { CTA } from "./components/sections/CTA";
 import { Footer } from "./components/sections/Footer";
 
-const TrialDialog = lazy(() =>
-  import("./components/TrialDialog").then((module) => ({
-    default: module.TrialDialog,
-  })),
-);
+const TrialDialog = __COMMERCIAL_MODE__ === "active"
+  ? lazy(() =>
+      import("./components/TrialDialog").then((module) => ({
+        default: module.TrialDialog,
+      })),
+    )
+  : null;
 
 function AppShell() {
   useReveal();
   const { shouldMount, setOpen: openTrial } = useTrialDialog();
 
   useEffect(() => {
-    trackPageView();
+    if (__COMMERCIAL_MODE__ === "active") trackPageView();
   }, []);
 
   useEffect(() => {
     function syncTrialHash() {
-      if (window.location.hash === "#trial") {
+      if (__COMMERCIAL_MODE__ === "active" && window.location.hash === "#trial") {
         openTrial(true);
+        return;
       }
+
+      if (__COMMERCIAL_MODE__ === "active") return;
+
+      const redirects: Record<string, string> = {
+        "#trial": "#features",
+        "#pricing": "#devices",
+      };
+      const destination = redirects[window.location.hash];
+      if (!destination) return;
+
+      window.history.replaceState(null, "", destination);
+      window.requestAnimationFrame(() => {
+        document.querySelector(destination)?.scrollIntoView();
+      });
     }
 
     syncTrialHash();
@@ -53,17 +70,17 @@ function AppShell() {
         <Features />
         <Quotes />
         <Devices />
-        <Pricing />
+        {__COMMERCIAL_MODE__ === "active" ? <Pricing /> : null}
         <FAQ />
         <CTA />
       </main>
 
       <Footer />
-      {shouldMount && (
+      {__COMMERCIAL_MODE__ === "active" && shouldMount && TrialDialog ? (
         <Suspense fallback={null}>
           <TrialDialog />
         </Suspense>
-      )}
+      ) : null}
     </>
   );
 }
