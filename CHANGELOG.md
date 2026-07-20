@@ -1,5 +1,12 @@
 # ANCBuddy Changelog
 
+## v2.0.3 — July 20, 2026
+**Reliable recovery after Bluetooth interruptions**
+- Restores headphone control automatically when macOS interrupts an active Bose Bluetooth session.
+- Discards stale connections instead of leaving ANCBuddy unreachable until the app or Bluetooth is restarted.
+- Retries one time with a fresh connection when the headphones stop responding.
+- Shows connection progress immediately and offers a Retry action after a failed attempt.
+
 ## v2.0.2 — June 2, 2026
 **Native ANCBuddy 2.x release**
 - New native menu-bar panel for Listening Mode, battery/status context, AI Auto-EQ, Launch at Login, license actions, updates, and quit.

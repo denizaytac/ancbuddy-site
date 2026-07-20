@@ -4,7 +4,7 @@
   "title": "ANCBuddy Facts",
   "description": "Canonical product facts for ANCBuddy, the independent Mac menu-bar app for Bose QC Ultra headphones and earbuds.",
   "kind": "facts",
-  "lastmod": "2026-07-02",
+  "lastmod": "2026-07-20",
   "priority": 0.7,
   "h1": "ANCBuddy facts",
   "faqs": [
@@ -18,7 +18,7 @@
     },
     {
       "q": "What is the current version?",
-      "a": "The current public release is ANCBuddy 2.0.2."
+      "a": "The current public release is ANCBuddy 2.0.3."
     }
   ],
   "breadcrumbs": [
@@ -40,7 +40,7 @@ ANCBuddy is an independent macOS menu-bar utility for Bose QC Ultra users who wa
 
 - Product name: ANCBuddy
 - Developer: Deniz Aytac
-- Documented version: 2.0.2
+- Documented version: 2.0.3
 - Platform: macOS 12 Monterey and newer
 - Macs: Apple Silicon and Intel
 - Supported devices: Bose QuietComfort Ultra Headphones Gen 1, Bose QuietComfort Ultra Headphones Gen 2, Bose QuietComfort Ultra Earbuds 2nd Gen

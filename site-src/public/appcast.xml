@@ -3,12 +3,20 @@
     <channel>
         <title>ANCBuddy</title>
         <item>
-            <title>2.0.2</title>
-            <pubDate>Tue, 02 Jun 2026 08:21:57 +0200</pubDate>
-            <sparkle:version>20002</sparkle:version>
-            <sparkle:shortVersionString>2.0.2</sparkle:shortVersionString>
+            <title>2.0.3</title>
+            <pubDate>Mon, 20 Jul 2026 09:47:30 +0200</pubDate>
+            <sparkle:version>20003</sparkle:version>
+            <sparkle:shortVersionString>2.0.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.2/ANCBuddy-2.0.2.dmg" length="4005088" type="application/octet-stream" sparkle:edSignature="/oFT5TxNc9eDGCGl/JkcIuh7iYa6KGSgY2BBjNwoN4uYshP7xrd/SJ4T4vQ5IULfYgmXgmzIt8VxTTql2NSICA=="/>
+            <description sparkle:format="markdown"><![CDATA[# ANCBuddy 2.0.3
+
+ANCBuddy 2.0.3 restores reliable control after macOS interrupts a Bose Bluetooth session.
+
+ANCBuddy now detects unexpected disconnects, discards stale Bluetooth sessions, and retries once with a fresh connection instead of remaining unreachable until restart.
+
+If you still have the old BoseControl app installed, quit and remove it after installing ANCBuddy to avoid two menu bar apps competing for the same headphones.
+]]></description>
+            <enclosure url="https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.3/ANCBuddy-2.0.3.dmg" length="4049109" type="application/octet-stream" sparkle:edSignature="AaOBicqP19oUG5ts0/asjWz/AmKoEzoeyRNXvg22P/vbQNOLKkVVjh2Q+420xBz8vdIc6LDXPx7HH9d9xAryAA=="/>
         </item>
     </channel>
 </rss>

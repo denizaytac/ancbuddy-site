@@ -1,7 +1,7 @@
 import { IS_COMMERCIAL_MODE_ACTIVE } from "@/config/commercialMode";
 
 export const DMG_URL =
-  "https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.2/ANCBuddy-2.0.2.dmg";
+  "https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.3/ANCBuddy-2.0.3.dmg";
 
 export const LEMON_SQUEEZY_URL =
   "https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2";
