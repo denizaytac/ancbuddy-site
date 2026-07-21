@@ -22,7 +22,7 @@
     },
     {
       "q": "Where can I get help?",
-      "a": "Email denoaytac62@gmail.com with your Mac model, macOS version, Bose model, and what you already tried."
+      "a": "Email hello@ancbuddy.com with your Mac model, macOS version, Bose model, and what you already tried."
     }
   ],
   "breadcrumbs": [
@@ -59,4 +59,4 @@ The Bose phone app is still the right place for firmware updates, product setup,
 
 ## Contact support
 
-If the problem remains, email [denoaytac62@gmail.com](mailto:denoaytac62@gmail.com) with your Mac model, macOS version, Bose model, and whether audio playback works.
+If the problem remains, email [hello@ancbuddy.com](mailto:hello@ancbuddy.com) with your Mac model, macOS version, Bose model, and whether audio playback works.

@@ -62,4 +62,4 @@ AI Auto-EQ is opt-in. When enabled, ANCBuddy sends the current artist, title, an
 
 ## Support
 
-For privacy questions, email [denoaytac62@gmail.com](mailto:denoaytac62@gmail.com).
+For privacy questions, email [hello@ancbuddy.com](mailto:hello@ancbuddy.com).

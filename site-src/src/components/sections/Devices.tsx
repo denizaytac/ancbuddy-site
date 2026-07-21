@@ -1,5 +1,6 @@
 import { Icon } from "../Icon";
 import { Eyebrow, SectionTitle, SectionLede } from "./Section";
+import facts from "../../../content/product-facts.json";
 
 export function Devices() {
   return (
@@ -55,7 +56,7 @@ export function Devices() {
 
       <p className="device-note reveal" style={{ "--reveal-delay": "300ms" } as React.CSSProperties}>
         Want ANCBuddy for another Bose model?{" "}
-        <a href="mailto:denoaytac62@gmail.com?subject=ANCBuddy%20headphone%20request">
+        <a href={`mailto:${facts.supportEmail}?subject=ANCBuddy%20headphone%20request`}>
           Send a note.
         </a>
       </p>

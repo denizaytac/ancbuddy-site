@@ -10,7 +10,7 @@
   "faqs": [
     {
       "q": "How do I contact support?",
-      "a": "Email denoaytac62@gmail.com with your Mac model, macOS version, ANCBuddy version, and Bose device model."
+      "a": "Email hello@ancbuddy.com with your Mac model, macOS version, ANCBuddy version, and Bose device model."
     },
     {
       "q": "What should I include for a connection issue?",
@@ -37,7 +37,7 @@ ANCBuddy support is handled directly by the developer for setup, Bose QC Ultra c
 
 ## Contact
 
-Email [denoaytac62@gmail.com](mailto:denoaytac62@gmail.com).
+Email [hello@ancbuddy.com](mailto:hello@ancbuddy.com).
 
 For faster support, include:
 
