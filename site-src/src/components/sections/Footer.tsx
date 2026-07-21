@@ -50,7 +50,7 @@ export function Footer() {
             <div className="footer-heading">Product</div>
             <a href="#features">Features</a>
             <a href="#devices">Devices</a>
-            {__COMMERCIAL_MODE__ === "active" ? <a href="#pricing">Pricing</a> : null}
+            <a href="#pricing">Pricing</a>
             <a href="#faq">FAQ</a>
           </div>
           <div className="footer-col">
@@ -61,9 +61,7 @@ export function Footer() {
             <a href="/privacy.html">Privacy</a>
             <a href="/facts.html">Facts</a>
             <a href="/changelog.html">Changelog</a>
-            {__COMMERCIAL_MODE__ === "active" ? (
-              <button onClick={() => openTrial(true)}>Free trial</button>
-            ) : null}
+            <button onClick={() => openTrial(true)}>Free trial</button>
             <a href="mailto:denoaytac62@gmail.com">Contact</a>
           </div>
         </div>

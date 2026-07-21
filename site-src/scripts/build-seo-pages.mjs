@@ -8,17 +8,11 @@ const siteRoot = resolve(here, "..");
 const distDir = resolve(siteRoot, "dist");
 const contentDir = resolve(siteRoot, "content/pages");
 const factsPath = resolve(siteRoot, "content/product-facts.json");
-const commercialModePath = resolve(siteRoot, "src/config/commercial-mode.json");
 const siteUrl = "https://ancbuddy.com";
 const supabaseUrl = process.env.VITE_SUPABASE_URL ?? "";
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? "";
 
 const facts = JSON.parse(await readFile(factsPath, "utf8"));
-const { commercialMode } = JSON.parse(await readFile(commercialModePath, "utf8"));
-if (commercialMode !== "active" && commercialMode !== "paused") {
-  throw new Error(`Invalid commercial mode: ${commercialMode}`);
-}
-const isCommercialModeActive = commercialMode === "active";
 const requiredFields = [
   "slug",
   "title",
@@ -124,25 +118,22 @@ function schemas(page) {
 
   const result = [breadcrumb, main, faq];
   if (page.kind === "download") {
-    const softwareApplication = {
+    result.push({
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       name: facts.name,
       operatingSystem: "macOS",
       applicationCategory: "UtilitiesApplication",
       softwareVersion: facts.version,
-    };
-    if (isCommercialModeActive) {
-      softwareApplication.downloadUrl = facts.downloadUrl;
-      softwareApplication.offers = {
+      downloadUrl: facts.downloadUrl,
+      offers: {
         "@type": "Offer",
         price: facts.price,
         priceCurrency: facts.currency,
         availability: "https://schema.org/InStock",
         url: facts.checkoutUrl,
-      };
-    }
-    result.push(softwareApplication);
+      },
+    });
   }
   return result;
 }
@@ -236,7 +227,7 @@ function renderPage(page) {
 
 function labelForKind(kind) {
   if (kind === "guide") return "Guide";
-  if (kind === "download") return isCommercialModeActive ? "Download" : "Product";
+  if (kind === "download") return "Download";
   if (kind === "privacy") return "Privacy";
   if (kind === "support") return "Support";
   if (kind === "facts") return "Facts";
@@ -245,13 +236,6 @@ function labelForKind(kind) {
 }
 
 function staticNav() {
-  const finalLink = isCommercialModeActive
-    ? '<a class="nav-link" href="/#pricing">Pricing</a>'
-    : '<a class="nav-link" href="/#faq">FAQ</a>';
-  const cta = isCommercialModeActive
-    ? '<a class="nav-cta" href="/#trial">Try 14 days for free</a>'
-    : '<a class="nav-cta" href="/#features">Explore features</a>';
-
   return `<nav class="nav">
     <div class="nav-inner">
       <a class="nav-brand" href="/">
@@ -270,17 +254,14 @@ function staticNav() {
         <a class="nav-link" href="/#features">Features</a>
         <a class="nav-link" href="/#devices">Devices</a>
         <a class="nav-link" href="/guides.html">Guides</a>
-        ${finalLink}
+        <a class="nav-link" href="/#pricing">Pricing</a>
       </div>
-      ${cta}
+      <a class="nav-cta" href="/#trial">Try 14 days for free</a>
     </div>
   </nav>`;
 }
 
 function staticFooter() {
-  const pricingLink = isCommercialModeActive ? '<a href="/#pricing">Pricing</a>' : "";
-  const trialLink = isCommercialModeActive ? '<a href="/#trial">Free trial</a>' : "";
-
   return `<footer class="footer">
     <div class="container">
       <div class="footer-grid">
@@ -292,7 +273,7 @@ function staticFooter() {
           <div class="footer-heading">Product</div>
           <a href="/#features">Features</a>
           <a href="/#devices">Devices</a>
-          ${pricingLink}
+          <a href="/#pricing">Pricing</a>
           <a href="/#faq">FAQ</a>
         </div>
         <div class="footer-col">
@@ -304,7 +285,7 @@ function staticFooter() {
           <a href="/privacy.html">Privacy</a>
           <a href="/facts.html">Facts</a>
           <a href="/changelog.html">Changelog</a>
-          ${trialLink}
+          <a href="/#trial">Free trial</a>
           <a href="mailto:${escapeHtml(facts.supportEmail)}">Contact</a>
         </div>
       </div>
@@ -648,10 +629,6 @@ function staticCss() {
 }
 
 function render404() {
-  const downloadLink = isCommercialModeActive
-    ? '<li><a href="/download.html">Download</a></li>'
-    : '<li><a href="/#features">Features</a></li>';
-
   return `<!doctype html>
 <html lang="en" data-theme="dark">
 <head>
@@ -674,7 +651,7 @@ function render404() {
       <ul>
         <li><a href="/">Homepage</a></li>
         <li><a href="/guides.html">Guides</a></li>
-        ${downloadLink}
+        <li><a href="/download.html">Download</a></li>
         <li><a href="/support.html">Support</a></li>
         <li><a href="/privacy.html">Privacy</a></li>
         <li><a href="/changelog.html">Changelog</a></li>
@@ -688,8 +665,6 @@ function render404() {
 }
 
 function staticAttributionScript() {
-  if (!isCommercialModeActive) return "";
-
   return `<script>
 (() => {
   const SUPABASE_URL = ${JSON.stringify(supabaseUrl)};
@@ -864,46 +839,6 @@ function llms(pages) {
     .join("\n");
   const devices = facts.supportedDevices.map((device) => `- ${device}`).join("\n");
   const features = facts.features.map((feature) => `- ${feature}`).join("\n");
-
-  if (!isCommercialModeActive) {
-    return `# ${facts.name}
-
-> ${facts.description} The app supports ${facts.platform} on ${facts.architectures}.
-
-## Canonical Links
-
-- [Website](${facts.siteUrl}/)
-- [Guides](${facts.siteUrl}/guides.html)
-- [Support](${facts.siteUrl}/support.html)
-- [Trust](${facts.siteUrl}/trust.html)
-- [Privacy](${facts.siteUrl}/privacy.html)
-- [Changelog](${facts.siteUrl}/changelog.html)
-- [Facts](${facts.siteUrl}/facts.html)
-
-## Product Facts
-
-- Product: native Mac menu-bar utility for compatible Bose QC Ultra hardware.
-- Documented version: ${facts.version}.
-- Build: ${facts.build}.
-- Platform: ${facts.platform} on ${facts.architectures}.
-- Developer: ${facts.developer.name}.
-- Support: ${facts.supportEmail}.
-- AI Auto-EQ: ${facts.aiAutoEqPrivacy}
-- Independence: ${facts.independenceDisclaimer}
-
-## Supported Devices
-
-${devices}
-
-## Features
-
-${features}
-
-## Important Pages
-
-${links}
-`;
-  }
 
   return `# ${facts.name}
 

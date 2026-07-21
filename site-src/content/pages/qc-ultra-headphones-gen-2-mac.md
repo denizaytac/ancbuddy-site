@@ -4,7 +4,7 @@
   "title": "QC Ultra Headphones Gen 2 on Mac",
   "description": "ANCBuddy supports Bose QC Ultra Headphones Gen 2 on macOS for menu-bar mode switching, battery status, and optional AI Auto-EQ.",
   "kind": "guide",
-  "lastmod": "2026-07-02",
+  "lastmod": "2026-07-21",
   "priority": 0.75,
   "h1": "QC Ultra Headphones Gen 2 on Mac",
   "faqs": [
@@ -27,7 +27,7 @@
     { "name": "QC Ultra Headphones Gen 2 on Mac", "url": "/qc-ultra-headphones-gen-2-mac.html" }
   ],
   "relatedLinks": [
-    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore ANCBuddy for Mac." },
+    { "title": "Download", "href": "/download.html", "description": "Install ANCBuddy for Mac." },
     { "title": "Bose QC Ultra Mac app", "href": "/bose-qc-ultra-mac-app.html", "description": "See the broader product overview." },
     { "title": "Support", "href": "/support.html", "description": "Get direct help." }
   ]
@@ -46,4 +46,4 @@ With Gen 2 headphones, ANCBuddy focuses on the same daily controls as the rest o
 - Launch at Login
 - Built-in update checks
 
-Review the [feature overview](/#features). If the headphones are paired but do not appear, use the [troubleshooting guide](/troubleshooting.html).
+Install the current release from the [download page](/download.html). If the headphones are paired but do not appear, use the [troubleshooting guide](/troubleshooting.html).

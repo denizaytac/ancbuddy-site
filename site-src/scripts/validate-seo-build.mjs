@@ -7,10 +7,6 @@ const siteRoot = resolve(here, "..");
 const distDir = resolve(siteRoot, "dist");
 const contentDir = resolve(siteRoot, "content/pages");
 const facts = JSON.parse(await readFile(resolve(siteRoot, "content/product-facts.json"), "utf8"));
-const { commercialMode } = JSON.parse(
-  await readFile(resolve(siteRoot, "src/config/commercial-mode.json"), "utf8"),
-);
-const isCommercialModeActive = commercialMode === "active";
 const siteUrl = facts.siteUrl;
 
 function assert(condition, message) {
@@ -76,7 +72,7 @@ for (const expected of [
 }
 
 const llms = await readFile(resolve(distDir, "llms.txt"), "utf8");
-const requiredLlmsContent = [
+for (const expected of [
   "ANCBuddy",
   "download.html",
   "privacy.html",
@@ -85,43 +81,14 @@ const requiredLlmsContent = [
   "guides.html",
   "changelog.html",
   "facts.html",
+  facts.priceDisplay,
   facts.version,
   "Bose QuietComfort Ultra Headphones Gen 1",
   "Bose QuietComfort Ultra Headphones Gen 2",
   "Bose QuietComfort Ultra Earbuds 2nd Gen",
   "not affiliated with, endorsed by, or sponsored by Bose Corporation",
-];
-if (isCommercialModeActive) requiredLlmsContent.push(facts.priceDisplay);
-
-for (const expected of requiredLlmsContent) {
+]) {
   assert(llms.includes(expected), `llms.txt missing ${expected}`);
-}
-
-if (!isCommercialModeActive) {
-  const publicTextFiles = [
-    "index.html",
-    "404.html",
-    "changelog.html",
-    "llms.txt",
-    ...pages.map((page) => page.slug),
-  ];
-  const forbiddenPatterns = [
-    /ancbuddy\.lemonsqueezy\.com/i,
-    /releases\/download\/[^\s"')]+\.dmg/i,
-    /\$9\.99/i,
-    /free trial/i,
-    /checkout/i,
-    /trial_signups/i,
-    /site_events/i,
-    /VITE_SUPABASE/i,
-  ];
-
-  for (const file of publicTextFiles) {
-    const content = await readFile(resolve(distDir, file), "utf8");
-    for (const pattern of forbiddenPatterns) {
-      assert(!pattern.test(content), `${file} contains paused-mode commercial or tracking content: ${pattern}`);
-    }
-  }
 }
 
 await readFile(resolve(distDir, "404.html"), "utf8");

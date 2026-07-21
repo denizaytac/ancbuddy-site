@@ -41,25 +41,13 @@ export function Nav() {
           <a className="nav-link" href="/guides.html">
             Guides
           </a>
-          {__COMMERCIAL_MODE__ === "active" ? (
-            <a className="nav-link" href="#pricing">
-              Pricing
-            </a>
-          ) : (
-            <a className="nav-link" href="#faq">
-              FAQ
-            </a>
-          )}
+          <a className="nav-link" href="#pricing">
+            Pricing
+          </a>
         </div>
-        {__COMMERCIAL_MODE__ === "active" ? (
-          <a className="nav-cta" href="#trial" onClick={handleTrialClick}>
-            Try 14 days for free
-          </a>
-        ) : (
-          <a className="nav-cta" href="#features">
-            Explore features
-          </a>
-        )}
+        <a className="nav-cta" href="#trial" onClick={handleTrialClick}>
+          Try 14 days for free
+        </a>
       </div>
     </nav>
   );

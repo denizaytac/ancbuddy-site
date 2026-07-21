@@ -17,9 +17,9 @@ export function Quotes() {
           className="quote-card reveal"
           style={{ "--reveal-delay": "100ms" } as React.CSSProperties}
         >
-          <p>"Tiny, native, does one thing well. The kind of Mac app that stays out of the way."</p>
+          <p>"Tiny, native, does one thing well. The kind of mac app I keep paying for."</p>
           <div className="quote-meta">
-            <span>Early product feedback</span>
+            <span>Early customer feedback</span>
             <span className="quote-meta-dot" />
             <span>April 2026</span>
           </div>

@@ -1,5 +1,3 @@
-import { IS_COMMERCIAL_MODE_ACTIVE } from "@/config/commercialMode";
-
 export const DMG_URL =
   "https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.3/ANCBuddy-2.0.3.dmg";
 
@@ -102,18 +100,6 @@ function referrerHost() {
 }
 
 export function getAttributionPayload(): AttributionPayload {
-  if (!IS_COMMERCIAL_MODE_ACTIVE) {
-    return {
-      session_id: "disabled",
-      utm_source: null,
-      utm_medium: null,
-      utm_campaign: null,
-      referrer_host: null,
-      landing_path: "/",
-      current_path: "/",
-    };
-  }
-
   const stored = readStoredAttribution();
   const params = isBrowser() ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const next: StoredAttribution = {
@@ -162,7 +148,7 @@ export async function insertSupabaseRow(
   payload: Record<string, unknown>,
   options: { signal?: AbortSignal; keepalive?: boolean } = {},
 ) {
-  if (!IS_COMMERCIAL_MODE_ACTIVE || !SUPABASE_URL || !SUPABASE_ANON_KEY || !isBrowser()) return;
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !isBrowser()) return;
 
   const response = await fetch(
     `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${table}`,
@@ -189,7 +175,7 @@ export function trackSiteEvent(
   eventName: SiteEventName,
   metadata?: Record<string, string | number | boolean | null>,
 ) {
-  if (!IS_COMMERCIAL_MODE_ACTIVE || !isBrowser()) return;
+  if (!isBrowser()) return;
 
   const attribution = getAttributionPayload();
   void insertSupabaseRow(
@@ -207,13 +193,12 @@ export function trackSiteEvent(
 }
 
 export function trackPageView() {
-  if (!IS_COMMERCIAL_MODE_ACTIVE || pageViewTracked) return;
+  if (pageViewTracked) return;
   pageViewTracked = true;
   scheduleIdle(() => trackSiteEvent("page_view"));
 }
 
 export function buildCheckoutUrl(baseUrl = LEMON_SQUEEZY_URL) {
-  if (!IS_COMMERCIAL_MODE_ACTIVE) return "#features";
   const attribution = getAttributionPayload();
   const url = new URL(baseUrl);
 
@@ -225,10 +210,6 @@ export function buildCheckoutUrl(baseUrl = LEMON_SQUEEZY_URL) {
 }
 
 export function prepareCheckoutLink(anchor: HTMLAnchorElement) {
-  if (!IS_COMMERCIAL_MODE_ACTIVE) {
-    anchor.href = "#features";
-    return;
-  }
   anchor.href = buildCheckoutUrl(anchor.href || LEMON_SQUEEZY_URL);
   trackSiteEvent("checkout_click", { href: anchor.href });
 }

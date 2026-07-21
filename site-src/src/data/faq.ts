@@ -3,7 +3,7 @@ export interface FAQItem {
   a: string;
 }
 
-const PRODUCT_FAQ_ITEMS: FAQItem[] = [
+export const FAQ_ITEMS: FAQItem[] = [
   {
     q: "Is this an official Bose product?",
     a: "No. ANCBuddy is an independent third‑party utility. Bose, QuietComfort, and QC Ultra are trademarks of Bose Corporation. ANCBuddy is not affiliated with, endorsed by, or sponsored by Bose.",
@@ -32,9 +32,6 @@ const PRODUCT_FAQ_ITEMS: FAQItem[] = [
     q: "Can it launch at login?",
     a: "Yes. The panel includes a Launch at Login switch, so you can decide whether ANCBuddy starts automatically with your Mac.",
   },
-];
-
-const COMMERCIAL_FAQ_ITEMS: FAQItem[] = [
   {
     q: "I bought BoseControl. Do I need to buy again?",
     a: "No. The ANCBuddy 2.x app migrates existing BoseControl license and trial data automatically when it starts.",
@@ -52,7 +49,3 @@ const COMMERCIAL_FAQ_ITEMS: FAQItem[] = [
     a: "Yes — 14‑day no‑questions refund through Lemon Squeezy.",
   },
 ];
-
-export const FAQ_ITEMS: FAQItem[] = __COMMERCIAL_MODE__ === "active"
-  ? [...PRODUCT_FAQ_ITEMS, ...COMMERCIAL_FAQ_ITEMS]
-  : PRODUCT_FAQ_ITEMS;

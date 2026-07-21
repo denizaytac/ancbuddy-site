@@ -4,7 +4,7 @@
   "title": "ANCBuddy Troubleshooting for Bose QC Ultra on Mac",
   "description": "Troubleshoot ANCBuddy connection, Bluetooth, battery, and Bose QC Ultra mode-switching issues on macOS.",
   "kind": "support",
-  "lastmod": "2026-07-02",
+  "lastmod": "2026-07-21",
   "priority": 0.7,
   "h1": "Troubleshooting Bose QC Ultra on Mac",
   "faqs": [
@@ -31,7 +31,7 @@
   ],
   "relatedLinks": [
     { "title": "Support", "href": "/support.html", "description": "Contact the developer." },
-    { "title": "ANCBuddy features", "href": "/#features", "description": "Review the product controls." },
+    { "title": "Download", "href": "/download.html", "description": "Install the current release." },
     { "title": "Mac control guide", "href": "/control-bose-qc-ultra-from-mac.html", "description": "Understand what macOS and ANCBuddy can do." }
   ],
   "sources": [

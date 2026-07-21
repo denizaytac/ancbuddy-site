@@ -4,7 +4,7 @@
   "title": "AI Auto-EQ for Bose QC Ultra",
   "description": "How ANCBuddy's optional AI Auto-EQ works for Bose QC Ultra headphones and earbuds, including track metadata and privacy details.",
   "kind": "guide",
-  "lastmod": "2026-07-02",
+  "lastmod": "2026-07-21",
   "priority": 0.75,
   "h1": "AI Auto-EQ for Bose QC Ultra",
   "faqs": [
@@ -32,7 +32,7 @@
   ],
   "relatedLinks": [
     { "title": "Privacy", "href": "/privacy.html", "description": "Read the data handling details." },
-    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore ANCBuddy." },
+    { "title": "Download", "href": "/download.html", "description": "Try ANCBuddy." },
     { "title": "Bose QC Ultra Mac app", "href": "/bose-qc-ultra-mac-app.html", "description": "See all product features." }
   ]
 }

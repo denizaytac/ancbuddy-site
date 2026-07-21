@@ -128,29 +128,14 @@ export function Hero() {
           Auto-EQ when you want a track-aware sound profile with more depth.
         </p>
         <div className="hero-cta">
-          {__COMMERCIAL_MODE__ === "active" ? (
-            <>
-              <a className="btn btn-accent" href="#pricing">
-                <Icon name="bolt" size={15} />
-                Buy ANCBuddy — $9.99
-              </a>
-              <button className="btn btn-ghost" onClick={() => openTrial(true)}>
-                Try 14 days for free
-                <Icon name="arrow" size={15} />
-              </button>
-            </>
-          ) : (
-            <>
-              <a className="btn btn-accent" href="#features">
-                Explore features
-                <Icon name="arrow" size={15} />
-              </a>
-              <a className="btn btn-ghost" href="#devices">
-                See compatibility
-                <Icon name="arrow" size={15} />
-              </a>
-            </>
-          )}
+          <a className="btn btn-accent" href="#pricing">
+            <Icon name="bolt" size={15} />
+            Buy ANCBuddy — $9.99
+          </a>
+          <button className="btn btn-ghost" onClick={() => openTrial(true)}>
+            Try 14 days for free
+            <Icon name="arrow" size={15} />
+          </button>
         </div>
         <div className="hero-meta">
           <span>
@@ -162,8 +147,7 @@ export function Hero() {
           </span>
           <span className="hero-meta-dot" />
           <span>
-            <Icon name="check" size={12} />
-            {__COMMERCIAL_MODE__ === "active" ? "Buy once, no subscription" : "macOS 12 and newer"}
+            <Icon name="check" size={12} /> Buy once, no subscription
           </span>
         </div>
       </div>

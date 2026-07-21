@@ -2,9 +2,9 @@
 {
   "slug": "trust.html",
   "title": "ANCBuddy Trust and Safety",
-  "description": "Trust details for ANCBuddy: Bose independence, local Bluetooth control, network paths, signing, updates, and closed-source maintenance rationale.",
+  "description": "Trust details for ANCBuddy: Bose independence, local Bluetooth control, network paths, refunds, signing, updates, and closed-source maintenance rationale.",
   "kind": "trust",
-  "lastmod": "2026-07-05",
+  "lastmod": "2026-07-21",
   "priority": 0.7,
   "h1": "ANCBuddy trust and safety",
   "faqs": [
@@ -18,11 +18,11 @@
     },
     {
       "q": "Which network paths exist?",
-      "a": "Network use is limited to Sparkle update checks and optional AI Auto-EQ when enabled. Normal website browsing does not send measurement events."
+      "a": "Network use is limited to trial/download flow, first-party distribution measurement, license validation, Sparkle update checks, and optional AI Auto-EQ when enabled."
     },
     {
-      "q": "Why is ANCBuddy closed-source?",
-      "a": "ANCBuddy is closed-source so its Bluetooth integration, signing, notarization, update delivery, and compatibility work can be maintained as one product."
+      "q": "Why is ANCBuddy paid and closed-source?",
+      "a": "ANCBuddy is paid closed-source for now so maintenance, signing, notarization, support, macOS changes, and Bose firmware changes stay worth handling."
     }
   ],
   "breadcrumbs": [
@@ -30,14 +30,14 @@
     { "name": "Trust", "url": "/trust.html" }
   ],
   "relatedLinks": [
-    { "title": "Privacy", "href": "/privacy.html", "description": "Review website, update, and AI Auto-EQ data handling." },
-    { "title": "Facts", "href": "/facts.html", "description": "Canonical product facts and supported devices." },
-    { "title": "Support", "href": "/support.html", "description": "Ask setup, privacy, or compatibility questions directly." }
+    { "title": "Privacy", "href": "/privacy.html", "description": "Review trial, attribution, license, and AI Auto-EQ data handling." },
+    { "title": "Facts", "href": "/facts.html", "description": "Canonical product facts, supported devices, price, and download links." },
+    { "title": "Support", "href": "/support.html", "description": "Ask setup, privacy, or license questions directly." }
   ]
 }
 ---
 
-ANCBuddy is a small Mac utility for a narrow job: controlling compatible Bose QC Ultra listening modes from the Mac menu bar. This page collects the technical trust details behind the product.
+ANCBuddy is a small paid Mac utility for a narrow job: controlling compatible Bose QC Ultra listening modes from the Mac menu bar. This page collects the trust details that matter before installing or recommending it.
 
 ## Independence from Bose
 
@@ -55,17 +55,24 @@ ANCBuddy does not update headphone firmware and does not need the Bose phone app
 
 ANCBuddy is not a zero-network product. These are the network paths to know about:
 
+- Trial/download flow: the website offers an optional name-and-email signup before starting the DMG download; visitors can skip it and download directly.
+- First-party distribution measurement: the website records campaign/source fields and basic site events to understand which channels work.
+- License validation: paid licenses are handled through Lemon Squeezy.
 - Update checks: the Mac app uses Sparkle to check for signed updates.
 - Optional AI Auto-EQ: only when enabled, ANCBuddy sends current artist/title/album to ANCBuddy's relay to generate a 3-band EQ suggestion.
 
-There is no third-party analytics SDK, ad pixel, cross-site tracking, attribution session, or site-event measurement on the public site.
+There is no third-party analytics SDK, ad pixel, or cross-site tracking on the site.
+
+## Price, trial, and refund
+
+ANCBuddy has a 14-day trial and costs $9.99 one-time if it earns a place in your menu bar. Lemon Squeezy handles checkout and refund processing. The current support policy is a 14-day no-questions refund.
 
 ## Signing and updates
 
-ANCBuddy builds are signed with Developer ID and notarized by Apple. The app includes Sparkle update checks so signed fixes can be delivered outside the Mac App Store.
+The public ANCBuddy 2.0.3 DMG is signed with Developer ID, notarized by Apple, and distributed through the ANCBuddy GitHub release asset and Lemon Squeezy download flow. The app includes Sparkle update checks so fixes can ship outside the Mac App Store.
 
 ## Closed-source maintenance rationale
 
-ANCBuddy is closed-source for now. The reason is practical maintenance: Bluetooth behavior, macOS releases, Bose firmware behavior, support, signing, notarization, and update delivery all take ongoing work.
+ANCBuddy is closed-source for now. The reason is practical maintenance: Bluetooth behavior, macOS releases, Bose firmware behavior, support, signing, notarization, and update delivery all take ongoing work. The $9.99 one-time price is meant to fund that maintenance without a subscription.
 
 There is no public abandonment or future open-source promise at this time. If that policy changes, it should be stated explicitly rather than implied.

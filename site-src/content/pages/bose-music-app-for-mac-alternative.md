@@ -4,7 +4,7 @@
   "title": "Bose Music App for Mac Alternative",
   "description": "ANCBuddy is an independent Mac alternative for daily Bose QC Ultra mode control when you do not want to use the Bose phone app.",
   "kind": "guide",
-  "lastmod": "2026-07-02",
+  "lastmod": "2026-07-21",
   "priority": 0.8,
   "h1": "Bose Music app for Mac alternative",
   "faqs": [
@@ -27,7 +27,7 @@
     { "name": "Bose Music App for Mac Alternative", "url": "/bose-music-app-for-mac-alternative.html" }
   ],
   "relatedLinks": [
-    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore the Mac menu-bar utility." },
+    { "title": "Download ANCBuddy", "href": "/download.html", "description": "Try the Mac menu-bar utility." },
     { "title": "Privacy", "href": "/privacy.html", "description": "Understand local controls and AI Auto-EQ." },
     { "title": "Support", "href": "/support.html", "description": "Contact the developer." }
   ],

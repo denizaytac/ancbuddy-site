@@ -4,7 +4,7 @@
   "title": "Bose QC Ultra Battery Level on Mac",
   "description": "How to check Bose QC Ultra battery status from a Mac, and how ANCBuddy makes battery and connection status visible in the menu bar.",
   "kind": "guide",
-  "lastmod": "2026-07-02",
+  "lastmod": "2026-07-21",
   "priority": 0.78,
   "h1": "Bose QC Ultra battery level on Mac",
   "faqs": [
@@ -27,7 +27,7 @@
     { "name": "Bose QC Ultra Battery on Mac", "url": "/bose-qc-ultra-battery-mac.html" }
   ],
   "relatedLinks": [
-    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore battery and status visibility." },
+    { "title": "Download", "href": "/download.html", "description": "Try ANCBuddy for battery/status visibility." },
     { "title": "Troubleshooting", "href": "/troubleshooting.html", "description": "Fix connection issues." },
     { "title": "Mac control guide", "href": "/control-bose-qc-ultra-from-mac.html", "description": "Understand the full workflow." }
   ],

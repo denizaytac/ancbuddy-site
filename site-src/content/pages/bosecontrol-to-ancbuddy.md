@@ -2,23 +2,23 @@
 {
   "slug": "bosecontrol-to-ancbuddy.html",
   "title": "BoseControl to ANCBuddy Migration",
-  "description": "Technical background on the BoseControl to ANCBuddy rename and the current app identity.",
+  "description": "What existing BoseControl users need to know about ANCBuddy, licenses, trial data, and the v2.0.2 app rename.",
   "kind": "support",
-  "lastmod": "2026-07-02",
+  "lastmod": "2026-07-21",
   "priority": 0.75,
   "h1": "BoseControl to ANCBuddy",
   "faqs": [
     {
+      "q": "Do BoseControl buyers need to buy ANCBuddy again?",
+      "a": "No. ANCBuddy 2.x migrates existing BoseControl license and trial data automatically when it starts."
+    },
+    {
       "q": "What changed in the rename?",
-      "a": "The product name changed to ANCBuddy and the app moved to the com.deniz.ancbuddy identity."
+      "a": "The product name changed to ANCBuddy and the app moved to the new com.deniz.ancbuddy identity."
     },
     {
-      "q": "What does ANCBuddy control?",
-      "a": "ANCBuddy provides Bose QC Ultra listening-mode, battery, connection, and optional AI Auto-EQ controls from the Mac menu bar."
-    },
-    {
-      "q": "Which Macs are supported?",
-      "a": "ANCBuddy supports macOS 12 Monterey and newer on Apple Silicon and Intel Macs."
+      "q": "Where can I get the current ANCBuddy DMG?",
+      "a": "Use the download page for the current signed and notarized ANCBuddy 2.0.3 DMG."
     }
   ],
   "breadcrumbs": [
@@ -27,23 +27,23 @@
     { "name": "BoseControl to ANCBuddy", "url": "/bosecontrol-to-ancbuddy.html" }
   ],
   "relatedLinks": [
-    { "title": "ANCBuddy features", "href": "/#features", "description": "Explore the menu-bar controls." },
+    { "title": "Download ANCBuddy", "href": "/download.html", "description": "Get the current DMG." },
     { "title": "Changelog", "href": "/changelog.html", "description": "Read release notes." },
     { "title": "Support", "href": "/support.html", "description": "Get help with migration." }
   ]
 }
 ---
 
-BoseControl became ANCBuddy as part of the app's move to the current product name and bundle identity.
+BoseControl became ANCBuddy, and existing BoseControl buyers do not need to buy again because ANCBuddy 2.x migrates existing license and trial data on first launch.
 
 ## What migrates
 
-ANCBuddy 2.x uses the com.deniz.ancbuddy identity and keeps its signed update mechanism within the app.
+ANCBuddy 2.x keeps the update path for existing users by migrating legacy BoseControl license and trial information into the new ANCBuddy app identity.
 
-## What stayed consistent
+## What to install
 
-The core purpose remains the same: quick Bose QC Ultra mode, battery, and connection controls from the Mac menu bar.
+Install the current public release from the [download page](/download.html). The current public release is ANCBuddy 2.0.3.
 
-## Support
+## If something does not migrate
 
-Email [support](/support.html) with your Mac model, macOS version, Bose device model, and the ANCBuddy version shown in the app.
+Email [support](/support.html) with your purchase email, Mac model, macOS version, and the ANCBuddy version you installed.

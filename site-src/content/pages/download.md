@@ -1,60 +1,68 @@
 ---
 {
   "slug": "download.html",
-  "title": "ANCBuddy for Mac Product Overview",
-  "description": "Explore ANCBuddy features and compatibility for Bose QC Ultra Headphones and Earbuds on macOS.",
+  "title": "Free Trial and Install ANCBuddy for Mac",
+  "description": "Start the ANCBuddy free trial for macOS, then install the signed and notarized app for Bose QC Ultra Headphones and Earbuds.",
   "kind": "download",
-  "lastmod": "2026-07-03",
+  "lastmod": "2026-07-21",
   "priority": 0.9,
-  "h1": "ANCBuddy for Mac",
+  "h1": "Free trial and install ANCBuddy for Mac",
   "faqs": [
     {
-      "q": "Which macOS versions does ANCBuddy support?",
+      "q": "Is ANCBuddy signed and notarized?",
+      "a": "Yes. The current Mac app release is signed with Developer ID and notarized by Apple for normal macOS installation."
+    },
+    {
+      "q": "Can I try ANCBuddy before buying?",
+      "a": "Yes. ANCBuddy includes a 14-day free trial. A one-time $9.99 license unlocks it permanently."
+    },
+    {
+      "q": "Which macOS versions are supported?",
       "a": "ANCBuddy supports macOS 12 Monterey and newer on Apple Silicon and Intel Macs."
     },
     {
-      "q": "Which Bose devices are compatible?",
-      "a": "ANCBuddy supports QC Ultra Headphones Gen 1 and Gen 2, plus QC Ultra Earbuds 2nd Gen."
-    },
-    {
-      "q": "What can ANCBuddy control?",
-      "a": "ANCBuddy can switch Quiet, Aware, and Immersion, show battery and connection status, and provide optional AI Auto-EQ profiles."
-    },
-    {
-      "q": "How do updates work?",
-      "a": "ANCBuddy includes user-confirmed update checks powered by Sparkle."
+      "q": "Where does the download come from?",
+      "a": "The public DMG is hosted as a GitHub Release asset for ANCBuddy version 2.0.3."
     }
   ],
   "breadcrumbs": [
     { "name": "Home", "url": "/" },
-    { "name": "Product overview", "url": "/download.html" }
+    { "name": "Free trial and install", "url": "/download.html" }
   ],
   "relatedLinks": [
     { "title": "Install and troubleshooting", "href": "/troubleshooting.html", "description": "Fix connection, Bluetooth, and installation issues." },
-    { "title": "Privacy", "href": "/privacy.html", "description": "Understand local controls and AI Auto-EQ data handling." },
+    { "title": "Privacy", "href": "/privacy.html", "description": "Understand trial signup and AI Auto-EQ data handling." },
     { "title": "Support", "href": "/support.html", "description": "Email the developer directly." }
   ]
 }
 ---
 
-ANCBuddy is currently in development.
+Start ANCBuddy with a 14-day free trial, then install the signed and notarized Mac app for Bose QC Ultra Headphones Gen 1, QC Ultra Headphones Gen 2, and QC Ultra Earbuds 2nd Gen.
 
-It is a native Mac menu-bar app for Bose QC Ultra Headphones Gen 1, QC Ultra Headphones Gen 2, and QC Ultra Earbuds 2nd Gen.
+[Download ANCBuddy 2.0.3 DMG directly](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.3/ANCBuddy-2.0.3.dmg)
 
-## Product overview
+[Try ANCBuddy free for 14 days](/#trial)
 
-- Switch Quiet, Aware, and Immersion from the Mac menu bar
-- See battery and connection status
-- Use optional AI Auto-EQ for track-aware 3-band EQ profiles
-- Choose Launch at Login
-- Check for signed updates from the app
+## Current release
 
-## Compatibility
+- Version: 2.0.3
+- macOS: 12 Monterey or newer
+- Macs: Apple Silicon and Intel
+- Trial: 14 days
+- Price after trial: $9.99 one-time
 
-ANCBuddy supports macOS 12 Monterey and newer on Apple Silicon and Intel Macs. It communicates with compatible Bose QC Ultra devices over Bluetooth after they are paired in macOS.
+[Buy ANCBuddy — $9.99](https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2)
 
-## How it works
+## Install steps
 
-The menu-bar panel provides quick listening-mode controls without requiring the Bose phone app to remain open. Firmware updates and initial device setup remain in the Bose app.
+1. Download the DMG directly, or start the free trial if you want email support and product updates.
+2. Open the DMG and move ANCBuddy to Applications.
+3. Launch ANCBuddy and allow Bluetooth access if macOS asks.
+4. Pair your Bose QC Ultra in macOS Bluetooth settings if it is not already paired.
+5. Use the ANCBuddy menu-bar panel to switch Quiet, Aware, and Immersion.
 
-For more detail, explore the [feature overview](/#features), [device compatibility](/#devices), [Mac control guide](/control-bose-qc-ultra-from-mac.html), or [changelog](/changelog.html).
+Apple's Mac Bluetooth setup flow is documented in [Apple Support](https://support.apple.com/guide/mac-help/connect-a-wireless-accessory-blth1004/mac).
+
+## Manual download
+
+The direct DMG link is available without entering an email. The trial still runs for 14 days. If ANCBuddy belongs in your menu bar, buy a permanent license through [Lemon Squeezy](https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2).
