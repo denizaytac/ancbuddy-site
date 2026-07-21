@@ -1,4 +1,5 @@
 import { useTrialDialog } from "@/hooks/useTrialDialog";
+import facts from "../../../content/product-facts.json";
 
 export function Footer() {
   const { setOpen: openTrial } = useTrialDialog();
@@ -62,7 +63,7 @@ export function Footer() {
             <a href="/facts.html">Facts</a>
             <a href="/changelog.html">Changelog</a>
             <button onClick={() => openTrial(true)}>Free trial</button>
-            <a href="mailto:denoaytac62@gmail.com">Contact</a>
+            <a href={`mailto:${facts.supportEmail}`}>Contact</a>
           </div>
         </div>
 
