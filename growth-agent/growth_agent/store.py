@@ -777,7 +777,13 @@ class SupabaseGrowthStore(GrowthStore):
 
     async def metrics(self) -> Metrics:
         downloads, outcome_response = await asyncio.gather(
-            self._count("site_events", {"event_name": "eq.download_click"}),
+            self._count(
+                "site_events",
+                {
+                    "event_name": "eq.download_click",
+                    "or": "(is_internal.is.null,is_internal.eq.false)",
+                },
+            ),
             self._request(
                 "GET",
                 "growth_outcome_events",
@@ -798,6 +804,7 @@ class SupabaseGrowthStore(GrowthStore):
             params={
                 "select": "amount_total,amount_usd,currency,status,refunded",
                 "refunded": "not.is.true",
+                "or": "(is_internal.is.null,is_internal.eq.false)",
                 "limit": "10000",
             },
         )

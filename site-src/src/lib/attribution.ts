@@ -6,6 +6,8 @@ export const LEMON_SQUEEZY_URL =
 
 const ATTRIBUTION_KEY = "ancbuddy_attribution_v1";
 const SESSION_ID_KEY = "ancbuddy_session_id_v1";
+const INTERNAL_MARKER_KEY = "ancbuddy_internal_analytics_v1";
+const INTERNAL_MARKER_PARAM = "ancbuddy_internal";
 const CAMPAIGN_KEYS = ["utm_source", "utm_medium", "utm_campaign"] as const;
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
@@ -27,6 +29,7 @@ export interface AttributionPayload {
   referrer_host: string | null;
   landing_path: string;
   current_path: string;
+  is_internal: boolean;
 }
 
 type StoredAttribution = Partial<Record<CampaignKey, string>> & {
@@ -43,6 +46,36 @@ function isBrowser() {
 function pathWithSearch() {
   if (!isBrowser()) return "/";
   return `${window.location.pathname}${window.location.search}`;
+}
+
+function applyInternalMarkerCommand() {
+  if (!isBrowser()) return;
+
+  const url = new URL(window.location.href);
+  const command = url.searchParams.get(INTERNAL_MARKER_PARAM);
+  if (command !== "1" && command !== "0") return;
+
+  try {
+    if (command === "1") {
+      window.localStorage.setItem(INTERNAL_MARKER_KEY, "1");
+    } else {
+      window.localStorage.removeItem(INTERNAL_MARKER_KEY);
+    }
+  } catch {
+    // Storage can be disabled; analytics must never block the website.
+  }
+
+  url.searchParams.delete(INTERNAL_MARKER_PARAM);
+  window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
+export function isInternalAnalyticsBrowser() {
+  if (!isBrowser()) return false;
+  try {
+    return window.localStorage.getItem(INTERNAL_MARKER_KEY) === "1";
+  } catch {
+    return false;
+  }
 }
 
 function readStoredAttribution(): StoredAttribution {
@@ -100,6 +133,7 @@ function referrerHost() {
 }
 
 export function getAttributionPayload(): AttributionPayload {
+  applyInternalMarkerCommand();
   const stored = readStoredAttribution();
   const params = isBrowser() ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const next: StoredAttribution = {
@@ -123,6 +157,7 @@ export function getAttributionPayload(): AttributionPayload {
     referrer_host: next.referrer_host ?? null,
     landing_path: next.landing_path ?? pathWithSearch(),
     current_path: pathWithSearch(),
+    is_internal: isInternalAnalyticsBrowser(),
   };
 }
 

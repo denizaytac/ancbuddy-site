@@ -43,6 +43,10 @@ function asBoolean(value: unknown): boolean | null {
   return null;
 }
 
+function asInternalFlag(value: unknown): boolean {
+  return value === true || value === "true";
+}
+
 function asIsoDate(value: unknown): string | null {
   const text = normalize(value, 80);
   if (!text) return null;
@@ -199,6 +203,7 @@ Deno.serve(async (req) => {
     referrer_host: normalize(customData.referrer_host, 255),
     landing_path: normalize(customData.landing_path, 1000),
     current_path: normalize(customData.current_path, 1000),
+    is_internal: asInternalFlag(customData.is_internal),
     custom_data: customData,
     raw_event: payload,
     updated_at: new Date().toISOString(),

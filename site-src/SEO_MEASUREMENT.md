@@ -2,6 +2,16 @@
 
 Measurement stays privacy-light: no third-party analytics script, ad pixel, or cross-site tracking is used. ANCBuddy records first-party attribution and site events in Supabase for distribution tests.
 
+## Internal browser marker
+
+Developer/test traffic is marked locally per browser profile and is still stored for QA, but excluded from cleaned funnel and CEO metrics.
+
+- Enable on the current browser profile: open `https://ancbuddy.com/?ancbuddy_internal=1`
+- Disable on the current browser profile: open `https://ancbuddy.com/?ancbuddy_internal=0`
+- The command parameter is removed from the address bar before the page-view event is built.
+- The marker stores only the boolean-like local value `1`; it contains no identity, IP address, fingerprint, or location.
+- Clearing site data also clears the marker.
+
 ## After deploy
 
 1. Submit `https://ancbuddy.com/sitemap.xml` in Google Search Console.
@@ -56,5 +66,6 @@ Current code coverage checked on 2026-07-05:
 
 - Browser roles can insert into `site_events` and `trial_signups`.
 - Browser roles cannot read, update, or delete `site_events`, `trial_signups`, or `lemon_orders`.
+- New website and checkout-attribution rows carry only the boolean `is_internal`; cleaned metrics exclude exactly `true`, while historical `null` rows remain counted.
 - Lemon Squeezy checkout links include only minimal `checkout[custom][...]` attribution fields.
 - The Lemon Squeezy `order_created` webhook rejects bad `X-Signature` requests, accepts valid requests, and upserts duplicate order IDs without creating duplicates.
