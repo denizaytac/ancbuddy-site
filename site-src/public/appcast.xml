@@ -3,20 +3,22 @@
     <channel>
         <title>ANCBuddy</title>
         <item>
-            <title>2.0.3</title>
-            <pubDate>Mon, 20 Jul 2026 09:47:30 +0200</pubDate>
-            <sparkle:version>20003</sparkle:version>
-            <sparkle:shortVersionString>2.0.3</sparkle:shortVersionString>
+            <title>2.1.0</title>
+            <pubDate>Mon, 17 Aug 2026 12:22:19 +0200</pubDate>
+            <sparkle:version>20100</sparkle:version>
+            <sparkle:shortVersionString>2.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <description sparkle:format="markdown"><![CDATA[# ANCBuddy 2.0.3
+            <description sparkle:format="markdown"><![CDATA[# ANCBuddy 2.1.0
 
-ANCBuddy 2.0.3 restores reliable control after macOS interrupts a Bose Bluetooth session.
+ANCBuddy 2.1.0 adds Immersive Audio controls for compatible QC Ultra devices.
 
-ANCBuddy now detects unexpected disconnects, discards stale Bluetooth sessions, and retries once with a fresh connection instead of remaining unreachable until restart.
+Switch between Still and Motion directly inside the active Immersion card, read the headphones' live setting, and get clear confirmation while each change is applied.
+
+Devices without a supported Immersive Audio protocol path keep the existing Quiet, Aware, Immersion, battery, and AI Auto-EQ controls unchanged.
 
 If you still have the old BoseControl app installed, quit and remove it after installing ANCBuddy to avoid two menu bar apps competing for the same headphones.
 ]]></description>
-            <enclosure url="https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.3/ANCBuddy-2.0.3.dmg" length="4049109" type="application/octet-stream" sparkle:edSignature="AaOBicqP19oUG5ts0/asjWz/AmKoEzoeyRNXvg22P/vbQNOLKkVVjh2Q+420xBz8vdIc6LDXPx7HH9d9xAryAA=="/>
+            <enclosure url="https://github.com/denizaytac/ancbuddy-site/releases/download/v2.1.0/ANCBuddy-2.1.0.dmg" length="4154112" type="application/octet-stream" sparkle:edSignature="jLaa8vV9SWx1pehpFujpwz6Buqdqe6fQynxHH3tAcAx2tC1dxEOLhylk1LXP6ZHKVeaIF9R0N9zARLaIVBOuBw=="/>
         </item>
     </channel>
 </rss>

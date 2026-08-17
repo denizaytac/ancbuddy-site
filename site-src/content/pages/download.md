@@ -4,7 +4,7 @@
   "title": "Free Trial and Install ANCBuddy for Mac",
   "description": "Start the ANCBuddy free trial for macOS, then install the signed and notarized app for Bose QC Ultra Headphones and Earbuds.",
   "kind": "download",
-  "lastmod": "2026-07-21",
+  "lastmod": "2026-08-17",
   "priority": 0.9,
   "h1": "Free trial and install ANCBuddy for Mac",
   "faqs": [
@@ -22,7 +22,7 @@
     },
     {
       "q": "Where does the download come from?",
-      "a": "The public DMG is hosted as a GitHub Release asset for ANCBuddy version 2.0.3."
+      "a": "The public DMG is hosted as a GitHub Release asset for ANCBuddy version 2.1.0."
     }
   ],
   "breadcrumbs": [
@@ -39,13 +39,14 @@
 
 Start ANCBuddy with a 14-day free trial, then install the signed and notarized Mac app for Bose QC Ultra Headphones Gen 1, QC Ultra Headphones Gen 2, and QC Ultra Earbuds 2nd Gen.
 
-[Download ANCBuddy 2.0.3 DMG directly](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.0.3/ANCBuddy-2.0.3.dmg)
+[Download ANCBuddy 2.1.0 DMG directly](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.1.0/ANCBuddy-2.1.0.dmg)
 
 [Try ANCBuddy free for 14 days](/#trial)
 
 ## Current release
 
-- Version: 2.0.3
+- Version: 2.1.0
+- New: Still and Motion controls inside Immersion on compatible QC Ultra devices
 - macOS: 12 Monterey or newer
 - Macs: Apple Silicon and Intel
 - Trial: 14 days

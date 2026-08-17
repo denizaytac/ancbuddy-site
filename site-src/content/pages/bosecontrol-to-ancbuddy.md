@@ -4,7 +4,7 @@
   "title": "BoseControl to ANCBuddy Migration",
   "description": "What existing BoseControl users need to know about ANCBuddy, licenses, trial data, and the v2.0.2 app rename.",
   "kind": "support",
-  "lastmod": "2026-07-21",
+  "lastmod": "2026-08-17",
   "priority": 0.75,
   "h1": "BoseControl to ANCBuddy",
   "faqs": [
@@ -18,7 +18,7 @@
     },
     {
       "q": "Where can I get the current ANCBuddy DMG?",
-      "a": "Use the download page for the current signed and notarized ANCBuddy 2.0.3 DMG."
+      "a": "Use the download page for the current signed and notarized ANCBuddy 2.1.0 DMG."
     }
   ],
   "breadcrumbs": [
@@ -42,7 +42,7 @@ ANCBuddy 2.x keeps the update path for existing users by migrating legacy BoseCo
 
 ## What to install
 
-Install the current public release from the [download page](/download.html). The current public release is ANCBuddy 2.0.3.
+Install the current public release from the [download page](/download.html). The current public release is ANCBuddy 2.1.0.
 
 ## If something does not migrate
 

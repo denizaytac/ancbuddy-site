@@ -1,5 +1,11 @@
 # ANCBuddy Changelog
 
+## v2.1.0 — August 17, 2026
+**Immersive Audio controls**
+- Switch compatible QC Ultra headphones between Still and Motion directly inside the active Immersion mode.
+- See the headphones' live Immersive Audio setting and clear feedback while a change is being confirmed.
+- Devices that don't expose this setting keep the existing Quiet, Aware, Immersion, battery, and AI Auto-EQ controls unchanged.
+
 ## v2.0.3 — July 20, 2026
 **Reliable recovery after Bluetooth interruptions**
 - Restores headphone control automatically when macOS interrupts an active Bose Bluetooth session.

@@ -74,7 +74,7 @@ export function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 ANCBuddy · v2.0.3</span>
+          <span>© 2026 ANCBuddy · v2.1.0</span>
           <span>Independent utility for compatible Bose hardware</span>
         </div>
       </div>

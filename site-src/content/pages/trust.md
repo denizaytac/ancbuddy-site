@@ -4,7 +4,7 @@
   "title": "ANCBuddy Trust and Safety",
   "description": "Trust details for ANCBuddy: Bose independence, local Bluetooth control, network paths, refunds, signing, updates, and closed-source maintenance rationale.",
   "kind": "trust",
-  "lastmod": "2026-07-21",
+  "lastmod": "2026-08-17",
   "priority": 0.7,
   "h1": "ANCBuddy trust and safety",
   "faqs": [
@@ -47,7 +47,7 @@ The Bose phone app remains the official place for firmware updates, product setu
 
 ## What stays local
 
-Normal mode switching is local. Quiet, Aware, Immersion, battery, and connection status use Bluetooth communication between your Mac and the paired Bose QC Ultra device.
+Normal mode switching is local. Quiet, Aware, Immersion, compatible Still/Motion controls, battery, and connection status use Bluetooth communication between your Mac and the paired Bose QC Ultra device.
 
 ANCBuddy does not update headphone firmware and does not need the Bose phone app to be open for those daily controls.
 
@@ -69,7 +69,7 @@ ANCBuddy has a 14-day trial and costs $9.99 one-time if it earns a place in your
 
 ## Signing and updates
 
-The public ANCBuddy 2.0.3 DMG is signed with Developer ID, notarized by Apple, and distributed through the ANCBuddy GitHub release asset and Lemon Squeezy download flow. The app includes Sparkle update checks so fixes can ship outside the Mac App Store.
+The public ANCBuddy 2.1.0 DMG is signed with Developer ID, notarized by Apple, and distributed through the ANCBuddy GitHub release asset and Lemon Squeezy download flow. The app includes Sparkle update checks so fixes can ship outside the Mac App Store.
 
 ## Closed-source maintenance rationale
 
