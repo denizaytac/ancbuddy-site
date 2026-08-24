@@ -17,11 +17,11 @@ export function Quotes() {
           className="quote-card reveal"
           style={{ "--reveal-delay": "100ms" } as React.CSSProperties}
         >
-          <p>"Tiny, native, does one thing well. The kind of mac app I keep paying for."</p>
+          <p>"AI Auto‑EQ is ANCBuddy at its best — track-by-track tuning, handled automatically."</p>
           <div className="quote-meta">
-            <span>Early customer feedback</span>
+            <span>ANCBuddy</span>
             <span className="quote-meta-dot" />
-            <span>April 2026</span>
+            <span>Product highlight</span>
           </div>
         </div>
         <div
@@ -35,6 +35,23 @@ export function Quotes() {
             <span>Source on file</span>
           </div>
         </div>
+      </div>
+      <div className="product-hunt-proof reveal">
+        <a
+          href="https://www.producthunt.com/products/ancbuddy-for-bose-qc-ultra?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-ancbuddy-for-bose-qc-ultra"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View ANCBuddy for Bose QC Ultra on Product Hunt"
+        >
+          <img
+            alt="ANCBuddy for Bose QC Ultra — featured on Product Hunt"
+            width="250"
+            height="54"
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1195105&theme=dark&t=1787558108420"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
       </div>
     </section>
   );

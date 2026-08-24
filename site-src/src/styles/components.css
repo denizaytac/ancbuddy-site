@@ -1021,6 +1021,28 @@
   display: flex; align-items: center; gap: 8px;
 }
 .quote-meta-dot { width: 4px; height: 4px; background: var(--fg-4); border-radius: 50%; }
+.product-hunt-proof {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+.product-hunt-proof a {
+  display: block;
+  width: 250px;
+  max-width: 100%;
+  border-radius: 12px;
+  transition: filter 160ms ease;
+}
+.product-hunt-proof a:hover { filter: brightness(1.08); }
+.product-hunt-proof a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.product-hunt-proof img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 
 /* ---- Trial Dialog (custom styling on shadcn Dialog) ---- */
 .trial-dialog {
