@@ -36,23 +36,6 @@ export function Quotes() {
           </div>
         </div>
       </div>
-      <div className="product-hunt-proof reveal">
-        <a
-          href="https://www.producthunt.com/products/ancbuddy-for-bose-qc-ultra?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-ancbuddy-for-bose-qc-ultra"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="View ANCBuddy for Bose QC Ultra on Product Hunt"
-        >
-          <img
-            alt="ANCBuddy for Bose QC Ultra — featured on Product Hunt"
-            width="250"
-            height="54"
-            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1195105&theme=dark&t=1787558108420"
-            loading="lazy"
-            decoding="async"
-          />
-        </a>
-      </div>
     </section>
   );
 }

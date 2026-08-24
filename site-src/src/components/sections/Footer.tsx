@@ -8,7 +8,7 @@ export function Footer() {
     <footer className="footer">
       <div className="container">
         <div className="footer-grid">
-          <div className="footer-col">
+          <div className="footer-col footer-brand">
             <div className="nav-brand" style={{ marginBottom: 16 }}>
               <picture className="footer-logo-picture">
                 <source
@@ -46,6 +46,22 @@ export function Footer() {
             >
               A tiny menu‑bar app for Bose QC Ultra, built for quick Mac control.
             </p>
+            <a
+              className="footer-product-hunt"
+              href="https://www.producthunt.com/products/ancbuddy-for-bose-qc-ultra?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-ancbuddy-for-bose-qc-ultra"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View ANCBuddy for Bose QC Ultra on Product Hunt"
+            >
+              <img
+                alt="ANCBuddy for Bose QC Ultra — featured on Product Hunt"
+                width="250"
+                height="54"
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1195105&theme=dark&t=1787558108420"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
           </div>
           <div className="footer-col">
             <div className="footer-heading">Product</div>
