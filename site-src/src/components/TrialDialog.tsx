@@ -18,6 +18,8 @@ import { Icon } from "./Icon";
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY as string | undefined;
 const SUBMIT_TIMEOUT_MS = 8000;
+const PRODUCT_HUNT_URL =
+  "https://www.producthunt.com/products/ancbuddy-for-bose-qc-ultra?utm_source=ancbuddy&utm_medium=trial_success&utm_campaign=ancbuddy_launch";
 
 type Status = "idle" | "submitting" | "success";
 
@@ -171,6 +173,17 @@ export function TrialDialog() {
 
             <p className="trial-fineprint">
               14‑day trial · then $9.99 to keep using.
+            </p>
+
+            <p className="trial-product-hunt">
+              ANCBuddy is live on Product Hunt.{" "}
+              <a
+                href={PRODUCT_HUNT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Join the launch discussion and share feedback.
+              </a>
             </p>
           </>
         ) : (

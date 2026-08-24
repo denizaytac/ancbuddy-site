@@ -1087,6 +1087,30 @@
   text-align: center;
   line-height: 1.55;
 }
+.trial-dialog .trial-product-hunt {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--fg-4);
+  font-size: 12.5px;
+  text-align: center;
+}
+.trial-product-hunt a {
+  color: var(--fg-2);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+.trial-product-hunt a:hover {
+  color: var(--fg);
+  text-decoration-color: currentColor;
+}
+.trial-product-hunt a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
 
 /* ---- Density ---- */
 [data-density="compact"] { --section-y: clamp(56px, 8vw, 100px); }
