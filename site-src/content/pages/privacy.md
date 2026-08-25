@@ -4,7 +4,7 @@
   "title": "ANCBuddy Privacy",
   "description": "Privacy details for ANCBuddy trial signup, first-party attribution, license validation, Bluetooth control, and optional AI Auto-EQ.",
   "kind": "privacy",
-  "lastmod": "2026-07-21",
+  "lastmod": "2026-08-25",
   "priority": 0.7,
   "h1": "ANCBuddy privacy",
   "faqs": [
@@ -22,7 +22,7 @@
     },
     {
       "q": "What is collected for the trial?",
-      "a": "The trial form collects the name and email address entered by the user, plus privacy-light first-party attribution such as campaign parameters and referrer host."
+      "a": "The trial form collects the name and email address entered by the user, plus privacy-light first-party attribution such as campaign parameters, referrer host, and random session-scoped identifiers."
     },
     {
       "q": "Does ANCBuddy use analytics or ad pixels?",
@@ -52,7 +52,7 @@ Switching Quiet, Aware, and Immersion modes is handled from your Mac to your pai
 
 ## Trial and license data
 
-The trial dialog offers an optional name-and-email signup before the DMG download starts; visitors can skip it and download directly. When someone submits the form, the website stores the entered name and email address. To understand which launch channels work, the website also stores first-party attribution fields: UTM source, medium, campaign, referrer host, landing path, current path, and a generated session ID. The same fields can be passed to Lemon Squeezy checkout as custom checkout data.
+The trial dialog offers an optional name-and-email signup before the DMG download starts; visitors can skip it and download directly. When someone submits the form, the website stores the entered name and email address. To understand which launch channels work, the website also stores first-party attribution fields: UTM source, medium, campaign and content, referrer host, landing and current paths, first- and last-touch values, and random pseudonymous visitor and session IDs. Both IDs and the touch history are scoped to the current browser tab/session rather than a cross-session advertising profile. The same attribution snapshot can be passed to Lemon Squeezy checkout as custom checkout data.
 
 ANCBuddy does not use a third-party analytics SDK, ad pixels, or cross-site tracking. The first-party site events are limited to page view, trial open, trial start, download click, and checkout click. License purchases and license validation are handled through Lemon Squeezy. For purchase-source measurement, Lemon Squeezy can send signed order webhooks to ANCBuddy's Supabase project; ANCBuddy stores the order ID, amount, status, first-party attribution fields, and a hashed customer email for matching purchases back to prior trial signups without storing the raw purchase email in the measurement table. ANCBuddy stores license state locally so existing users do not need to re-enter keys on every launch.
 

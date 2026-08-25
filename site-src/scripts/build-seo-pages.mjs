@@ -668,14 +668,21 @@ function staticAttributionScript() {
   return `<script>
 (() => {
   const SUPABASE_URL = ${JSON.stringify(supabaseUrl)};
-  const SUPABASE_ANON_KEY = ${JSON.stringify(supabaseAnonKey)};
+  const SUPABASE_PUBLISHABLE_KEY = ${JSON.stringify(supabaseAnonKey)};
   const CHECKOUT_HOST = "ancbuddy.lemonsqueezy.com";
   const DOWNLOAD_URL = ${JSON.stringify(facts.downloadUrl)};
-  const ATTRIBUTION_KEY = "ancbuddy_attribution_v1";
+  const ATTRIBUTION_VERSION = 2;
+  const ATTRIBUTION_KEY = "ancbuddy_attribution_v2";
+  const LEGACY_ATTRIBUTION_KEY = "ancbuddy_attribution_v1";
+  const VISITOR_ID_KEY = "ancbuddy_visitor_id_v2";
   const SESSION_ID_KEY = "ancbuddy_session_id_v1";
   const INTERNAL_MARKER_KEY = "ancbuddy_internal_analytics_v1";
   const INTERNAL_MARKER_PARAM = "ancbuddy_internal";
-  const CAMPAIGN_KEYS = ["utm_source", "utm_medium", "utm_campaign"];
+  const CAMPAIGN_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];
+  const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  let memorySessionId = null;
+  let memoryVisitorId = null;
+  let memoryAttribution = null;
 
   function applyInternalMarkerCommand() {
     const url = new URL(window.location.href);
@@ -702,95 +709,206 @@ function staticAttributionScript() {
     }
   }
 
+  function boundedText(value, maxLength) {
+    const text = String(value ?? "").trim().slice(0, maxLength);
+    return text || null;
+  }
+
   function pathWithSearch() {
-    return window.location.pathname + window.location.search;
+    return boundedText(window.location.pathname + window.location.search, 1000) || "/";
   }
 
-  function readStored() {
+  function readSessionValue(key) {
     try {
-      const raw = window.sessionStorage.getItem(ATTRIBUTION_KEY);
-      return raw ? JSON.parse(raw) : {};
+      return window.sessionStorage.getItem(key);
     } catch {
-      return {};
+      return null;
     }
   }
 
-  function writeStored(value) {
+  function writeSessionValue(key, value) {
     try {
-      window.sessionStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(value));
+      window.sessionStorage.setItem(key, value);
     } catch {
-      // Storage can be disabled; tracking must never block navigation.
+      // In-memory fallbacks keep one page internally consistent.
     }
+  }
+
+  function createUuid() {
+    if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+
+    const bytes = new Uint8Array(16);
+    if (window.crypto?.getRandomValues) {
+      window.crypto.getRandomValues(bytes);
+    } else {
+      for (let index = 0; index < bytes.length; index += 1) {
+        bytes[index] = Math.floor(Math.random() * 256);
+      }
+    }
+    bytes[6] = (bytes[6] & 15) | 64;
+    bytes[8] = (bytes[8] & 63) | 128;
+    const hex = [...bytes].map((byte) => byte.toString(16).padStart(2, "0"));
+    return hex.slice(0, 4).join("") + "-" +
+      hex.slice(4, 6).join("") + "-" +
+      hex.slice(6, 8).join("") + "-" +
+      hex.slice(8, 10).join("") + "-" +
+      hex.slice(10).join("");
   }
 
   function sessionId() {
-    try {
-      const existing = window.sessionStorage.getItem(SESSION_ID_KEY);
-      if (existing) return existing;
-      const next = window.crypto?.randomUUID
-        ? window.crypto.randomUUID()
-        : "anc_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2);
-      window.sessionStorage.setItem(SESSION_ID_KEY, next);
-      return next;
-    } catch {
-      return "anc_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2);
-    }
+    if (memorySessionId) return memorySessionId;
+    memorySessionId = boundedText(readSessionValue(SESSION_ID_KEY), 80) || createUuid();
+    writeSessionValue(SESSION_ID_KEY, memorySessionId);
+    return memorySessionId;
+  }
+
+  function visitorId() {
+    if (memoryVisitorId) return memoryVisitorId;
+    const existing = boundedText(readSessionValue(VISITOR_ID_KEY), 80);
+    memoryVisitorId = existing && UUID_PATTERN.test(existing) ? existing : createUuid();
+    writeSessionValue(VISITOR_ID_KEY, memoryVisitorId);
+    return memoryVisitorId;
   }
 
   function referrerHost() {
     if (!document.referrer) return null;
     try {
       const host = new URL(document.referrer).host;
-      return host === window.location.host ? null : host;
+      return host === window.location.host ? null : boundedText(host, 255);
     } catch {
       return null;
     }
   }
 
+  function currentTouch(now) {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      utm_source: boundedText(params.get("utm_source"), 160),
+      utm_medium: boundedText(params.get("utm_medium"), 160),
+      utm_campaign: boundedText(params.get("utm_campaign"), 160),
+      utm_content: boundedText(params.get("utm_content"), 160),
+      referrer_host: referrerHost(),
+      landing_path: pathWithSearch(),
+      seen_at: now,
+    };
+  }
+
+  function hasAttributionSignal(touch) {
+    return CAMPAIGN_KEYS.some((key) => touch[key] !== null) || touch.referrer_host !== null;
+  }
+
+  function legacyTouch(now) {
+    const raw = readSessionValue(LEGACY_ATTRIBUTION_KEY);
+    if (!raw) return null;
+    try {
+      const legacy = JSON.parse(raw);
+      return {
+        utm_source: boundedText(legacy.utm_source, 160),
+        utm_medium: boundedText(legacy.utm_medium, 160),
+        utm_campaign: boundedText(legacy.utm_campaign, 160),
+        utm_content: boundedText(legacy.utm_content, 160),
+        referrer_host: boundedText(legacy.referrer_host, 255),
+        landing_path: boundedText(legacy.landing_path, 1000) || pathWithSearch(),
+        seen_at: now,
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  function isTouchpoint(value) {
+    return value && typeof value === "object" &&
+      typeof value.landing_path === "string" &&
+      typeof value.seen_at === "string";
+  }
+
+  function readStoredAttribution() {
+    if (memoryAttribution) return memoryAttribution;
+    const raw = readSessionValue(ATTRIBUTION_KEY);
+    if (!raw) return null;
+    try {
+      const stored = JSON.parse(raw);
+      if (stored.attribution_version !== ATTRIBUTION_VERSION ||
+          !isTouchpoint(stored.first_touch) ||
+          !isTouchpoint(stored.last_touch)) return null;
+      memoryAttribution = stored;
+      return memoryAttribution;
+    } catch {
+      return null;
+    }
+  }
+
+  function writeStoredAttribution(value) {
+    memoryAttribution = value;
+    writeSessionValue(ATTRIBUTION_KEY, JSON.stringify(value));
+  }
+
   function attribution() {
     applyInternalMarkerCommand();
-    const params = new URLSearchParams(window.location.search);
-    const stored = readStored();
-    const next = {
-      ...stored,
-      landing_path: stored.landing_path || pathWithSearch(),
-      referrer_host: stored.referrer_host || referrerHost() || undefined,
-    };
-    for (const key of CAMPAIGN_KEYS) {
-      const value = params.get(key);
-      if (value) next[key] = value;
-    }
-    writeStored(next);
+    const now = new Date().toISOString();
+    const observedTouch = currentTouch(now);
+    const stored = readStoredAttribution();
+    const initialTouch = legacyTouch(now) || observedTouch;
+    const firstTouch = stored?.first_touch || initialTouch;
+    const previousLastTouch = stored?.last_touch || initialTouch;
+    const lastTouch = hasAttributionSignal(observedTouch)
+      ? observedTouch
+      : { ...previousLastTouch, seen_at: now };
+
+    writeStoredAttribution({
+      attribution_version: ATTRIBUTION_VERSION,
+      first_touch: firstTouch,
+      last_touch: lastTouch,
+    });
+
     return {
+      visitor_id: visitorId(),
+      attribution_version: ATTRIBUTION_VERSION,
       session_id: sessionId(),
-      utm_source: next.utm_source || null,
-      utm_medium: next.utm_medium || null,
-      utm_campaign: next.utm_campaign || null,
-      referrer_host: next.referrer_host || null,
-      landing_path: next.landing_path || pathWithSearch(),
+      utm_source: lastTouch.utm_source,
+      utm_medium: lastTouch.utm_medium,
+      utm_campaign: lastTouch.utm_campaign,
+      utm_content: lastTouch.utm_content,
+      referrer_host: lastTouch.referrer_host,
+      landing_path: firstTouch.landing_path,
       current_path: pathWithSearch(),
+      first_utm_source: firstTouch.utm_source,
+      first_utm_medium: firstTouch.utm_medium,
+      first_utm_campaign: firstTouch.utm_campaign,
+      first_utm_content: firstTouch.utm_content,
+      first_referrer_host: firstTouch.referrer_host,
+      first_landing_path: firstTouch.landing_path,
+      first_seen_at: firstTouch.seen_at,
+      last_utm_source: lastTouch.utm_source,
+      last_utm_medium: lastTouch.utm_medium,
+      last_utm_campaign: lastTouch.utm_campaign,
+      last_utm_content: lastTouch.utm_content,
+      last_referrer_host: lastTouch.referrer_host,
+      last_landing_path: lastTouch.landing_path,
+      last_seen_at: lastTouch.seen_at,
       is_internal: isInternalBrowser(),
     };
   }
 
   function track(eventName, metadata) {
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return;
+    if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) return;
     const payload = {
       event_name: eventName,
       ...attribution(),
       metadata: metadata || {},
-      user_agent: window.navigator.userAgent,
+      user_agent: boundedText(window.navigator.userAgent, 600),
     };
     window.fetch(SUPABASE_URL.replace(/\\/$/, "") + "/rest/v1/site_events", {
       method: "POST",
       headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: "Bearer " + SUPABASE_ANON_KEY,
+        apikey: SUPABASE_PUBLISHABLE_KEY,
         "Content-Type": "application/json",
         Prefer: "return=minimal",
       },
       body: JSON.stringify(payload),
       keepalive: true,
+    }).then((response) => {
+      if (!response.ok) throw new Error("Site event insert failed: HTTP " + response.status);
     }).catch(() => {});
   }
 
@@ -798,7 +916,9 @@ function staticAttributionScript() {
     const url = new URL(href, window.location.href);
     const data = attribution();
     for (const [key, value] of Object.entries(data)) {
-      if (value) url.searchParams.set("checkout[custom][" + key + "]", value);
+      if (value !== null && value !== "") {
+        url.searchParams.set("checkout[custom][" + key + "]", String(value));
+      }
     }
     return url.toString();
   }

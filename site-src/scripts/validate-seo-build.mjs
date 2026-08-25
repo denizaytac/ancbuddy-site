@@ -141,5 +141,22 @@ for (const expected of [
   assert(llms.includes(expected), `llms.txt missing ${expected}`);
 }
 
-await readFile(resolve(distDir, "404.html"), "utf8");
+const staticTrackingPages = new Map([
+  ["download.html", generatedContent.get("download.html")],
+  ["404.html", await readFile(resolve(distDir, "404.html"), "utf8")],
+]);
+
+for (const [file, html] of staticTrackingPages) {
+  assert(html.includes("const ATTRIBUTION_VERSION = 2"), `${file} is missing attribution v2`);
+  assert(html.includes("visitor_id: visitorId()"), `${file} is missing visitor_id`);
+  assert(html.includes("first_utm_source"), `${file} is missing first-touch attribution`);
+  assert(html.includes("last_utm_source"), `${file} is missing last-touch attribution`);
+  assert(
+    html.includes("apikey: SUPABASE_PUBLISHABLE_KEY"),
+    `${file} is missing the publishable apikey header`,
+  );
+  assert(!html.includes("Authorization:"), `${file} must not send the publishable key as Bearer`);
+  assert(countMatches(html, /track\("page_view"\);/g) === 1, `${file} must emit one pageview`);
+}
+
 console.log(`Validated ${pages.length} generated SEO pages`);
