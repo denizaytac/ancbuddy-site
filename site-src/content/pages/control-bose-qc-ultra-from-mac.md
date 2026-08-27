@@ -4,13 +4,13 @@
   "title": "How to Control Bose QC Ultra From Your Mac",
   "description": "Yes, you can control Bose QC Ultra noise cancellation from a Mac. Learn what macOS supports natively, what the Bose app does, and how ANCBuddy adds menu-bar control.",
   "kind": "guide",
-  "lastmod": "2026-07-21",
+  "lastmod": "2026-08-27",
   "priority": 0.85,
   "h1": "How to control Bose QC Ultra from your Mac",
   "faqs": [
     {
       "q": "Can I control Bose QC Ultra noise cancellation from my Mac?",
-      "a": "Yes. macOS handles pairing and audio, while ANCBuddy can switch Quiet, Aware, and Immersion from the Mac menu bar."
+      "a": "Yes. macOS handles pairing and audio, while ANCBuddy can switch Quiet, Aware, and Immersion from the Mac menu bar, plus Still and Motion inside Immersion on compatible headphones."
     },
     {
       "q": "Is there an official Bose app for Mac?",
@@ -36,6 +36,7 @@
   ],
   "relatedLinks": [
     { "title": "Download ANCBuddy", "href": "/download.html", "description": "Try the Mac app for 14 days." },
+    { "title": "Immersive Audio on Mac", "href": "/bose-qc-ultra-immersive-audio-mac.html", "description": "Switch Still and Motion on compatible headphones." },
     { "title": "Bose Music app for Mac alternative", "href": "/bose-music-app-for-mac-alternative.html", "description": "Understand the Bose app gap on Mac." },
     { "title": "Troubleshooting", "href": "/troubleshooting.html", "description": "Fix setup and Bluetooth issues." }
   ],
@@ -61,6 +62,7 @@ The Bose app remains useful for firmware updates, product setup, shortcuts, and 
 ANCBuddy is a native Mac menu-bar app for the QC Ultra line. It connects to already-paired headphones or earbuds over Bluetooth and gives you:
 
 - Quiet, Aware, and Immersion switching from the Mac menu bar
+- Still and Motion switching inside Immersion on compatible headphones
 - Battery and connection status
 - Optional AI Auto-EQ for track-aware 3-band EQ profiles
 - Launch at Login and built-in update checks
