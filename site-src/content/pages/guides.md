@@ -4,7 +4,7 @@
   "title": "ANCBuddy Guides for Bose QC Ultra on Mac",
   "description": "Practical guides for controlling Bose QC Ultra headphones and earbuds from a Mac with ANCBuddy.",
   "kind": "hub",
-  "lastmod": "2026-07-21",
+  "lastmod": "2026-08-27",
   "priority": 0.8,
   "h1": "ANCBuddy guides for Bose QC Ultra on Mac",
   "faqs": [
@@ -39,6 +39,7 @@ ANCBuddy guides help Bose QC Ultra users understand what a Mac can do natively, 
 ## Start here
 
 - [How to control Bose QC Ultra from your Mac](/control-bose-qc-ultra-from-mac.html)
+- [Bose QC Ultra Immersive Audio on Mac: Still vs Motion](/bose-qc-ultra-immersive-audio-mac.html)
 - [Bose QC Ultra Mac app](/bose-qc-ultra-mac-app.html)
 - [Bose Music app for Mac alternative](/bose-music-app-for-mac-alternative.html)
 - [Bose QC Ultra battery on Mac](/bose-qc-ultra-battery-mac.html)
