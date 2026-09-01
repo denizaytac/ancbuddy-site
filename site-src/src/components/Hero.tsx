@@ -3,10 +3,13 @@ import { Icon } from "./Icon";
 import { MODES } from "@/data/modes";
 import { useTrialDialog } from "@/hooks/useTrialDialog";
 
+type ImmersiveAudioSetting = "still" | "motion";
+
 interface HeroScene {
   id: string;
   mode: number;
   pendingMode?: number;
+  immersiveAudio?: ImmersiveAudioSetting;
   status: string;
   battery: string;
   soundBadge: string;
@@ -18,6 +21,32 @@ interface HeroScene {
 }
 
 const HERO_SCENES: HeroScene[] = [
+  {
+    id: "immersion-still",
+    mode: 2,
+    immersiveAudio: "still",
+    status: "Connected",
+    battery: "82%",
+    soundBadge: "AI TUNED",
+    soundText: "Bass +4 · Mid +1 · Treble +3",
+    soundDetail: "Current track",
+    track: "The Less I Know The Better · Tame Impala",
+    autoEQ: true,
+    levels: [4, 1, 3],
+  },
+  {
+    id: "immersion-motion",
+    mode: 2,
+    immersiveAudio: "motion",
+    status: "Connected",
+    battery: "82%",
+    soundBadge: "AI TUNED",
+    soundText: "Bass +4 · Mid +1 · Treble +3",
+    soundDetail: "Current track",
+    track: "The Less I Know The Better · Tame Impala",
+    autoEQ: true,
+    levels: [4, 1, 3],
+  },
   {
     id: "aware",
     mode: 1,
@@ -60,11 +89,15 @@ const HERO_SCENES: HeroScene[] = [
 export function Hero() {
   const [sceneIndex, setSceneIndex] = useState(0);
   const [manualMode, setManualMode] = useState<number | null>(null);
+  const [manualImmersiveAudio, setManualImmersiveAudio] =
+    useState<ImmersiveAudioSetting | null>(null);
   const [open, setOpen] = useState(true);
   const [autoplay, setAutoplay] = useState(true);
   const { setOpen: openTrial } = useTrialDialog();
   const scene = HERO_SCENES[sceneIndex];
   const visibleMode = scene.pendingMode ?? manualMode ?? scene.mode;
+  const visibleImmersiveAudio = manualImmersiveAudio ?? scene.immersiveAudio ?? "still";
+  const showsImmersiveAudio = visibleMode === 2 && scene.pendingMode === undefined;
 
   useEffect(() => {
     if (!autoplay) return;
@@ -74,8 +107,16 @@ export function Hero() {
 
   const pickMode = (i: number) => {
     setAutoplay(false);
-    setManualMode(i === 2 ? null : i);
-    setSceneIndex(i === 2 ? 2 : 0);
+    setManualMode(i);
+    setManualImmersiveAudio(i === 2 ? "still" : null);
+    setSceneIndex(i === 2 ? 0 : 2);
+  };
+
+  const pickImmersiveAudio = (setting: ImmersiveAudioSetting) => {
+    setAutoplay(false);
+    setManualMode(2);
+    setManualImmersiveAudio(setting);
+    setSceneIndex(setting === "still" ? 0 : 1);
   };
 
   const bars = useMemo(() => {
@@ -219,26 +260,61 @@ export function Hero() {
 
                 <div className="dd-section-label">Listening Mode</div>
 
-                {MODES.map((m, i) => (
-                  <button
-                    key={m.id}
-                    className={
-                      "dd-mode" +
-                      (visibleMode === i ? " is-active" : "") +
-                      (scene.pendingMode === i ? " is-pending" : "")
-                    }
-                    onClick={() => pickMode(i)}
-                  >
-                    <span className="dd-mode-icon">
-                      <Icon name={m.icon} size={14} />
-                    </span>
-                    <span className="dd-mode-body">
-                      <div className="dd-mode-name">{m.name}</div>
-                      <div className="dd-mode-desc">{m.desc}</div>
-                    </span>
-                    {scene.pendingMode === i && <span className="mini-spinner light" />}
-                  </button>
-                ))}
+                {MODES.map((m, i) => {
+                  const isActive = visibleMode === i;
+                  const isPending = scene.pendingMode === i;
+
+                  return (
+                    <div
+                      key={m.id}
+                      className={
+                        "dd-mode-shell" +
+                        (isActive ? " is-active" : "") +
+                        (isPending ? " is-pending" : "")
+                      }
+                    >
+                      <button
+                        className="dd-mode"
+                        onClick={() => pickMode(i)}
+                        aria-pressed={isActive}
+                      >
+                        <span className="dd-mode-icon">
+                          <Icon name={m.icon} size={14} />
+                        </span>
+                        <span className="dd-mode-body">
+                          <span className="dd-mode-name">{m.name}</span>
+                          <span className="dd-mode-desc">{m.desc}</span>
+                        </span>
+                        {isPending && <span className="mini-spinner light" />}
+                      </button>
+
+                      {i === 2 && showsImmersiveAudio && (
+                        <div
+                          className="dd-immersive-control"
+                          role="group"
+                          aria-label="Immersive Audio"
+                        >
+                          {(["still", "motion"] as const).map((setting) => {
+                            const isSelected = visibleImmersiveAudio === setting;
+                            return (
+                              <button
+                                key={setting}
+                                className={
+                                  "dd-immersive-segment" +
+                                  (isSelected ? " is-selected" : "")
+                                }
+                                onClick={() => pickImmersiveAudio(setting)}
+                                aria-pressed={isSelected}
+                              >
+                                {setting === "still" ? "Still" : "Motion"}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
 
                 <div className="dd-divider" />
 

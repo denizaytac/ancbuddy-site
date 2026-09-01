@@ -398,19 +398,28 @@
   padding: 8px 12px 4px;
 }
 
+.dd-mode-shell {
+  border-radius: 9px;
+  color: rgba(255,255,255,.85);
+  transition: background .15s;
+}
+.dd-mode-shell:hover { background: rgba(255,255,255,.06); }
+.dd-mode-shell.is-active {
+  background: linear-gradient(180deg, rgba(167,139,250,.22), rgba(124,58,237,.16));
+  color: #fff;
+}
 .dd-mode {
   width: 100%;
   display: flex; align-items: center; gap: 12px;
   padding: 10px 12px;
   border-radius: 9px;
   text-align: left;
-  transition: background .15s;
-  color: rgba(255,255,255,.85);
+  color: inherit;
 }
-.dd-mode:hover { background: rgba(255,255,255,.06); }
-.dd-mode.is-active {
-  background: linear-gradient(180deg, rgba(167,139,250,.22), rgba(124,58,237,.16));
-  color: #fff;
+.dd-mode:focus-visible,
+.dd-immersive-segment:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: -2px;
 }
 .dd-mode-icon {
   width: 28px; height: 28px;
@@ -420,14 +429,36 @@
   flex-shrink: 0;
   color: rgba(255,255,255,.7);
 }
-.dd-mode.is-active .dd-mode-icon {
+.dd-mode-shell.is-active .dd-mode-icon {
   background: linear-gradient(135deg, var(--accent), #7c3aed);
   color: #0a0a0c;
 }
-.dd-mode.is-pending { opacity: .96; }
-.dd-mode-body { flex: 1; min-width: 0; }
+.dd-mode-shell.is-pending { opacity: .96; }
+.dd-mode-body { flex: 1; min-width: 0; display: grid; }
 .dd-mode-name { font-size: 13.5px; font-weight: 500; }
 .dd-mode-desc { font-size: 11.5px; color: rgba(255,255,255,.45); margin-top: 1px; }
+.dd-immersive-control {
+  display: flex;
+  margin: 1px 12px 11px 52px;
+  padding: 2px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 9px;
+  background: rgba(28,28,32,.55);
+}
+.dd-immersive-segment {
+  flex: 1;
+  height: 30px;
+  border-radius: 7px;
+  color: rgba(255,255,255,.56);
+  font-size: 11.5px;
+  font-weight: 500;
+  transition: color .15s, background .15s;
+}
+.dd-immersive-segment:hover { background: rgba(255,255,255,.07); }
+.dd-immersive-segment.is-selected {
+  background: linear-gradient(135deg, var(--accent), #7c3aed);
+  color: #fff;
+}
 
 .dd-divider { height: 1px; background: rgba(255,255,255,.08); margin: 6px 4px; }
 
