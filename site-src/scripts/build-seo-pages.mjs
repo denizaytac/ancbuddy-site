@@ -8,11 +8,11 @@ const siteRoot = resolve(here, "..");
 const distDir = resolve(siteRoot, "dist");
 const contentDir = resolve(siteRoot, "content/pages");
 const factsPath = resolve(siteRoot, "content/product-facts.json");
-const siteUrl = "https://ancbuddy.com";
 const supabaseUrl = process.env.VITE_SUPABASE_URL ?? "";
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? "";
 
 const facts = JSON.parse(await readFile(factsPath, "utf8"));
+const siteUrl = facts.siteUrl;
 const requiredFields = [
   "slug",
   "title",
@@ -251,7 +251,7 @@ function staticNav() {
         ANCBuddy
       </a>
       <div class="nav-links">
-        <a class="nav-link" href="/#features">Features</a>
+        <a class="nav-link" href="/#audio-sources">Sources</a>
         <a class="nav-link" href="/#devices">Devices</a>
         <a class="nav-link" href="/guides.html">Guides</a>
         <a class="nav-link" href="/#pricing">Pricing</a>
@@ -279,6 +279,7 @@ function staticFooter() {
         <div class="footer-col">
           <div class="footer-heading">Resources</div>
           <a href="/guides.html">Guides</a>
+          <a href="/switch-bose-qc-ultra-audio-sources-mac.html">Audio sources</a>
           <a href="/control-bose-qc-ultra-from-mac.html">Mac control guide</a>
           <a href="/support.html">Support</a>
           <a href="/trust.html">Trust</a>
@@ -529,6 +530,54 @@ function staticCss() {
     li + li { margin-top: 8px; }
     strong { color: var(--fg); }
     .article-card a, .article-block a { color: var(--accent-2); }
+    .article-screenshot {
+      display: grid;
+      place-items: center;
+      margin: 30px 0 38px;
+      padding: clamp(18px, 5vw, 34px) clamp(12px, 5vw, 28px) 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 50% 24%, rgba(167,139,250,.22), transparent 48%),
+        rgba(10,10,12,.28);
+    }
+    .article-screenshot picture { display: block; width: min(100%, 336px); }
+    .article-screenshot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 24px 44px rgba(0,0,0,.42));
+    }
+    .article-screenshot figcaption {
+      margin-top: 14px;
+      color: var(--fg-3);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      text-align: center;
+    }
+    .article-card table {
+      display: block;
+      width: 100%;
+      margin: 22px 0 28px;
+      overflow-x: auto;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .article-card th, .article-card td {
+      min-width: 132px;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      color: var(--fg-2);
+      line-height: 1.45;
+      text-align: left;
+      vertical-align: top;
+    }
+    .article-card th {
+      color: var(--fg);
+      background: rgba(167,139,250,.09);
+      font-weight: 600;
+    }
     .related-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -952,7 +1001,7 @@ function staticAttributionScript() {
 
 function sitemap(pages) {
   const entries = [
-    { loc: `${siteUrl}/`, lastmod: "2026-07-02", priority: 1.0 },
+    { loc: `${siteUrl}/`, lastmod: facts.homepageLastmod, priority: 1.0 },
     ...pages.map((page) => ({
       loc: page.canonical,
       lastmod: page.lastmod,
@@ -988,6 +1037,18 @@ function llms(pages) {
     .join("\n");
   const devices = facts.supportedDevices.map((device) => `- ${device}`).join("\n");
   const features = facts.features.map((feature) => `- ${feature}`).join("\n");
+  const capabilityLabels = {
+    activeSourceVisible: "Active source visible",
+    otherConnectedSourcesVisible: "Other connected sources visible",
+    rememberedSourcesVisible: "Remembered sources visible",
+    rememberedSourceSwitching: "Switch to a remembered source",
+    pairingControl: "Start or cancel Bose pairing",
+    multipointToggle: "Multipoint on/off toggle",
+    macAudioRecovery: "Mac audio-route recovery",
+  };
+  const capabilities = Object.entries(facts.capabilities)
+    .map(([key, value]) => `- ${capabilityLabels[key] ?? key}: ${value ? "supported" : "not supported"}.`)
+    .join("\n");
 
   return `# ${facts.name}
 
@@ -1026,6 +1087,10 @@ ${devices}
 ## Features
 
 ${features}
+
+## Audio Source Capabilities
+
+${capabilities}
 
 ## Important Pages
 

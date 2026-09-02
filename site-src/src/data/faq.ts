@@ -6,19 +6,19 @@ export interface FAQItem {
 export const FAQ_ITEMS: FAQItem[] = [
   {
     q: "Is this an official Bose product?",
-    a: "No. ANCBuddy is an independent third‑party utility. Bose, QuietComfort, and QC Ultra are trademarks of Bose Corporation. ANCBuddy is not affiliated with, endorsed by, or sponsored by Bose.",
+    a: "No. ANCBuddy is an independent third-party utility. Bose, QuietComfort, and QC Ultra are trademarks of Bose Corporation. ANCBuddy is not affiliated with, endorsed by, or sponsored by Bose.",
   },
   {
     q: "Which Macs and macOS versions are supported?",
     a: "macOS 12 Monterey and newer, Apple Silicon and Intel Macs are supported. ANCBuddy is signed and notarized for normal macOS installation.",
   },
   {
-    q: "Do I need the Bose Music app open?",
-    a: "No. ANCBuddy talks directly to your paired Bose QC Ultra headphones over Bluetooth for mode control, so the phone app does not need to be open.",
+    q: "Do I need the Bose app open?",
+    a: "No. ANCBuddy talks directly to your paired Bose QC Ultra for listening modes and everyday audio-source control. Keep the Bose app for firmware updates, initial setup, and settings ANCBuddy does not manage.",
   },
   {
-    q: "How does AI Auto‑EQ handle my music data?",
-    a: "AI Auto‑EQ is opt‑in. When enabled, ANCBuddy sends the current artist, title, and album to the AI service only to generate a 3‑band EQ profile for that track. Results are cached by a hashed track key, and raw song names are not stored.",
+    q: "How does AI Auto-EQ handle my music data?",
+    a: "AI Auto-EQ is opt-in. When enabled, ANCBuddy sends the current artist, title, and album to the AI service only to generate a 3-band EQ profile for that track. Results are cached by a hashed track key, and raw song names are not stored.",
   },
   {
     q: "What's the difference between Quiet, Aware, and Immersion?",
@@ -46,6 +46,6 @@ export const FAQ_ITEMS: FAQItem[] = [
   },
   {
     q: "Refunds?",
-    a: "Yes — 14‑day no‑questions refund through Lemon Squeezy.",
+    a: "Yes — 14-day no-questions refund through Lemon Squeezy.",
   },
 ];

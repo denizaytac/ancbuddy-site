@@ -73,6 +73,7 @@ export function Footer() {
           <div className="footer-col">
             <div className="footer-heading">Resources</div>
             <a href="/guides.html">Guides</a>
+            <a href="/switch-bose-qc-ultra-audio-sources-mac.html">Audio sources</a>
             <a href="/control-bose-qc-ultra-from-mac.html">Mac control guide</a>
             <a href="/support.html">Support</a>
             <a href="/privacy.html">Privacy</a>
@@ -90,7 +91,7 @@ export function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 ANCBuddy · v2.2.0</span>
+          <span>© 2026 ANCBuddy · v{facts.version}</span>
           <span>Independent utility for compatible Bose hardware</span>
         </div>
       </div>

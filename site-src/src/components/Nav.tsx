@@ -32,8 +32,8 @@ export function Nav() {
           ANCBuddy
         </a>
         <div className="nav-links">
-          <a className="nav-link" href="#features">
-            Features
+          <a className="nav-link" href="#audio-sources">
+            Sources
           </a>
           <a className="nav-link" href="#devices">
             Devices

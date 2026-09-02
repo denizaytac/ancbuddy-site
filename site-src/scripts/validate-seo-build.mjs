@@ -1,5 +1,5 @@
 import { readdir, readFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { dirname, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -17,6 +17,18 @@ function assert(condition, message) {
 
 function countMatches(text, pattern) {
   return [...text.matchAll(pattern)].length;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function escapeReactText(value) {
+  return escapeHtml(value).replaceAll("'", "&#x27;");
 }
 
 function parseFrontMatter(raw, file) {
@@ -60,6 +72,25 @@ assert(
   facts.supportEmail === expectedSupportEmail,
   `product-facts.json supportEmail must be ${expectedSupportEmail}`,
 );
+assert(/^\d{4}-\d{2}-\d{2}$/.test(facts.homepageLastmod), "homepageLastmod must be YYYY-MM-DD");
+for (const capability of [
+  "activeSourceVisible",
+  "otherConnectedSourcesVisible",
+  "rememberedSourcesVisible",
+  "rememberedSourceSwitching",
+  "pairingControl",
+  "multipointToggle",
+  "macAudioRecovery",
+]) {
+  assert(
+    typeof facts.capabilities?.[capability] === "boolean",
+    `product-facts.json capabilities.${capability} must be a boolean`,
+  );
+}
+assert(
+  facts.capabilities.multipointToggle === false,
+  "ANCBuddy must not advertise a Multipoint toggle",
+);
 
 const generatedFiles = ["index.html", "llms.txt", ...pages.map((page) => page.slug)];
 const generatedContent = new Map(
@@ -85,6 +116,27 @@ for (const file of ["index.html", "support.html", "troubleshooting.html", "priva
   );
 }
 
+const homepage = generatedContent.get("index.html");
+const homepageSchemas = [...homepage.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(
+  ([, json]) => JSON.parse(json),
+);
+const homepageFaq = homepageSchemas.find((schema) => schema["@type"] === "FAQPage");
+assert(homepageFaq, "index.html is missing FAQPage JSON-LD");
+assert(
+  countMatches(homepage, /<details[^>]*class="faq-item"/g) === homepageFaq.mainEntity.length,
+  "index.html visible FAQ count does not match FAQPage JSON-LD",
+);
+for (const item of homepageFaq.mainEntity) {
+  assert(
+    homepage.includes(`>${escapeReactText(item.name)}</span>`),
+    `index.html is missing visible FAQ question: ${item.name}`,
+  );
+  assert(
+    homepage.includes(`>${escapeReactText(item.acceptedAnswer.text)}</div>`),
+    `index.html is missing visible FAQ answer: ${item.name}`,
+  );
+}
+
 for (const page of pages) {
   const html = generatedContent.get(page.slug);
   const canonical = `${siteUrl}/${page.slug}`;
@@ -104,7 +156,23 @@ for (const page of pages) {
 
   const jsonScripts = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
   assert(jsonScripts.length >= 2, `${page.slug} must include JSON-LD`);
-  for (const [, json] of jsonScripts) JSON.parse(json);
+  const schemas = jsonScripts.map(([, json]) => JSON.parse(json));
+  const faqSchema = schemas.find((schema) => schema["@type"] === "FAQPage");
+  assert(faqSchema, `${page.slug} is missing FAQPage JSON-LD`);
+  assert(
+    faqSchema.mainEntity.length === page.faqs.length,
+    `${page.slug} visible FAQ count does not match FAQPage JSON-LD`,
+  );
+  for (const [index, item] of page.faqs.entries()) {
+    const schemaItem = faqSchema.mainEntity[index];
+    assert(schemaItem.name === item.q, `${page.slug} FAQ question ${index + 1} differs from JSON-LD`);
+    assert(
+      schemaItem.acceptedAnswer?.text === item.a,
+      `${page.slug} FAQ answer ${index + 1} differs from JSON-LD`,
+    );
+    assert(html.includes(`<h3>${escapeHtml(item.q)}</h3>`), `${page.slug} is missing visible FAQ question`);
+    assert(html.includes(`<p>${escapeHtml(item.a)}</p>`), `${page.slug} is missing visible FAQ answer`);
+  }
 }
 
 for (const expected of [
@@ -116,6 +184,7 @@ for (const expected of [
   `${siteUrl}/guides.html`,
   `${siteUrl}/changelog.html`,
   `${siteUrl}/facts.html`,
+  `${siteUrl}/switch-bose-qc-ultra-audio-sources-mac.html`,
 ]) {
   assert(urls.includes(expected), `sitemap.xml missing ${expected}`);
 }
@@ -130,6 +199,7 @@ for (const expected of [
   "guides.html",
   "changelog.html",
   "facts.html",
+  "switch-bose-qc-ultra-audio-sources-mac.html",
   facts.priceDisplay,
   facts.version,
   facts.supportEmail,
@@ -139,6 +209,50 @@ for (const expected of [
   "not affiliated with, endorsed by, or sponsored by Bose Corporation",
 ]) {
   assert(llms.includes(expected), `llms.txt missing ${expected}`);
+}
+
+const distFiles = await filesUnder(distDir);
+const distFileNames = new Set(
+  distFiles.map((file) => relative(distDir, file).split(sep).join("/")),
+);
+const htmlByFile = new Map(
+  await Promise.all(
+    [...distFileNames]
+      .filter((file) => file.endsWith(".html"))
+      .map(async (file) => [file, await readFile(resolve(distDir, file), "utf8")]),
+  ),
+);
+let internalLinkCount = 0;
+
+for (const [file, html] of htmlByFile) {
+  const pageUrl = file === "index.html" ? `${siteUrl}/` : `${siteUrl}/${file}`;
+  for (const [, , rawHref] of html.matchAll(/<a\b[^>]*\bhref=(['"])(.*?)\1/g)) {
+    const href = rawHref.replaceAll("&amp;", "&");
+    let url;
+    try {
+      url = new URL(href, pageUrl);
+    } catch {
+      throw new Error(`${file} contains an invalid link: ${rawHref}`);
+    }
+
+    if (!['http:', 'https:'].includes(url.protocol) || url.origin !== new URL(siteUrl).origin) {
+      continue;
+    }
+
+    let target = decodeURIComponent(url.pathname).replace(/^\/+/, "");
+    if (!target) target = "index.html";
+    if (target.endsWith("/")) target += "index.html";
+    assert(distFileNames.has(target), `${file} links to missing internal target: ${rawHref}`);
+
+    const fragment = decodeURIComponent(url.hash.slice(1));
+    if (fragment && fragment !== "trial" && target.endsWith(".html")) {
+      assert(
+        htmlByFile.get(target)?.includes(`id="${fragment}"`),
+        `${file} links to missing #${fragment} in ${target}`,
+      );
+    }
+    internalLinkCount += 1;
+  }
 }
 
 const staticTrackingPages = new Map([
@@ -159,4 +273,4 @@ for (const [file, html] of staticTrackingPages) {
   assert(countMatches(html, /track\("page_view"\);/g) === 1, `${file} must emit one pageview`);
 }
 
-console.log(`Validated ${pages.length} generated SEO pages`);
+console.log(`Validated ${pages.length} generated SEO pages and ${internalLinkCount} internal links`);

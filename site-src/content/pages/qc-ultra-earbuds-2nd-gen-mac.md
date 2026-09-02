@@ -4,7 +4,7 @@
   "title": "QC Ultra Earbuds 2nd Gen on Mac",
   "description": "ANCBuddy supports Bose QC Ultra Earbuds 2nd Gen on Mac for Quiet, Aware, Immersion, battery status, and optional AI Auto-EQ.",
   "kind": "guide",
-  "lastmod": "2026-07-21",
+  "lastmod": "2026-09-02",
   "priority": 0.75,
   "h1": "QC Ultra Earbuds 2nd Gen on Mac",
   "faqs": [
@@ -27,6 +27,7 @@
     { "name": "QC Ultra Earbuds 2nd Gen on Mac", "url": "/qc-ultra-earbuds-2nd-gen-mac.html" }
   ],
   "relatedLinks": [
+    { "title": "Audio-source switching", "href": "/switch-bose-qc-ultra-audio-sources-mac.html", "description": "Read the shared supported-device source workflow." },
     { "title": "Download", "href": "/download.html", "description": "Try ANCBuddy on macOS." },
     { "title": "Mac control guide", "href": "/control-bose-qc-ultra-from-mac.html", "description": "Understand the control workflow." },
     { "title": "Support", "href": "/support.html", "description": "Ask a device-specific question." }
@@ -48,3 +49,5 @@ Pair the earbuds with macOS Bluetooth, then use ANCBuddy from the menu bar for d
 - A small native utility instead of a phone-app detour
 
 Start with the [download page](/download.html) or read the full [Mac control guide](/control-bose-qc-ultra-from-mac.html).
+
+For ANCBuddy 2.2.0's shared active, connected, and remembered source workflow, see the [audio-source switching guide](/switch-bose-qc-ultra-audio-sources-mac.html). Source availability depends on the Bose device's remembered list; this page does not claim a model-specific Multipoint toggle.
