@@ -13,4 +13,22 @@ The agent may research, analyze, and draft autonomously. Email, posts, listings,
 
 Start with [Growth Agent operations](docs/growth-agent-operations.md), then use the component READMEs for local commands.
 
+## Repository hygiene
+
+Install the versioned push guard once per clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+Run `./scripts/repo-health.sh` before starting and after finishing a task. It
+checks every linked worktree and stops when tracked or untracked work would be
+left behind. The pre-push hook runs the same check automatically.
+
+For non-trivial work, use a dedicated branch/worktree. Before a push or
+Supabase deployment, commit the implementation, run the relevant component
+tests, and confirm the repository-health check passes. After merging, remove
+the temporary worktree and branch; keep recovery stashes only until the commits
+are stored remotely or in another durable backup.
+
 > Independent app. Not affiliated with Bose Corporation. Bose® and QuietComfort® are trademarks of Bose Corporation.
