@@ -1,0 +1,210 @@
+.purchase-shell {
+  min-height: 100vh;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: clamp(28px, 6vw, 72px) 20px;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(167, 139, 250, 0.14), transparent 46%),
+    var(--bg);
+}
+
+.purchase-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.28;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+.purchase-orb {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 999px;
+  filter: blur(90px);
+  pointer-events: none;
+  opacity: 0.12;
+  background: var(--accent);
+}
+
+.purchase-orb-left { left: -160px; top: 12%; }
+.purchase-orb-right { right: -180px; bottom: 5%; }
+
+.purchase-card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 620px);
+  padding: clamp(28px, 6vw, 52px);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius-xl);
+  background: rgba(15, 15, 18, 0.9);
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 0.42),
+    inset 0 1px rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(22px);
+}
+
+.purchase-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 38px;
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.purchase-brand img {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+
+.purchase-card h1 {
+  margin: 0;
+  max-width: 520px;
+  font-size: clamp(34px, 6vw, 52px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.purchase-intro,
+.purchase-result p {
+  margin: 20px 0 28px;
+  color: var(--fg-2);
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: -0.012em;
+}
+
+.purchase-options {
+  display: grid;
+  gap: 8px;
+}
+
+.purchase-options button {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--fg-2);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 520;
+  transition: 160ms ease;
+  transition-property: border-color, background, color, transform;
+}
+
+.purchase-options button:hover:not(:disabled),
+.purchase-options button:focus-visible {
+  border-color: rgba(167, 139, 250, 0.56);
+  background: rgba(167, 139, 250, 0.09);
+  color: var(--fg);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.purchase-options button:disabled,
+.purchase-skip:disabled {
+  cursor: wait;
+  opacity: 0.52;
+}
+
+.purchase-status {
+  margin: 16px 0 0;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.purchase-error { color: #fca5a5; }
+
+.purchase-skip {
+  display: block;
+  margin: 22px auto 0;
+  padding: 8px 12px;
+  color: var(--fg-3);
+  font-size: 13px;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.2);
+  text-underline-offset: 4px;
+}
+
+.purchase-skip:hover:not(:disabled),
+.purchase-skip:focus-visible {
+  color: var(--fg);
+  outline: none;
+}
+
+.purchase-result { padding: 24px 0 12px; }
+
+.purchase-check {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 22px;
+  border-radius: 15px;
+  background: rgba(167, 139, 250, 0.14);
+  color: var(--accent-2);
+  font-size: 23px;
+}
+
+.purchase-primary {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border-radius: 11px;
+  background: var(--accent);
+  color: #0a0a0c;
+  font-size: 14px;
+  font-weight: 680;
+  box-shadow: 0 12px 34px var(--accent-glow);
+}
+
+.purchase-primary:hover,
+.purchase-primary:focus-visible {
+  background: var(--accent-2);
+  outline: none;
+}
+
+.purchase-privacy {
+  margin: 28px 0 0;
+  color: var(--fg-4);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.purchase-privacy a {
+  color: var(--fg-3);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 560px) {
+  .purchase-shell { align-items: start; padding: 16px 12px; }
+  .purchase-card { padding: 26px 20px; border-radius: 24px; }
+  .purchase-brand { margin-bottom: 30px; }
+  .purchase-card h1 { font-size: 38px; }
+  .purchase-intro { font-size: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .purchase-options button { transition: none; }
+}

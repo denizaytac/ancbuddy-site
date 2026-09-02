@@ -804,6 +804,7 @@ class SupabaseGrowthStore(GrowthStore):
             params={
                 "select": "amount_total,amount_usd,currency,status,refunded",
                 "refunded": "not.is.true",
+                "test_mode": "not.is.true",
                 "or": "(is_internal.is.null,is_internal.eq.false)",
                 "limit": "10000",
             },

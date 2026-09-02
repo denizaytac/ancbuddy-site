@@ -6,3 +6,6 @@ verify_jwt = false
 
 [functions.lemon-commerce-sync]
 verify_jwt = false
+
+[functions.purchase-attribution-feedback]
+verify_jwt = false

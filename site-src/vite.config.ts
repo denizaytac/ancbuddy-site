@@ -13,12 +13,16 @@ export default defineConfig({
     outDir: "dist",
     emptyOutDir: true,
     assetsDir: "assets",
-    cssCodeSplit: false,
+    // Vite 8/Rolldown can deadlock when a single CSS bundle is synthesized for
+    // multiple HTML entries. Per-entry CSS keeps main, CEO, and purchase builds
+    // isolated and lets the normal HTML transform inject each dependency.
+    cssCodeSplit: true,
     sourcemap: false,
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
         ceo: resolve(__dirname, "ceo/index.html"),
+        purchase: resolve(__dirname, "purchase/index.html"),
       },
       output: { manualChunks: undefined },
     },

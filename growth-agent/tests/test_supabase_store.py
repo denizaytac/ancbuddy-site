@@ -30,6 +30,40 @@ def action_row(action_id: str) -> dict:
 
 
 @pytest.mark.asyncio
+async def test_supabase_metrics_excludes_test_and_internal_orders():
+    order_query: dict[str, str] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path.endswith("/site_events"):
+            return httpx.Response(200, json=[], headers={"Content-Range": "*/0"})
+        if request.url.path.endswith("/growth_outcome_events"):
+            return httpx.Response(200, json=[])
+        if request.url.path.endswith("/lemon_orders"):
+            order_query.update(dict(request.url.params))
+            return httpx.Response(200, json=[])
+        raise AssertionError(request.url)
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    store = SupabaseGrowthStore(
+        Settings(
+            app_env="test",
+            openai_api_key="",
+            store_backend="supabase",
+            supabase_url="https://example.supabase.co",
+            supabase_service_role_key="test-role-key",
+        ),
+        client=client,
+    )
+
+    await store.metrics()
+
+    assert order_query["test_mode"] == "not.is.true"
+    assert order_query["or"] == "(is_internal.is.null,is_internal.eq.false)"
+    assert order_query["refunded"] == "not.is.true"
+    await client.aclose()
+
+
+@pytest.mark.asyncio
 async def test_supabase_decision_uses_rpc_contract_and_snapshot_columns():
     seen_rpc = {}
     action_id = "11111111-1111-4111-8111-111111111111"

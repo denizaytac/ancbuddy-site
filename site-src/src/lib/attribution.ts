@@ -31,7 +31,10 @@ export type SiteEventName =
   | "trial_open"
   | "trial_start"
   | "download_click"
-  | "checkout_click";
+  | "checkout_click"
+  | "purchase_feedback_shown"
+  | "purchase_feedback_submitted"
+  | "purchase_feedback_skipped";
 
 export interface AttributionPayload {
   visitor_id: string;
