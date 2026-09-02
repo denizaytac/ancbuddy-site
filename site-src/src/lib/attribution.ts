@@ -1,5 +1,5 @@
 export const DMG_URL =
-  "https://github.com/denizaytac/ancbuddy-site/releases/download/v2.1.0/ANCBuddy-2.1.0.dmg";
+  "https://github.com/denizaytac/ancbuddy-site/releases/download/v2.2.0/ANCBuddy-2.2.0.dmg";
 
 export const LEMON_SQUEEZY_URL =
   "https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2";

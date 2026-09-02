@@ -4,7 +4,7 @@
   "title": "ANCBuddy Facts",
   "description": "Canonical product facts for ANCBuddy, the independent Mac menu-bar app for Bose QC Ultra headphones and earbuds.",
   "kind": "facts",
-  "lastmod": "2026-08-17",
+  "lastmod": "2026-09-02",
   "priority": 0.7,
   "h1": "ANCBuddy facts",
   "faqs": [
@@ -18,7 +18,7 @@
     },
     {
       "q": "What is the current version?",
-      "a": "The current public release is ANCBuddy 2.1.0."
+      "a": "The current public release is ANCBuddy 2.2.0."
     }
   ],
   "breadcrumbs": [
@@ -40,18 +40,18 @@ ANCBuddy is an independent macOS menu-bar utility for Bose QC Ultra users who wa
 
 - Product name: ANCBuddy
 - Developer: Deniz Aytac
-- Current public version: 2.1.0
+- Current public version: 2.2.0
 - Platform: macOS 12 Monterey and newer
 - Macs: Apple Silicon and Intel
 - Price: $9.99 one-time
 - Trial: 14-day free trial
 - Supported devices: Bose QuietComfort Ultra Headphones Gen 1, Bose QuietComfort Ultra Headphones Gen 2, Bose QuietComfort Ultra Earbuds 2nd Gen
-- Download: [ANCBuddy 2.1.0 DMG](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.1.0/ANCBuddy-2.1.0.dmg)
+- Download: [ANCBuddy 2.2.0 DMG](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.2.0/ANCBuddy-2.2.0.dmg)
 - Checkout: [Lemon Squeezy](https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2)
 
 ## What ANCBuddy does
 
-ANCBuddy puts daily Bose QC Ultra controls in the Mac menu bar: Quiet, Aware, Immersion, Still/Motion inside Immersion on compatible devices, battery and connection status, Launch at Login, update checks, and optional AI Auto-EQ.
+ANCBuddy puts daily Bose QC Ultra controls in the Mac menu bar: Quiet, Aware, Immersion, Still/Motion inside Immersion on compatible devices, remembered audio-source status and switching, battery and connection status, Launch at Login, update checks, and optional AI Auto-EQ.
 
 ## Independence
 

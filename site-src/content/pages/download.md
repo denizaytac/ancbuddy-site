@@ -4,7 +4,7 @@
   "title": "Free Trial and Install ANCBuddy for Mac",
   "description": "Start the ANCBuddy free trial for macOS, then install the signed and notarized app for Bose QC Ultra Headphones and Earbuds.",
   "kind": "download",
-  "lastmod": "2026-08-17",
+  "lastmod": "2026-09-02",
   "priority": 0.9,
   "h1": "Free trial and install ANCBuddy for Mac",
   "faqs": [
@@ -22,7 +22,7 @@
     },
     {
       "q": "Where does the download come from?",
-      "a": "The public DMG is hosted as a GitHub Release asset for ANCBuddy version 2.1.0."
+      "a": "The public DMG is hosted as a GitHub Release asset for ANCBuddy version 2.2.0."
     }
   ],
   "breadcrumbs": [
@@ -39,14 +39,14 @@
 
 Start ANCBuddy with a 14-day free trial, then install the signed and notarized Mac app for Bose QC Ultra Headphones Gen 1, QC Ultra Headphones Gen 2, and QC Ultra Earbuds 2nd Gen.
 
-[Download ANCBuddy 2.1.0 DMG directly](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.1.0/ANCBuddy-2.1.0.dmg)
+[Download ANCBuddy 2.2.0 DMG directly](https://github.com/denizaytac/ancbuddy-site/releases/download/v2.2.0/ANCBuddy-2.2.0.dmg)
 
 [Try ANCBuddy free for 14 days](/#trial)
 
 ## Current release
 
-- Version: 2.1.0
-- New: Still and Motion controls inside Immersion on compatible QC Ultra devices
+- Version: 2.2.0
+- New: See and switch remembered audio sources, with faster live status and clearer Mac-audio recovery
 - macOS: 12 Monterey or newer
 - Macs: Apple Silicon and Intel
 - Trial: 14 days
@@ -60,7 +60,7 @@ Start ANCBuddy with a 14-day free trial, then install the signed and notarized M
 2. Open the DMG and move ANCBuddy to Applications.
 3. Launch ANCBuddy and allow Bluetooth access if macOS asks.
 4. Pair your Bose QC Ultra in macOS Bluetooth settings if it is not already paired.
-5. Use the ANCBuddy menu-bar panel to switch Quiet, Aware, and Immersion.
+5. Use the ANCBuddy menu-bar panel to switch Quiet, Aware, Immersion, and remembered audio sources.
 
 Apple's Mac Bluetooth setup flow is documented in [Apple Support](https://support.apple.com/guide/mac-help/connect-a-wireless-accessory-blth1004/mac).
 

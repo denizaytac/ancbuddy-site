@@ -1,5 +1,15 @@
 # ANCBuddy Changelog
 
+## v2.2.0 — September 2, 2026
+**Audio-source control and more reliable live status**
+- See which remembered device is actively streaming and which other sources remain connected.
+- Switch to another remembered source or start pairing a new device directly from ANCBuddy.
+- Reconnect this Mac's Bose audio route when macOS is still using another output, with clear recovery if the audio profile is missing.
+- Open the panel faster while device names and capabilities finish loading in the background.
+- Reopening ANCBuddy now recognizes Immersion with Still or Motion after live headphone adjustments, without stale mode highlights.
+- Releases headphone control cleanly when ANCBuddy quits and avoids repeated connection attempts when the panel is reopened.
+- Contact the developer directly; the prefilled email includes the app and macOS versions, never license information.
+
 ## v2.1.0 — August 17, 2026
 **Immersive Audio controls**
 - Switch compatible QC Ultra headphones between Still and Motion directly inside the active Immersion mode.

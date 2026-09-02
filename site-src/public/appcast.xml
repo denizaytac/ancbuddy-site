@@ -3,22 +3,26 @@
     <channel>
         <title>ANCBuddy</title>
         <item>
-            <title>2.1.0</title>
-            <pubDate>Mon, 17 Aug 2026 12:22:19 +0200</pubDate>
-            <sparkle:version>20100</sparkle:version>
-            <sparkle:shortVersionString>2.1.0</sparkle:shortVersionString>
+            <title>2.2.0</title>
+            <pubDate>Wed, 02 Sep 2026 13:50:19 +0200</pubDate>
+            <sparkle:version>20201</sparkle:version>
+            <sparkle:shortVersionString>2.2.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <description sparkle:format="markdown"><![CDATA[# ANCBuddy 2.1.0
+            <description sparkle:format="markdown"><![CDATA[# ANCBuddy 2.2.0
 
-ANCBuddy 2.1.0 adds Immersive Audio controls for compatible QC Ultra devices.
+ANCBuddy 2.2.0 adds audio-source controls and makes live headphone status more reliable.
 
-Switch between Still and Motion directly inside the active Immersion card, read the headphones' live setting, and get clear confirmation while each change is applied.
+See which remembered device is streaming, switch to another source, or start pairing directly from ANCBuddy. If macOS is still using another output, ANCBuddy can reconnect the Bose audio route and guide you to Bluetooth Settings when needed.
 
-Devices without a supported Immersive Audio protocol path keep the existing Quiet, Aware, Immersion, battery, and AI Auto-EQ controls unchanged.
+The panel opens faster while device details finish loading in the background. It also recognizes Immersion with Still or Motion after live headphone adjustments, and keeps unconfirmed values neutral until fresh hardware status is available.
+
+ANCBuddy now releases the Bose control connection cleanly when it quits and reuses an active status read when the panel is reopened instead of queueing duplicate connection attempts.
+
+Use Contact Developer in the panel to start a support email containing only the ANCBuddy and macOS versions, never license information.
 
 If you still have the old BoseControl app installed, quit and remove it after installing ANCBuddy to avoid two menu bar apps competing for the same headphones.
 ]]></description>
-            <enclosure url="https://github.com/denizaytac/ancbuddy-site/releases/download/v2.1.0/ANCBuddy-2.1.0.dmg" length="4154112" type="application/octet-stream" sparkle:edSignature="jLaa8vV9SWx1pehpFujpwz6Buqdqe6fQynxHH3tAcAx2tC1dxEOLhylk1LXP6ZHKVeaIF9R0N9zARLaIVBOuBw=="/>
+            <enclosure url="https://github.com/denizaytac/ancbuddy-site/releases/download/v2.2.0/ANCBuddy-2.2.0.dmg" length="4622349" type="application/octet-stream" sparkle:edSignature="vsOk/kqVUISmXStza9zYQgpuly1/zKAKggwYw8n90GjM+5a5Z3Ref397MfRKZ7WvCfMDd/Ylgz/T5LLRRVRkBA=="/>
         </item>
     </channel>
 </rss>
