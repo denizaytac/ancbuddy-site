@@ -10,10 +10,12 @@ site-src/node_modules/
 npm-debug.log*
 
 # Local secrets / environment
-/.env.local
-site-src/.env.local
-supabase/.env
-supabase/.env.local
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
 
 # Growth Agent local environment and runtime artifacts
 /growth-agent/.env

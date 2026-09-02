@@ -245,6 +245,7 @@ Deno.serve(async (req) => {
 
   const normalizedEmail = normalizeEmail(attributes.user_email);
   const lemonCreatedAt = asIsoDate(attributes.created_at);
+  const testMode = asBoolean(attributes.test_mode) ?? false;
   const trialSignup = await findTrialSignup(
     supabase,
     normalizedEmail,
@@ -300,6 +301,7 @@ Deno.serve(async (req) => {
     currency: normalize(attributes.currency, 12),
     status: normalize(attributes.status, 80),
     refunded: asBoolean(attributes.refunded),
+    test_mode: testMode,
     lemon_created_at: lemonCreatedAt,
     event_name: "order_created",
     conversion_path: conversionPath,
@@ -429,5 +431,6 @@ Deno.serve(async (req) => {
     ok: true,
     order_id: lemonOrderId,
     conversion_path: conversionPath,
+    test_mode: testMode,
   });
 });
