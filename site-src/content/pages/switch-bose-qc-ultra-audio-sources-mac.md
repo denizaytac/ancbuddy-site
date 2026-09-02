@@ -49,7 +49,7 @@
 
 ANCBuddy 2.2.0 shows which remembered device is actively streaming to your Bose QC Ultra and which other sources remain connected. From the Mac menu bar, you can switch to another remembered source or start pairing without opening the Bose phone app.
 
-<figure class="article-screenshot"><picture><source type="image/avif" srcset="/ancbuddy-audio-sources-mac.avif"><source type="image/webp" srcset="/ancbuddy-audio-sources-mac.webp"><img src="/ancbuddy-audio-sources-mac.png" alt="ANCBuddy Audio Sources panel showing the active Bose QC Ultra source, another connected source, and remembered devices on Mac" width="672" height="1604" loading="eager" decoding="async"></picture><figcaption>Real ANCBuddy 2.2.0 Audio Sources panel with privacy-safe device labels.</figcaption></figure>
+<figure class="article-screenshot"><picture><source type="image/webp" srcset="/ancbuddy-audio-sources-mac.webp"><img src="/ancbuddy-audio-sources-mac.png" alt="ANCBuddy Audio Sources panel showing the active Bose QC Ultra source, another connected source, and remembered devices on Mac" width="600" height="1520" loading="eager" decoding="async"></picture><figcaption>Real ANCBuddy 2.2.0 Audio Sources panel with privacy-safe device labels.</figcaption></figure>
 
 ## Active Source vs. Other Connected Sources
 

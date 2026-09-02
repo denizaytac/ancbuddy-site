@@ -47,7 +47,7 @@
 
 ANCBuddy is a native Mac menu-bar app for Bose QC Ultra. Switch listening modes, see active and connected audio sources, switch to remembered devices, check battery status, and use optional AI Auto-EQ without opening the Bose phone app.
 
-<figure class="article-screenshot"><picture><source type="image/avif" srcset="/ancbuddy-audio-sources-mac.avif"><source type="image/webp" srcset="/ancbuddy-audio-sources-mac.webp"><img src="/ancbuddy-audio-sources-mac.png" alt="ANCBuddy Audio Sources panel showing the active Bose QC Ultra source, another connected source, and remembered devices on Mac" width="672" height="1604" loading="lazy" decoding="async"></picture><figcaption>Real ANCBuddy 2.2.0 panel with privacy-safe device labels.</figcaption></figure>
+<figure class="article-screenshot"><picture><source type="image/webp" srcset="/ancbuddy-audio-sources-mac.webp"><img src="/ancbuddy-audio-sources-mac.png" alt="ANCBuddy Audio Sources panel showing the active Bose QC Ultra source, another connected source, and remembered devices on Mac" width="600" height="1520" loading="lazy" decoding="async"></picture><figcaption>Real ANCBuddy 2.2.0 panel with privacy-safe device labels.</figcaption></figure>
 
 ## Daily controls from the menu bar
 

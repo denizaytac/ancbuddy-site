@@ -25,13 +25,12 @@ export function AudioSources() {
       <div className="audio-sources-layout">
         <figure className="audio-sources-media reveal">
           <picture>
-            <source type="image/avif" srcSet="/ancbuddy-audio-sources-mac.avif" />
             <source type="image/webp" srcSet="/ancbuddy-audio-sources-mac.webp" />
             <img
               src="/ancbuddy-audio-sources-mac.png"
               alt="ANCBuddy Audio Sources panel showing the active Bose QC Ultra source, another connected source, and remembered devices on Mac"
-              width="672"
-              height="1604"
+              width="600"
+              height="1520"
               loading="lazy"
               decoding="async"
             />

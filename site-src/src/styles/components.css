@@ -778,7 +778,7 @@
 .audio-sources-media picture {
   position: relative;
   display: block;
-  width: min(100%, 320px);
+  width: min(100%, 286px);
 }
 .audio-sources-media img {
   display: block;
@@ -838,7 +838,7 @@
 @media (max-width: 520px) {
   .audio-sources-layout { margin-top: 40px; gap: 36px; }
   .audio-sources-media { border-radius: var(--radius-lg); padding: 20px 14px 18px; }
-  .audio-sources-media picture { width: min(100%, 292px); }
+  .audio-sources-media picture { width: min(100%, 261px); }
   .audio-sources-link { width: 100%; justify-content: center; text-align: center; }
 }
 
