@@ -1,0 +1,3 @@
+date_utc,day,action,target,channel,utm_content,reach_or_views,qualified_sessions,trial_opens,trial_signups,downloads,checkouts,net_purchases,refunds,attributed_relevant,total_relevant,attribution_quality_pct,learning,next_action
+2026-08-25,0,"Phase 0: first non-internal v2 visit verified","ancbuddy.com",baseline,,,,,,,,0,0,1,1,100.00,"Production v2 write returned 201; Phase 0 was subsequently accepted","Await approved Lemon test order"
+2026-08-26,0,"Phase 0 accepted and hourly monitor stopped","Supabase live",baseline,,,,,,,,0,0,,,,"14/14 observed non-internal v2 events complete; shortened window explicitly accepted","Await approved Lemon test order"
