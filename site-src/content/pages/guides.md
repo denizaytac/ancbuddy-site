@@ -2,15 +2,15 @@
 {
   "slug": "guides.html",
   "title": "ANCBuddy Guides for Bose QC Ultra on Mac",
-  "description": "Practical guides for controlling Bose QC Ultra headphones and earbuds from a Mac with ANCBuddy.",
+  "description": "Practical guides for Bose QC Ultra modes, audio sources, battery, pairing, Immersive Audio, and daily control from a Mac with ANCBuddy.",
   "kind": "hub",
-  "lastmod": "2026-08-27",
+  "lastmod": "2026-09-02",
   "priority": 0.8,
   "h1": "ANCBuddy guides for Bose QC Ultra on Mac",
   "faqs": [
     {
       "q": "Which guide should I read first?",
-      "a": "Start with the Mac control guide if you want to switch Quiet, Aware, and Immersion from your Mac."
+      "a": "Start with the Mac control guide for the full workflow, or the audio-source guide if you want to understand active, connected, and remembered sources."
     },
     {
       "q": "Are these pages official Bose documentation?",
@@ -26,6 +26,7 @@
     { "name": "Guides", "url": "/guides.html" }
   ],
   "relatedLinks": [
+    { "title": "Audio-source switching", "href": "/switch-bose-qc-ultra-audio-sources-mac.html", "description": "See, switch, pair, and recover Bose sources from a Mac." },
     { "title": "Download ANCBuddy", "href": "/download.html", "description": "Get the current signed and notarized DMG." },
     { "title": "Trust", "href": "/trust.html", "description": "Review privacy, signing, refunds, and independence details." },
     { "title": "Support", "href": "/support.html", "description": "Contact the developer and get setup help." },
@@ -34,10 +35,11 @@
 }
 ---
 
-ANCBuddy guides help Bose QC Ultra users understand what a Mac can do natively, what still requires the Bose phone app, and where ANCBuddy fits as a menu-bar utility for daily listening-mode control.
+ANCBuddy guides help Bose QC Ultra users understand listening modes, audio sources, battery status, pairing, and what still belongs in the Bose phone app.
 
 ## Start here
 
+- [Switch Bose QC Ultra audio sources from a Mac](/switch-bose-qc-ultra-audio-sources-mac.html)
 - [How to control Bose QC Ultra from your Mac](/control-bose-qc-ultra-from-mac.html)
 - [Bose QC Ultra Immersive Audio on Mac: Still vs Motion](/bose-qc-ultra-immersive-audio-mac.html)
 - [Bose QC Ultra Mac app](/bose-qc-ultra-mac-app.html)

@@ -157,7 +157,7 @@ export function Hero() {
         </picture>
         <span className="pill">
           <span className="pill-dot" />
-          <span>Bose QC Ultra + AI Auto-EQ</span>
+          <span>Native Bose QC Ultra control for Mac</span>
         </span>
         <h1>
           Bose QC Ultra control,
@@ -165,8 +165,8 @@ export function Hero() {
           <em>right from your Mac.</em>
         </h1>
         <p className="hero-sub">
-          Switch Quiet, Aware, and Immersion without reaching for your phone. Turn on AI
-          Auto-EQ when you want a track-aware sound profile with more depth.
+          Switch Quiet, Aware, and Immersion, see and switch remembered audio sources,
+          check battery, and use optional AI Auto-EQ — without opening the Bose phone app.
         </p>
         <div className="hero-cta">
           <a className="btn btn-accent" href="#pricing">
@@ -180,7 +180,7 @@ export function Hero() {
         </div>
         <div className="hero-meta">
           <span>
-            <Icon name="check" size={12} /> No Bose Music app needed
+            <Icon name="check" size={12} /> No Bose app needed for daily controls
           </span>
           <span className="hero-meta-dot" />
           <span>
@@ -258,6 +258,19 @@ export function Hero() {
                   </div>
                 </div>
 
+                <div className="dd-section-label">Audio Sources</div>
+                <div className="dd-source-card">
+                  <span className="dd-source-icon">
+                    <Icon name="device" size={14} />
+                  </span>
+                  <span className="dd-source-body">
+                    <span className="dd-source-name">This Mac</span>
+                    <span className="dd-source-detail">Phone connected · 3 remembered</span>
+                  </span>
+                  <span className="dd-source-state">Active</span>
+                </div>
+
+                <div className="dd-divider" />
                 <div className="dd-section-label">Listening Mode</div>
 
                 {MODES.map((m, i) => {
@@ -357,27 +370,6 @@ export function Hero() {
                     </div>
                   )}
                 </div>
-
-                <div className="dd-divider" />
-                <div className="dd-section-label">General</div>
-                <button className="dd-toggle-row">
-                  <span className="dd-toggle-icon">
-                    <Icon name="arrow" size={13} />
-                  </span>
-                  <span>
-                    <span className="dd-toggle-title">Launch at Login</span>
-                    <span className="dd-toggle-detail">On</span>
-                  </span>
-                  <span className="mock-switch is-on" />
-                </button>
-                <button className="dd-row">
-                  <Icon name="arrow" size={13} />
-                  Check for Updates…
-                </button>
-                <button className="dd-row">
-                  <Icon name="x-mark" size={13} />
-                  Quit
-                </button>
               </div>
             )}
           </div>

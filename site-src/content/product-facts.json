@@ -2,10 +2,11 @@
   "siteUrl": "https://ancbuddy.com",
   "name": "ANCBuddy",
   "tagline": "Bose QC Ultra control, right from your Mac.",
-  "description": "ANCBuddy is an independent macOS menu-bar app for Bose QC Ultra headphones and earbuds. It lets Mac users switch Quiet, Aware, and Immersion modes, manage remembered audio sources, check battery status, and optionally generate track-aware AI Auto-EQ profiles.",
+  "description": "ANCBuddy is an independent macOS menu-bar app for Bose QC Ultra headphones and earbuds. It lets Mac users switch Quiet, Aware, and Immersion modes, see active, connected, and remembered audio sources, switch to remembered devices, start pairing, check battery status, and optionally generate track-aware AI Auto-EQ profiles.",
   "version": "2.2.0",
   "build": "20201",
   "releaseDate": "2026-09-02",
+  "homepageLastmod": "2026-09-02",
   "platform": "macOS 12 Monterey and newer",
   "architectures": "Apple Silicon and Intel Macs",
   "price": "9.99",
@@ -28,12 +29,21 @@
   "features": [
     "Switch Bose QC Ultra Quiet, Aware, and Immersion listening modes from the Mac menu bar",
     "Switch between Still and Motion inside Immersion on compatible QC Ultra devices",
-    "See and switch remembered audio sources or start pairing from the Mac menu bar",
+    "See active, connected, and remembered audio sources, switch to a remembered source, or start pairing from the Mac menu bar",
     "Show battery and connection status for compatible Bose QC Ultra devices",
     "Generate optional AI Auto-EQ profiles for the current track",
     "Launch at Login support",
     "In-app updates powered by Sparkle"
   ],
+  "capabilities": {
+    "activeSourceVisible": true,
+    "otherConnectedSourcesVisible": true,
+    "rememberedSourcesVisible": true,
+    "rememberedSourceSwitching": true,
+    "pairingControl": true,
+    "multipointToggle": false,
+    "macAudioRecovery": true
+  },
   "aiAutoEqPrivacy": "AI Auto-EQ is opt-in. When enabled, ANCBuddy sends the current artist, title, and album to ANCBuddy's relay only to generate a 3-band EQ profile for that track. Results are cached by a hashed track key, and raw song names are not stored.",
   "independenceDisclaimer": "ANCBuddy is an independent project and is not affiliated with, endorsed by, or sponsored by Bose Corporation. Bose, QuietComfort, QC Ultra, and related marks are trademarks of Bose Corporation, used only to describe compatible hardware.",
   "officialSources": [

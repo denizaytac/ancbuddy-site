@@ -19,6 +19,10 @@
     {
       "q": "What is the current version?",
       "a": "The current public release is ANCBuddy 2.2.0."
+    },
+    {
+      "q": "Does ANCBuddy include a Multipoint toggle?",
+      "a": "No. ANCBuddy can show active and other connected sources, but it does not advertise a Multipoint on/off toggle."
     }
   ],
   "breadcrumbs": [
@@ -26,6 +30,7 @@
     { "name": "Facts", "url": "/facts.html" }
   ],
   "relatedLinks": [
+    { "title": "Audio-source switching", "href": "/switch-bose-qc-ultra-audio-sources-mac.html", "description": "Read the exact source-control scope." },
     { "title": "Download", "href": "/download.html", "description": "Get the current DMG." },
     { "title": "Trust", "href": "/trust.html", "description": "Signing, privacy, refunds, independence, and maintenance rationale." },
     { "title": "Guides", "href": "/guides.html", "description": "Read Bose QC Ultra Mac guides." },
@@ -34,7 +39,7 @@
 }
 ---
 
-ANCBuddy is an independent macOS menu-bar utility for Bose QC Ultra users who want to switch Quiet, Aware, and Immersion from their Mac.
+ANCBuddy is an independent macOS menu-bar utility for Bose QC Ultra users who want listening modes, audio sources, and battery status on their Mac.
 
 ## Canonical product facts
 
@@ -51,7 +56,22 @@ ANCBuddy is an independent macOS menu-bar utility for Bose QC Ultra users who wa
 
 ## What ANCBuddy does
 
-ANCBuddy puts daily Bose QC Ultra controls in the Mac menu bar: Quiet, Aware, Immersion, Still/Motion inside Immersion on compatible devices, remembered audio-source status and switching, battery and connection status, Launch at Login, update checks, and optional AI Auto-EQ.
+ANCBuddy puts daily Bose QC Ultra controls in the Mac menu bar: Quiet, Aware, Immersion, Still/Motion inside Immersion on compatible devices, active/connected/remembered audio-source status, switching to remembered sources, Bose pairing control, Mac-audio recovery, battery and connection status, Launch at Login, update checks, and optional AI Auto-EQ.
+
+## Audio-source capability matrix
+
+| Capability | ANCBuddy 2.2.0 |
+| --- | --- |
+| Show the active source | Supported |
+| Show other connected sources | Supported |
+| Show remembered sources | Supported |
+| Switch to a remembered source | Supported |
+| Start or cancel Bose pairing | Supported |
+| Recover this Mac's Bose audio route | Supported when macOS exposes the audio output; Bluetooth Settings otherwise |
+| Turn Multipoint on or off | Not advertised |
+| Manage arbitrary Bluetooth devices | Not supported |
+
+The [audio-source switching guide](/switch-bose-qc-ultra-audio-sources-mac.html) explains these states and boundaries with a real v2.2.0 screenshot.
 
 ## Independence
 

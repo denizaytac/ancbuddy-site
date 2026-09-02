@@ -10,7 +10,8 @@ export function Devices() {
         Made for <em>Bose QC Ultra.</em>
       </SectionTitle>
       <SectionLede>
-        ANCBuddy currently supports the Bose QC Ultra models below.
+        ANCBuddy brings modes, battery, and remembered audio sources to the supported
+        Bose QC Ultra models below.
       </SectionLede>
 
       <div className="devices">
@@ -19,8 +20,10 @@ export function Devices() {
             <Icon name="headphones" size={52} />
           </div>
           <div>
-            <h3>QC Ultra Headphones — Gen 1</h3>
-            <div className="device-meta">Quiet, Aware, Immersion + AI Auto‑EQ</div>
+            <h3>
+              <a href="/bose-qc-ultra-mac-app.html">QC Ultra Headphones — Gen 1</a>
+            </h3>
+            <div className="device-meta">Modes, battery, remembered audio sources</div>
           </div>
           <span className="device-status">Supported</span>
         </div>
@@ -33,8 +36,10 @@ export function Devices() {
             <Icon name="headphones" size={52} />
           </div>
           <div>
-            <h3>QC Ultra Headphones — Gen 2</h3>
-            <div className="device-meta">Quiet, Aware, Immersion + AI Auto‑EQ</div>
+            <h3>
+              <a href="/qc-ultra-headphones-gen-2-mac.html">QC Ultra Headphones — Gen 2</a>
+            </h3>
+            <div className="device-meta">Modes, battery, remembered audio sources</div>
           </div>
           <span className="device-status">Supported</span>
         </div>
@@ -47,8 +52,10 @@ export function Devices() {
             <Icon name="earbud" size={52} />
           </div>
           <div>
-            <h3>QC Ultra Earbuds — 2nd Gen</h3>
-            <div className="device-meta">Quiet, Aware, Immersion + AI Auto‑EQ</div>
+            <h3>
+              <a href="/qc-ultra-earbuds-2nd-gen-mac.html">QC Ultra Earbuds — 2nd Gen</a>
+            </h3>
+            <div className="device-meta">Modes, battery, remembered audio sources</div>
           </div>
           <span className="device-status">Supported</span>
         </div>

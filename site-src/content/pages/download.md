@@ -30,6 +30,7 @@
     { "name": "Free trial and install", "url": "/download.html" }
   ],
   "relatedLinks": [
+    { "title": "Audio-source switching", "href": "/switch-bose-qc-ultra-audio-sources-mac.html", "description": "See the new v2.2.0 source workflow before installing." },
     { "title": "Install and troubleshooting", "href": "/troubleshooting.html", "description": "Fix connection, Bluetooth, and installation issues." },
     { "title": "Privacy", "href": "/privacy.html", "description": "Understand trial signup and AI Auto-EQ data handling." },
     { "title": "Support", "href": "/support.html", "description": "Email the developer directly." }
@@ -51,6 +52,8 @@ Start ANCBuddy with a 14-day free trial, then install the signed and notarized M
 - Macs: Apple Silicon and Intel
 - Trial: 14 days
 - Price after trial: $9.99 one-time
+
+See the [v2.2.0 audio-source workflow](/switch-bose-qc-ultra-audio-sources-mac.html) before installing.
 
 [Buy ANCBuddy — $9.99](https://ancbuddy.lemonsqueezy.com/checkout/buy/b79f3888-28fa-4438-8328-fb604518cbc2)
 
