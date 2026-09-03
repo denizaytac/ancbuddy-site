@@ -245,10 +245,10 @@ main {
 
 @media (max-width: 720px) {
   .hero-atmosphere {
-    top: 92px;
+    top: 210px;
     width: 215vw;
     height: 860px;
-    opacity: 0.68;
+    opacity: 0.64;
     mask-image: linear-gradient(to bottom, transparent 0%, #000 6%, #000 88%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 6%, #000 88%, transparent 100%);
   }
@@ -263,7 +263,7 @@ main {
   }
 
   .hero-atmosphere[data-ready="true"] .hero-atmosphere-canvas {
-    opacity: 0.68;
+    opacity: 0.62;
   }
 
   .hero-stack > picture:first-child::before {
