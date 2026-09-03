@@ -22,7 +22,7 @@ const FRAGMENT_SHADER = `
   void main() {
     vec2 uv = vUv;
     float aspect = uResolution.x / max(uResolution.y, 1.0);
-    vec2 center = vec2(0.5, 0.56);
+    vec2 center = vec2(0.5, 0.335);
     vec2 p = (uv - center) * vec2(aspect, 1.0);
     vec2 pointer = (uPointer - center) * vec2(aspect, 1.0);
 
@@ -31,13 +31,13 @@ const FRAGMENT_SHADER = `
     vec2 radial = normalize(p + vec2(0.0001));
     vec2 tangent = vec2(-radial.y, radial.x);
 
-    float breathing = sin(radius * 24.0 - uTime * 0.48) * 0.0035;
+    float breathing = sin(radius * 24.0 - uTime * 0.48) * 0.0028;
     float drift = sin(p.x * 6.0 + p.y * 9.0 + uTime * 0.22) * 0.0018;
     vec2 warp = radial * breathing * (0.7 + pointerFalloff * 0.9);
     warp += tangent * drift;
-    warp += (uPointer - vec2(0.5)) * pointerFalloff * 0.006;
+    warp += (uPointer - vec2(0.5)) * pointerFalloff * 0.0045;
 
-    float split = 0.0012 + pointerFalloff * 0.0016;
+    float split = 0.00055 + pointerFalloff * 0.00075;
     vec4 base = texture2D(uTexture, uv + warp);
     float red = texture2D(uTexture, uv + warp + tangent * split).r;
     float blue = texture2D(uTexture, uv + warp - tangent * split).b;
@@ -146,8 +146,8 @@ export function HeroAtmosphere() {
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.clearColor(0, 0, 0, 0);
 
-    const pointerTarget = { x: 0.5, y: 0.48 };
-    const pointerCurrent = { x: 0.5, y: 0.48 };
+    const pointerTarget = { x: 0.5, y: 0.34 };
+    const pointerCurrent = { x: 0.5, y: 0.34 };
     let frameId = 0;
     let disposed = false;
     let visible = true;
