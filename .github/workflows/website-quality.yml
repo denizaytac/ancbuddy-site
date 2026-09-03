@@ -1,0 +1,50 @@
+name: Validate ANCBuddy website quality
+
+on:
+  pull_request:
+    paths:
+      - "site-src/**"
+      - "docs/INTENT_QUALITY_FRAMEWORK.md"
+      - ".github/workflows/website-quality.yml"
+  push:
+    branches:
+      - "agent/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: website-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: site-src/package-lock.json
+
+      - name: Install
+        working-directory: site-src
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint
+        working-directory: site-src
+        run: npm run lint
+
+      - name: Build and validate
+        working-directory: site-src
+        env:
+          VITE_WEB3FORMS_KEY: ${{ secrets.WEB3FORMS_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VITE_GROWTH_AGENT_API_URL: ${{ vars.GROWTH_AGENT_PUBLIC_URL }}
+          VITE_GROWTH_DEMO: "false"
+        run: npm run build

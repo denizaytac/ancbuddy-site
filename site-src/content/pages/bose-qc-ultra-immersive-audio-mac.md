@@ -1,32 +1,32 @@
 ---
 {
   "slug": "bose-qc-ultra-immersive-audio-mac.html",
-  "title": "Bose QC Ultra Immersive Audio: Still vs Motion on Mac",
-  "description": "Switch Bose QC Ultra Immersive Audio between Still and Motion from your Mac menu bar with ANCBuddy on compatible headphones.",
+  "title": "Bose QC Ultra Immersive Audio on Mac: Still, Motion & Cinema",
+  "description": "Switch Bose QC Ultra Immersive Audio between Still and Motion from your Mac, and understand current Cinema Mode support on Gen 2 hardware.",
   "kind": "guide",
-  "lastmod": "2026-08-27",
-  "priority": 0.8,
-  "h1": "Bose QC Ultra Immersive Audio: Still vs Motion on Mac",
+  "lastmod": "2026-09-03",
+  "priority": 0.82,
+  "h1": "Bose QC Ultra Immersive Audio on Mac: Still, Motion, and Cinema",
   "faqs": [
     {
       "q": "Can I switch Bose QC Ultra Immersive Audio from my Mac?",
-      "a": "Yes. ANCBuddy can switch between Still and Motion from the Mac menu bar when Immersion is active on a compatible QC Ultra headphone."
+      "a": "Yes. ANCBuddy 2.2.0 can switch between Still and Motion from the Mac menu bar when Immersion is active and the connected QC Ultra exposes that setting."
     },
     {
       "q": "What is the difference between Still and Motion?",
       "a": "Still keeps the soundstage anchored for listening in one place. Motion lets the soundstage move with you so it stays in front while you are moving."
     },
     {
-      "q": "Do I need the Bose phone app open?",
-      "a": "No. ANCBuddy handles this daily control directly from your Mac. Keep the Bose app for firmware updates, initial setup, and settings ANCBuddy does not expose."
+      "q": "Can ANCBuddy turn Bose Cinema Mode on from a Mac?",
+      "a": "No Cinema Mode control is advertised in the current ANCBuddy 2.2.0 release. Use the Bose app to enable Cinema Mode on supported Gen 2 products."
     },
     {
-      "q": "Does the Still and Motion control appear for every QC Ultra device?",
-      "a": "No. ANCBuddy shows the control only when the paired QC Ultra device exposes the compatible Immersive Audio setting."
+      "q": "Which Bose products support Cinema Mode?",
+      "a": "Bose documents Cinema Mode for QuietComfort Ultra Headphones 2nd Gen and QuietComfort Ultra Earbuds 2nd Gen."
     },
     {
       "q": "Does Bose Immersive Audio require special spatial-audio content?",
-      "a": "No. Bose says Immersive Audio can add a spatial effect to standard stereo content as well as other everyday audio."
+      "a": "No. Bose says its spatialized audio can work with normal stereo content, and Cinema Mode is designed to enhance ordinary video without requiring a special format."
     }
   ],
   "breadcrumbs": [
@@ -35,47 +35,70 @@
     { "name": "Immersive Audio on Mac", "url": "/bose-qc-ultra-immersive-audio-mac.html" }
   ],
   "relatedLinks": [
-    { "title": "Download ANCBuddy", "href": "/download.html", "description": "Try the Mac app free for 14 days." },
+    { "title": "Bose QC Ultra app for Mac", "href": "/bose-qc-ultra-mac-app.html", "description": "Review all supported controls and current limits." },
     { "title": "Control Bose QC Ultra from Mac", "href": "/control-bose-qc-ultra-from-mac.html", "description": "See the complete Mac control workflow." },
-    { "title": "QC Ultra Headphones Gen 2 on Mac", "href": "/qc-ultra-headphones-gen-2-mac.html", "description": "Review Gen 2 support on macOS." }
+    { "title": "QC Ultra Headphones Gen 2 on Mac", "href": "/qc-ultra-headphones-gen-2-mac.html", "description": "Review Gen 2-specific capabilities and limits." },
+    { "title": "QC Ultra Earbuds 2nd Gen on Mac", "href": "/qc-ultra-earbuds-2nd-gen-mac.html", "description": "Review the Earbuds 2nd Gen workflow." },
+    { "title": "Download ANCBuddy", "href": "/download.html", "description": "Try the current Mac app free for 14 days." }
   ],
   "sources": [
-    { "title": "Bose: Still and Motion Immersive Audio", "url": "https://www.bose.com/pressroom/bose-announces-new-quietcomfort-ultra-headphones-and-earbuds" },
+    { "title": "Bose: What is Cinema Mode and how to use it", "url": "https://www.bose.com/stories/bose-headphones-cinema-mode" },
     { "title": "Bose: What is spatial audio?", "url": "https://www.bose.com/stories/what-is-spatial-audio" },
+    { "title": "Bose QuietComfort Ultra Headphones 2nd Gen", "url": "https://www.bose.com/p/headphones/bose-quietcomfort-ultra-headphones-2nd-gen/QCUH2-HEADPHONEARN.html" },
     { "title": "ANCBuddy changelog", "url": "/changelog.html" }
   ]
 }
 ---
 
-ANCBuddy 2.1.0 lets you switch compatible Bose QC Ultra headphones between Still and Motion from the Mac menu bar while Immersion is active. The control sits with your other listening modes, so a daily change does not require a trip to the Bose phone app.
+ANCBuddy 2.2.0 lets you switch compatible Bose QC Ultra headphones between **Still** and **Motion** from the Mac menu bar while Immersion is active. The current release does **not** advertise Cinema Mode control, so Cinema remains a Bose-app setting on supported Gen 2 hardware.
+
+## Still, Motion, and Cinema at a glance
+
+| Setting | Best suited to | ANCBuddy 2.2.0 |
+| --- | --- | --- |
+| Still | Sitting at a desk, watching a screen, or listening in one place | Available when the connected QC Ultra exposes the setting |
+| Motion | Walking or moving while keeping the soundstage in front | Available when the connected QC Ultra exposes the setting |
+| Cinema | Video with clearer dialogue and a theater-like spatial presentation | Not currently advertised; use the Bose app |
+
+These modes are related but not interchangeable. Still and Motion describe how the immersive soundstage behaves as you move. Cinema is an additional Bose listening mode designed around video and dialogue.
 
 ## What Still and Motion mean
 
-Bose Immersive Audio creates a wider, more spacious soundstage from the audio you are already playing. Bose offers two ways to position that soundstage:
+Bose Immersive Audio creates a wider soundstage from the audio already playing:
 
-- **Still** is designed for listening in one place. The sound stays anchored in a fixed position as you move your head.
-- **Motion** is designed for listening while moving. The soundstage moves with you so it remains in front.
+- **Still** anchors the soundstage in a fixed position. It is the natural starting point when you are seated at a Mac or watching a film on one screen.
+- **Motion** lets the soundstage follow your movement so it remains in front while you walk or move around.
 
-At a desk or while watching a film, Still is the natural starting point. When you are walking or moving around, Motion is designed for that situation. [Bose says](https://www.bose.com/stories/what-is-spatial-audio) Immersive Audio can also work with standard stereo content; it does not depend on one particular spatial-audio format.
+Bose says its Immersive Audio can work with normal stereo content; it does not depend on one particular spatial-audio format.
 
 ## Switch Still and Motion from your Mac
 
-With a supported headphone paired to macOS:
+With a supported QC Ultra paired to macOS:
 
 1. Open ANCBuddy from the menu bar.
 2. Choose **Immersion** as the listening mode.
-3. Select **Still** or **Motion** when the control appears.
+3. Select **Still** or **Motion** when the segmented control appears.
+4. Wait for the Bose device to confirm the change before switching again.
 
-ANCBuddy reads the live Immersive Audio setting and shows feedback while the headphone confirms the change. You can return to Quiet or Aware from the same panel.
+ANCBuddy shows this control only when the connected device exposes the compatible setting. It does not display a disabled switch on products or states where Still and Motion are unavailable.
 
-## Compatibility behavior
+## Cinema Mode on Bose QC Ultra Gen 2
 
-ANCBuddy shows Still and Motion only when the connected QC Ultra headphone exposes the compatible setting. Devices that do not expose it keep the usual Quiet, Aware, Immersion, battery, and optional AI Auto-EQ controls without an inactive switch.
+Bose documents Cinema Mode for QuietComfort Ultra Headphones 2nd Gen and QuietComfort Ultra Earbuds 2nd Gen. Bose describes it as a video-focused mode that spatializes normal stereo, keeps dialogue clearer, and balances background effects without requiring Dolby Atmos or another special content format.
 
-For the broader device list, see the [Bose QC Ultra Mac app guide](/bose-qc-ultra-mac-app.html).
+To use Cinema Mode today:
 
-## What the Bose phone app is still for
+1. Update the Bose product if needed.
+2. Open the Bose app on iOS or Android.
+3. Go to **Modes**.
+4. Select **Cinema Mode**.
 
-Keep the Bose app available for firmware updates, initial product setup, shortcuts, and settings that ANCBuddy does not expose. ANCBuddy focuses on the controls you want close at hand while already working or listening on your Mac.
+ANCBuddy 2.2.0 does not claim to activate or configure Cinema Mode from the Mac. This page documents that boundary so a Cinema-related search does not lead to a false product promise.
+
+## What still belongs in the Bose app
+
+Keep the Bose app for Cinema Mode, firmware updates, initial product setup, custom modes, Multipoint settings, hardware shortcuts, and settings ANCBuddy does not expose.
+
+For the broader decision, review the [Bose QC Ultra app for Mac page](/bose-qc-ultra-mac-app.html). For all normal desktop controls, use the [complete Mac control guide](/control-bose-qc-ultra-from-mac.html).
 
 [Download ANCBuddy](/download.html) for a 14-day free trial. A permanent license is $9.99 once, with no subscription.
