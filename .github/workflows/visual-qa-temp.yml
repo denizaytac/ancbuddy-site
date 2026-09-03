@@ -1,0 +1,241 @@
+name: Temporary frame-by-frame visual QA
+
+on:
+  push:
+    branches:
+      - agent/personality-sonic-field
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: site-src/package-lock.json
+
+      - name: Install app
+        working-directory: site-src
+        run: npm ci --no-audit --no-fund
+
+      - name: Build production site
+        working-directory: site-src
+        env:
+          VITE_WEB3FORMS_KEY: ${{ secrets.WEB3FORMS_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VITE_GROWTH_AGENT_API_URL: ${{ vars.GROWTH_AGENT_PUBLIC_URL }}
+          VITE_GROWTH_DEMO: "false"
+        run: npm run build
+
+      - name: Install browser runner
+        working-directory: site-src
+        run: |
+          npm install --no-save --package-lock=false playwright
+          npx playwright install --with-deps chromium
+
+      - name: Capture and validate timed frames
+        working-directory: site-src
+        env:
+          QA_OUT: ${{ runner.temp }}/visual-qa
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > "${RUNNER_TEMP}/ancbuddy-preview.log" 2>&1 &
+          echo $! > "${RUNNER_TEMP}/ancbuddy-preview.pid"
+          for attempt in {1..40}; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then
+              break
+            fi
+            sleep 0.5
+          done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+
+          cat > .visual-qa.mjs <<'EOF'
+          import { chromium } from "playwright";
+          import fs from "node:fs/promises";
+          import path from "node:path";
+
+          const outputDirectory = process.env.QA_OUT;
+          if (!outputDirectory) throw new Error("QA_OUT is required");
+          await fs.mkdir(outputDirectory, { recursive: true });
+
+          const report = {
+            generatedAt: new Date().toISOString(),
+            productionUrl: "https://ancbuddy.com/",
+            candidateUrl: "http://127.0.0.1:4173/",
+            captures: [],
+          };
+
+          const browser = await chromium.launch({
+            headless: true,
+            args: [
+              "--enable-webgl",
+              "--ignore-gpu-blocklist",
+              "--use-gl=angle",
+              "--use-angle=swiftshader",
+            ],
+          });
+
+          const viewports = [
+            { name: "desktop", width: 1440, height: 1050 },
+            { name: "mobile", width: 390, height: 844 },
+          ];
+
+          async function prepare(page, url, expectAtmosphere) {
+            const consoleMessages = [];
+            const pageErrors = [];
+            page.on("console", (message) => {
+              if (message.type() === "error" || message.type() === "warning") {
+                consoleMessages.push(`${message.type()}: ${message.text()}`);
+              }
+            });
+            page.on("pageerror", (error) => pageErrors.push(error.message));
+
+            await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45_000 });
+            await page.evaluate(() => document.fonts.ready);
+            await page.waitForSelector("h1", { state: "visible" });
+            await page.waitForTimeout(900);
+
+            if (expectAtmosphere) {
+              await page.waitForSelector(".hero-atmosphere", { state: "visible" });
+              await page
+                .waitForFunction(
+                  () => document.querySelector(".hero-atmosphere")?.getAttribute("data-ready") === "true",
+                  { timeout: 8_000 },
+                )
+                .catch(() => undefined);
+            }
+
+            const state = await page.evaluate((shouldHaveAtmosphere) => {
+              const atmosphere = document.querySelector(".hero-atmosphere");
+              const canvas = document.querySelector(".hero-atmosphere canvas");
+              const fallback = document.querySelector(".hero-atmosphere img");
+              const h1 = document.querySelector("h1");
+              const documentElement = document.documentElement;
+              const canvasRect = canvas?.getBoundingClientRect();
+              const heroRect = document.querySelector(".hero")?.getBoundingClientRect();
+
+              return {
+                title: document.title,
+                h1: h1?.textContent?.replace(/\s+/g, " ").trim() ?? null,
+                horizontalOverflow: documentElement.scrollWidth - documentElement.clientWidth,
+                atmosphereExpected: shouldHaveAtmosphere,
+                atmospherePresent: Boolean(atmosphere),
+                atmosphereReady: atmosphere?.getAttribute("data-ready") === "true",
+                fallbackLoaded: fallback instanceof HTMLImageElement ? fallback.complete && fallback.naturalWidth > 0 : false,
+                canvasWidth: canvasRect?.width ?? 0,
+                canvasHeight: canvasRect?.height ?? 0,
+                canvasPixelWidth: canvas instanceof HTMLCanvasElement ? canvas.width : 0,
+                canvasPixelHeight: canvas instanceof HTMLCanvasElement ? canvas.height : 0,
+                webgl: canvas instanceof HTMLCanvasElement ? Boolean(canvas.getContext("webgl")) : false,
+                heroTop: heroRect?.top ?? null,
+                heroHeight: heroRect?.height ?? null,
+                reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+              };
+            }, expectAtmosphere);
+
+            if (!state.h1) throw new Error(`Missing visible H1 at ${url}`);
+            if (state.horizontalOverflow > 1) {
+              throw new Error(`Horizontal overflow of ${state.horizontalOverflow}px at ${url}`);
+            }
+            if (pageErrors.length) {
+              throw new Error(`Page errors at ${url}: ${pageErrors.join(" | ")}`);
+            }
+            if (expectAtmosphere) {
+              if (!state.atmospherePresent || !state.fallbackLoaded) {
+                throw new Error(`Generated atmosphere asset did not load at ${url}`);
+              }
+              if (!state.atmosphereReady || !state.webgl || state.canvasPixelWidth < 1 || state.canvasPixelHeight < 1) {
+                throw new Error(`WebGL atmosphere did not render at ${url}: ${JSON.stringify(state)}`);
+              }
+            }
+
+            return { state, consoleMessages, pageErrors };
+          }
+
+          for (const viewport of viewports) {
+            const context = await browser.newContext({
+              viewport: { width: viewport.width, height: viewport.height },
+              deviceScaleFactor: 1,
+              reducedMotion: "no-preference",
+              colorScheme: "dark",
+            });
+            const page = await context.newPage();
+
+            const production = await prepare(page, report.productionUrl, false);
+            await page.screenshot({
+              path: path.join(outputDirectory, `before-${viewport.name}.png`),
+              fullPage: false,
+            });
+            report.captures.push({ kind: "before", viewport, ...production });
+
+            const candidate = await prepare(page, report.candidateUrl, true);
+            const pointerFrames = [
+              [0.50, 0.46],
+              [0.24, 0.52],
+              [0.76, 0.43],
+              [0.62, 0.68],
+              [0.38, 0.36],
+            ];
+
+            for (let frame = 0; frame < pointerFrames.length; frame += 1) {
+              const [x, y] = pointerFrames[frame];
+              await page.mouse.move(Math.round(viewport.width * x), Math.round(viewport.height * y));
+              if (frame > 0) await page.waitForTimeout(650);
+              await page.screenshot({
+                path: path.join(
+                  outputDirectory,
+                  `after-${viewport.name}-frame-${String(frame).padStart(2, "0")}.png`,
+                ),
+                fullPage: false,
+              });
+            }
+
+            await page.screenshot({
+              path: path.join(outputDirectory, `after-${viewport.name}-full.png`),
+              fullPage: true,
+            });
+            report.captures.push({ kind: "after", viewport, ...candidate });
+
+            const sources = page.locator("#audio-sources");
+            await sources.scrollIntoViewIfNeeded();
+            await page.waitForTimeout(500);
+            await page.screenshot({
+              path: path.join(outputDirectory, `after-${viewport.name}-audio-sources.png`),
+              fullPage: false,
+            });
+
+            await context.close();
+          }
+
+          await browser.close();
+          await fs.writeFile(
+            path.join(outputDirectory, "report.json"),
+            `${JSON.stringify(report, null, 2)}\n`,
+          );
+          EOF
+
+          node .visual-qa.mjs
+
+      - name: Upload visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ancbuddy-frame-by-frame-visual-qa
+          path: |
+            ${{ runner.temp }}/visual-qa
+            ${{ runner.temp }}/ancbuddy-preview.log
+          if-no-files-found: warn
+          retention-days: 7
