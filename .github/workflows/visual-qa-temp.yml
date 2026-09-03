@@ -1,0 +1,155 @@
+name: Temporary final frame review
+
+on:
+  push:
+    branches:
+      - agent/personality-sonic-field
+
+permissions:
+  contents: read
+
+concurrency:
+  group: final-frame-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: site-src/package-lock.json
+
+      - name: Install and build
+        working-directory: site-src
+        env:
+          VITE_WEB3FORMS_KEY: ${{ secrets.WEB3FORMS_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VITE_GROWTH_AGENT_API_URL: ${{ vars.GROWTH_AGENT_PUBLIC_URL }}
+          VITE_GROWTH_DEMO: "false"
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          npm install --no-save --package-lock=false playwright
+          npx playwright install --with-deps chromium
+
+      - name: Review timed browser frames
+        working-directory: site-src
+        env:
+          QA_OUT: ${{ runner.temp }}/visual-qa
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > "${RUNNER_TEMP}/ancbuddy-preview.log" 2>&1 &
+          for attempt in {1..40}; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 0.5
+          done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+
+          cat > .visual-qa.mjs <<'EOF'
+          import { chromium } from "playwright";
+          import fs from "node:fs/promises";
+          import path from "node:path";
+
+          const out = process.env.QA_OUT;
+          if (!out) throw new Error("QA_OUT is required");
+          await fs.mkdir(out, { recursive: true });
+
+          const browser = await chromium.launch({
+            headless: true,
+            args: ["--enable-webgl", "--ignore-gpu-blocklist", "--use-gl=angle", "--use-angle=swiftshader"],
+          });
+          const report = { generatedAt: new Date().toISOString(), captures: [] };
+          const viewports = [
+            { name: "desktop", width: 1440, height: 1050 },
+            { name: "mobile", width: 390, height: 844 },
+          ];
+          const pointers = [[0.50, 0.46], [0.24, 0.52], [0.76, 0.43], [0.62, 0.68], [0.38, 0.36]];
+
+          for (const viewport of viewports) {
+            const context = await browser.newContext({
+              viewport: { width: viewport.width, height: viewport.height },
+              deviceScaleFactor: 1,
+              reducedMotion: "no-preference",
+              colorScheme: "dark",
+            });
+            const page = await context.newPage();
+            const pageErrors = [];
+            const consoleErrors = [];
+            page.on("pageerror", error => pageErrors.push(error.message));
+            page.on("console", message => {
+              if (message.type() === "error") consoleErrors.push(message.text());
+            });
+
+            await page.goto("http://127.0.0.1:4173/", { waitUntil: "domcontentloaded", timeout: 45_000 });
+            await page.evaluate(() => document.fonts.ready);
+            await page.waitForSelector("h1", { state: "visible" });
+            await page.waitForSelector(".hero-atmosphere", { state: "visible" });
+            await page.waitForFunction(
+              () => document.querySelector(".hero-atmosphere")?.getAttribute("data-ready") === "true",
+              { timeout: 8_000 },
+            );
+            await page.waitForTimeout(700);
+
+            const state = await page.evaluate(() => {
+              const root = document.documentElement;
+              const atmosphere = document.querySelector(".hero-atmosphere");
+              const fallback = document.querySelector(".hero-atmosphere img");
+              const canvas = document.querySelector(".hero-atmosphere canvas");
+              return {
+                h1: document.querySelector("h1")?.textContent?.replace(/\s+/g, " ").trim() ?? null,
+                horizontalOverflow: root.scrollWidth - root.clientWidth,
+                atmosphereReady: atmosphere?.getAttribute("data-ready") === "true",
+                fallbackLoaded: fallback instanceof HTMLImageElement && fallback.complete && fallback.naturalWidth > 0,
+                webgl: canvas instanceof HTMLCanvasElement && Boolean(canvas.getContext("webgl")),
+                canvasPixelWidth: canvas instanceof HTMLCanvasElement ? canvas.width : 0,
+                canvasPixelHeight: canvas instanceof HTMLCanvasElement ? canvas.height : 0,
+              };
+            });
+
+            if (!state.h1) throw new Error(`${viewport.name}: missing H1`);
+            if (state.horizontalOverflow > 1) throw new Error(`${viewport.name}: horizontal overflow ${state.horizontalOverflow}px`);
+            if (!state.atmosphereReady || !state.fallbackLoaded || !state.webgl) {
+              throw new Error(`${viewport.name}: atmosphere did not render: ${JSON.stringify(state)}`);
+            }
+            if (pageErrors.length || consoleErrors.length) {
+              throw new Error(`${viewport.name}: browser errors: ${[...pageErrors, ...consoleErrors].join(" | ")}`);
+            }
+
+            for (let index = 0; index < pointers.length; index += 1) {
+              const [x, y] = pointers[index];
+              await page.mouse.move(Math.round(viewport.width * x), Math.round(viewport.height * y));
+              if (index > 0) await page.waitForTimeout(650);
+              await page.screenshot({
+                path: path.join(out, `${viewport.name}-frame-${String(index).padStart(2, "0")}.png`),
+                fullPage: false,
+              });
+            }
+
+            report.captures.push({ viewport, state, pageErrors, consoleErrors });
+            await context.close();
+          }
+
+          await browser.close();
+          await fs.writeFile(path.join(out, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
+          EOF
+
+          node .visual-qa.mjs
+
+      - name: Upload frame evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ancbuddy-final-frame-review
+          path: |
+            ${{ runner.temp }}/visual-qa
+            ${{ runner.temp }}/ancbuddy-preview.log
+          if-no-files-found: warn
+          retention-days: 7
