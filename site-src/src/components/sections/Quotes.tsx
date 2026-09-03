@@ -17,11 +17,15 @@ export function Quotes() {
           className="quote-card reveal"
           style={{ "--reveal-delay": "100ms" } as React.CSSProperties}
         >
-          <p>"AI Auto‑EQ is ANCBuddy at its best — track-by-track tuning, handled automatically."</p>
+          <p>
+            <strong>Signed and notarized for macOS.</strong>
+            <br />
+            The current 2.2.0 DMG is published through GitHub Releases and includes a 14-day trial.
+          </p>
           <div className="quote-meta">
-            <span>ANCBuddy</span>
+            <span>Release proof</span>
             <span className="quote-meta-dot" />
-            <span>Product highlight</span>
+            <span>Version 2.2.0</span>
           </div>
         </div>
         <div
