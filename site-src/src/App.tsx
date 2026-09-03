@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Hero } from "./components/Hero";
+import { HeroAtmosphere } from "./components/HeroAtmosphere";
 import { Nav } from "./components/Nav";
 import { TrialDialogProvider } from "./hooks/TrialDialogProvider";
 import { useTrialDialog } from "./hooks/useTrialDialog";
@@ -49,6 +50,7 @@ function AppShell() {
       <Nav />
 
       <main>
+        <HeroAtmosphere />
         <Hero />
         <Problem />
         <AudioSources />
