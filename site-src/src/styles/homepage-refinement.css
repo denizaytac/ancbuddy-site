@@ -1,0 +1,165 @@
+/* Final optical refinements for the homepage composition. */
+
+@media (min-width: 1121px) {
+  .hero {
+    grid-template-columns: minmax(470px, 0.9fr) minmax(590px, 1.1fr);
+    gap: clamp(28px, 3.4vw, 48px);
+  }
+
+  .hero h1 {
+    max-width: 10.6ch;
+    font-size: clamp(58px, 5.15vw, 74px);
+  }
+
+  .hero h1 em {
+    width: max-content;
+    max-width: none;
+    font-size: 0.72em;
+    white-space: nowrap;
+  }
+
+  .hero-sub {
+    margin-top: 25px;
+  }
+
+  .hero-cta {
+    margin-top: 27px;
+  }
+
+  .hero-cta .btn-ghost {
+    min-height: 47px;
+    padding: 11px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .hero-cta .btn-ghost:hover {
+    border-color: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .hero-meta {
+    gap: 7px;
+    margin-top: 27px;
+    padding-left: 14px;
+    border-left: 1px solid rgba(167, 139, 250, 0.3);
+    color: rgba(224, 220, 230, 0.6);
+    font-size: 12.5px;
+  }
+
+  .mac-stage {
+    width: min(750px, 53vw);
+    transform: translateX(18px);
+  }
+
+  .mac-stage::before {
+    display: none;
+  }
+
+  .mac-stage .desktop {
+    height: 650px;
+  }
+
+  .mac-stage .dropdown {
+    top: 34px;
+    right: 25px;
+    width: 316px;
+  }
+
+  .hero-stack > picture:first-child {
+    top: clamp(39px, 5.3vh, 55px);
+    left: calc(50% + clamp(18px, 3.3vw, 48px));
+  }
+
+  .hero-stack > picture:first-child::after {
+    content: "ANCBuddy  ·  connected";
+    z-index: 1;
+    width: max-content;
+    height: auto;
+    left: calc(100% + 13px);
+    top: 55%;
+    padding-left: 30px;
+    border-radius: 0;
+    background: linear-gradient(90deg, rgba(167, 139, 250, 0.76) 0 20px, transparent 20px) left center / 20px 1px no-repeat;
+    color: rgba(226, 220, 238, 0.52);
+    filter: none;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .hero-mascot {
+    height: 106px;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero-atmosphere {
+    top: 410px;
+    height: 520px;
+  }
+
+  .hero {
+    padding-top: 30px;
+  }
+
+  .hero .pill {
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: clamp(41px, 11.5vw, 46px);
+    line-height: 0.95;
+  }
+
+  .hero-sub {
+    margin-top: 18px;
+    font-size: 14.5px;
+    line-height: 1.46;
+  }
+
+  .hero-cta {
+    align-self: stretch;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 20px;
+  }
+
+  .hero-cta .btn-accent {
+    min-height: 48px;
+  }
+
+  .hero-meta {
+    margin-top: 11px;
+    font-size: 11.5px;
+  }
+
+  .hero-meta > span:not(:last-child) {
+    display: none;
+  }
+
+  .hero-stack > picture:first-child {
+    margin: 25px 0 -50px 12px;
+  }
+
+  .hero-stack > picture:first-child::after {
+    display: none;
+  }
+
+  .hero-mascot {
+    height: 76px;
+  }
+
+  .mac-stage {
+    transform: translateY(-2px);
+  }
+
+  .mac-stage::before {
+    display: none;
+  }
+}
