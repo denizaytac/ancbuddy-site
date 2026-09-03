@@ -155,7 +155,8 @@ assert(
 includesAll(immersive, [
   "## Still, Motion, and Cinema at a glance",
   "## Cinema Mode on Bose QC Ultra Gen 2",
-  "does not advertise Cinema Mode control",
+  "Cinema Mode control",
+  "use the Bose app",
 ]);
 
 const autoEq = page("ai-auto-eq-bose-qc-ultra.html");
