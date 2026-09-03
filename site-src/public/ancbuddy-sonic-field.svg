@@ -20,7 +20,6 @@
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
-  <rect width="1800" height="1200" fill="#0a0a0c"/>
   <ellipse cx="900" cy="810" rx="780" ry="310" fill="url(#ambient)" filter="url(#field)"/>
   <g fill="none" stroke="url(#wave)" stroke-linecap="round" filter="url(#glow)">
     <ellipse cx="900" cy="798" rx="156" ry="58" stroke-width="3.6" opacity=".98" transform="rotate(.8 900 798)"/>
@@ -31,5 +30,4 @@
     <ellipse cx="900" cy="798" rx="643" ry="220" stroke-width="2.6" opacity=".43" transform="rotate(-.34 900 798)"/>
     <ellipse cx="900" cy="798" rx="766" ry="257" stroke-width="2.4" opacity=".31" transform="rotate(.26 900 798)"/>
   </g>
-  <ellipse cx="900" cy="800" rx="116" ry="42" fill="#0a0a0c" opacity=".9"/>
 </svg>

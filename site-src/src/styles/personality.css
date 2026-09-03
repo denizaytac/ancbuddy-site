@@ -8,16 +8,16 @@ main {
 .hero-atmosphere {
   position: absolute;
   z-index: 0;
-  top: clamp(-130px, -8vw, -72px);
+  top: clamp(32px, 5vw, 78px);
   left: 50%;
   width: min(1800px, 148vw);
   height: clamp(820px, 92vw, 1180px);
   transform: translateX(-50%);
   pointer-events: none;
   overflow: hidden;
-  opacity: 0.92;
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 82%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 82%, transparent 100%);
+  opacity: 0.84;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 90%, transparent 100%);
 }
 
 .hero-atmosphere::before {
@@ -26,7 +26,7 @@ main {
   inset: 10% 8% 5%;
   border-radius: 50%;
   background: radial-gradient(
-    ellipse at 50% 64%,
+    ellipse at 50% 72%,
     rgba(167, 139, 250, 0.13),
     rgba(124, 58, 237, 0.045) 42%,
     transparent 72%
@@ -61,7 +61,7 @@ main {
 }
 
 .hero-atmosphere[data-ready="true"] .hero-atmosphere-canvas {
-  opacity: 0.94;
+  opacity: 0.82;
 }
 
 .hero-atmosphere-flare {
@@ -75,14 +75,14 @@ main {
 }
 
 .hero-atmosphere-flare-left {
-  top: 35%;
+  top: 46%;
   left: 7%;
   background: rgba(92, 149, 255, 0.55);
   animation: sonicFlareLeft 13s ease-in-out infinite alternate;
 }
 
 .hero-atmosphere-flare-right {
-  top: 48%;
+  top: 56%;
   right: 4%;
   background: rgba(184, 116, 255, 0.62);
   animation: sonicFlareRight 16s ease-in-out infinite alternate;
@@ -139,6 +139,11 @@ main {
 
 .hero h1 {
   text-shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
+}
+
+.hero-sub,
+.hero-meta {
+  text-shadow: 0 2px 22px rgba(0, 0, 0, 0.88);
 }
 
 .mac-stage {
@@ -240,12 +245,12 @@ main {
 
 @media (max-width: 720px) {
   .hero-atmosphere {
-    top: -44px;
+    top: 92px;
     width: 215vw;
     height: 860px;
-    opacity: 0.76;
-    mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 74%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 74%, transparent 100%);
+    opacity: 0.68;
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 6%, #000 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 6%, #000 88%, transparent 100%);
   }
 
   .hero-atmosphere-fallback {
@@ -258,7 +263,7 @@ main {
   }
 
   .hero-atmosphere[data-ready="true"] .hero-atmosphere-canvas {
-    opacity: 0.72;
+    opacity: 0.68;
   }
 
   .hero-stack > picture:first-child::before {
