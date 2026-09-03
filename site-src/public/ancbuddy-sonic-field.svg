@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200" role="img" aria-label="Abstract lavender sound waves">
+  <defs>
+    <radialGradient id="ambient" cx="50%" cy="69%" r="51%">
+      <stop offset="0" stop-color="#49346f" stop-opacity=".32"/>
+      <stop offset=".44" stop-color="#231a3c" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#0a0a0c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#829dff" stop-opacity=".28"/>
+      <stop offset=".24" stop-color="#a78bfa" stop-opacity=".72"/>
+      <stop offset=".5" stop-color="#e2dcff" stop-opacity=".98"/>
+      <stop offset=".78" stop-color="#b69aff" stop-opacity=".68"/>
+      <stop offset="1" stop-color="#7f8fff" stop-opacity=".22"/>
+    </linearGradient>
+    <filter id="field" x="-20%" y="-55%" width="140%" height="210%">
+      <feGaussianBlur stdDeviation="38"/>
+    </filter>
+    <filter id="glow" x="-25%" y="-130%" width="150%" height="360%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="4.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1800" height="1200" fill="#0a0a0c"/>
+  <ellipse cx="900" cy="810" rx="780" ry="310" fill="url(#ambient)" filter="url(#field)"/>
+  <g fill="none" stroke="url(#wave)" stroke-linecap="round" filter="url(#glow)">
+    <ellipse cx="900" cy="798" rx="156" ry="58" stroke-width="3.6" opacity=".98" transform="rotate(.8 900 798)"/>
+    <ellipse cx="900" cy="798" rx="236" ry="86" stroke-width="3.4" opacity=".88" transform="rotate(-.7 900 798)"/>
+    <ellipse cx="900" cy="798" rx="327" ry="117" stroke-width="3.2" opacity=".78" transform="rotate(.6 900 798)"/>
+    <ellipse cx="900" cy="798" rx="423" ry="149" stroke-width="3" opacity=".67" transform="rotate(-.55 900 798)"/>
+    <ellipse cx="900" cy="798" rx="528" ry="183" stroke-width="2.8" opacity=".55" transform="rotate(.42 900 798)"/>
+    <ellipse cx="900" cy="798" rx="643" ry="220" stroke-width="2.6" opacity=".43" transform="rotate(-.34 900 798)"/>
+    <ellipse cx="900" cy="798" rx="766" ry="257" stroke-width="2.4" opacity=".31" transform="rotate(.26 900 798)"/>
+  </g>
+  <ellipse cx="900" cy="800" rx="116" ry="42" fill="#0a0a0c" opacity=".9"/>
+</svg>

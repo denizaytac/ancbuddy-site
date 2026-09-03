@@ -1,0 +1,303 @@
+/* Generated sonic field + restrained 3D depth for the public product page. */
+main {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+
+.hero-atmosphere {
+  position: absolute;
+  z-index: 0;
+  top: clamp(-130px, -8vw, -72px);
+  left: 50%;
+  width: min(1800px, 148vw);
+  height: clamp(820px, 92vw, 1180px);
+  transform: translateX(-50%);
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.92;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 82%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 82%, transparent 100%);
+}
+
+.hero-atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: 10% 8% 5%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 50% 64%,
+    rgba(167, 139, 250, 0.13),
+    rgba(124, 58, 237, 0.045) 42%,
+    transparent 72%
+  );
+  filter: blur(28px);
+}
+
+.hero-atmosphere-fallback,
+.hero-atmosphere-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hero-atmosphere-fallback {
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0.58;
+  filter: saturate(0.92) contrast(1.04);
+  transition: opacity 900ms ease;
+}
+
+.hero-atmosphere-canvas {
+  opacity: 0;
+  transition: opacity 1100ms ease;
+}
+
+.hero-atmosphere[data-ready="true"] .hero-atmosphere-fallback {
+  opacity: 0.13;
+}
+
+.hero-atmosphere[data-ready="true"] .hero-atmosphere-canvas {
+  opacity: 0.94;
+}
+
+.hero-atmosphere-flare {
+  position: absolute;
+  width: clamp(160px, 22vw, 360px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(46px);
+  mix-blend-mode: screen;
+  opacity: 0.18;
+}
+
+.hero-atmosphere-flare-left {
+  top: 35%;
+  left: 7%;
+  background: rgba(92, 149, 255, 0.55);
+  animation: sonicFlareLeft 13s ease-in-out infinite alternate;
+}
+
+.hero-atmosphere-flare-right {
+  top: 48%;
+  right: 4%;
+  background: rgba(184, 116, 255, 0.62);
+  animation: sonicFlareRight 16s ease-in-out infinite alternate;
+}
+
+.hero {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-stack {
+  position: relative;
+  z-index: 3;
+}
+
+.hero-stack > picture:first-child {
+  position: relative;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+
+.hero-stack > picture:first-child::before,
+.hero-stack > picture:first-child::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-stack > picture:first-child::before {
+  width: clamp(126px, 16vw, 182px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(196, 181, 253, 0.25);
+  background:
+    radial-gradient(circle at 40% 32%, rgba(255, 255, 255, 0.12), transparent 32%),
+    radial-gradient(circle, rgba(167, 139, 250, 0.14), rgba(124, 58, 237, 0.03) 56%, transparent 70%);
+  box-shadow:
+    0 0 0 18px rgba(167, 139, 250, 0.025),
+    0 22px 70px rgba(97, 61, 196, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  transform: rotateX(68deg) translateY(20%);
+  animation: sonicHalo 9s ease-in-out infinite alternate;
+}
+
+.hero-stack > picture:first-child::after {
+  width: clamp(92px, 12vw, 138px);
+  height: clamp(24px, 3.5vw, 38px);
+  top: 78%;
+  background: radial-gradient(ellipse, rgba(167, 139, 250, 0.36), transparent 67%);
+  filter: blur(9px);
+}
+
+.hero h1 {
+  text-shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
+}
+
+.mac-stage {
+  z-index: 2;
+  transform-style: preserve-3d;
+}
+
+.mac-stage::after {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  left: 9%;
+  right: 9%;
+  bottom: -13%;
+  height: 31%;
+  border-radius: 50%;
+  background:
+    url("/ancbuddy-sonic-field.svg") center 76% / 150% auto no-repeat,
+    radial-gradient(ellipse, rgba(167, 139, 250, 0.15), transparent 65%);
+  opacity: 0.24;
+  filter: blur(8px) saturate(0.8);
+  transform: rotateX(72deg) translateZ(-80px);
+  transform-origin: center top;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.mac {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.07) inset,
+    0 72px 130px -38px rgba(0, 0, 0, 0.82),
+    0 34px 72px -24px rgba(0, 0, 0, 0.62),
+    0 0 0 1px rgba(167, 139, 250, 0.035),
+    0 0 80px -34px rgba(167, 139, 250, 0.52);
+}
+
+.audio-sources-section {
+  isolation: isolate;
+}
+
+.audio-sources-section::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: min(880px, 88vw);
+  aspect-ratio: 3 / 2;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%) rotate(-5deg);
+  background: url("/ancbuddy-sonic-field.svg") center / contain no-repeat;
+  opacity: 0.10;
+  filter: blur(2px) saturate(0.72);
+  mask-image: radial-gradient(ellipse, #000 30%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse, #000 30%, transparent 72%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.audio-sources-media {
+  position: relative;
+  transform: perspective(1300px) rotateY(4deg) rotateX(0.8deg);
+  transform-origin: center center;
+  transition:
+    transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  filter: drop-shadow(-26px 36px 42px rgba(0, 0, 0, 0.30));
+}
+
+.audio-sources-media::before {
+  content: "";
+  position: absolute;
+  inset: 5% -8% 8%;
+  z-index: -1;
+  border-radius: 42%;
+  background: radial-gradient(ellipse, rgba(167, 139, 250, 0.18), transparent 67%);
+  filter: blur(30px);
+  opacity: 0.7;
+}
+
+.audio-sources-media:hover {
+  transform: perspective(1300px) rotateY(0deg) rotateX(0deg) translateY(-6px);
+  filter: drop-shadow(0 42px 54px rgba(0, 0, 0, 0.38));
+}
+
+@keyframes sonicHalo {
+  from { transform: rotateX(68deg) rotateZ(-5deg) translateY(20%) scale(0.96); }
+  to { transform: rotateX(68deg) rotateZ(6deg) translateY(15%) scale(1.04); }
+}
+
+@keyframes sonicFlareLeft {
+  from { transform: translate3d(-6%, 2%, 0) scale(0.92); }
+  to { transform: translate3d(14%, -9%, 0) scale(1.08); }
+}
+
+@keyframes sonicFlareRight {
+  from { transform: translate3d(6%, -4%, 0) scale(1.04); }
+  to { transform: translate3d(-15%, 10%, 0) scale(0.9); }
+}
+
+@media (max-width: 720px) {
+  .hero-atmosphere {
+    top: -44px;
+    width: 215vw;
+    height: 860px;
+    opacity: 0.76;
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 74%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 74%, transparent 100%);
+  }
+
+  .hero-atmosphere-fallback {
+    object-position: center 8%;
+    opacity: 0.46;
+  }
+
+  .hero-atmosphere[data-ready="true"] .hero-atmosphere-fallback {
+    opacity: 0.09;
+  }
+
+  .hero-atmosphere[data-ready="true"] .hero-atmosphere-canvas {
+    opacity: 0.72;
+  }
+
+  .hero-stack > picture:first-child::before {
+    width: clamp(116px, 36vw, 154px);
+  }
+
+  .mac-stage::after {
+    left: 2%;
+    right: 2%;
+    bottom: -8%;
+    opacity: 0.16;
+  }
+
+  .audio-sources-media,
+  .audio-sources-media:hover {
+    transform: none;
+    filter: drop-shadow(0 28px 36px rgba(0, 0, 0, 0.28));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-atmosphere-canvas {
+    display: none;
+  }
+
+  .hero-atmosphere-fallback {
+    opacity: 0.48;
+  }
+
+  .hero-atmosphere-flare,
+  .hero-stack > picture:first-child::before {
+    animation: none;
+  }
+
+  .audio-sources-media {
+    transition: none;
+  }
+}
+
+@supports not (overflow: clip) {
+  main { overflow: hidden; }
+}
