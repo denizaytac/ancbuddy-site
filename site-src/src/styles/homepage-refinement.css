@@ -105,6 +105,40 @@
   }
 }
 
+@media (max-width: 900px) {
+  /* Preserve the mascot's meaning across breakpoints: it remains a small brand
+     signature before the positioning copy instead of becoming a bridge into the
+     interactive product preview. */
+  .hero-stack > picture:first-child {
+    order: 0;
+    display: grid;
+    position: static;
+    top: auto;
+    left: auto;
+    align-self: flex-start;
+    margin: 0 0 16px;
+    place-items: center;
+    pointer-events: none;
+  }
+
+  .hero-stack > picture:first-child::before,
+  .hero-stack > picture:first-child::after {
+    display: none;
+  }
+
+  .hero-mascot {
+    height: 52px;
+    margin: 0;
+    filter:
+      drop-shadow(0 12px 20px rgba(76, 43, 155, 0.26))
+      drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  }
+
+  .mac-stage::after {
+    display: none;
+  }
+}
+
 @media (max-width: 720px) {
   .hero-atmosphere {
     top: 350px;
@@ -160,15 +194,11 @@
   }
 
   .hero-stack > picture:first-child {
-    margin: 14px 0 -48px 12px;
-  }
-
-  .hero-stack > picture:first-child::after {
-    display: none;
+    margin-bottom: 12px;
   }
 
   .hero-mascot {
-    height: 76px;
+    height: 48px;
   }
 
   .mac-stage {
