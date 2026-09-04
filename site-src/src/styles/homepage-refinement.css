@@ -1,33 +1,39 @@
 /* Final optical refinements for the homepage composition. */
 
 @media (min-width: 901px) {
-  /* Keep the mobile mascot treatment intact, but anchor the desktop mascot to
-     the product itself: directly above the ANCBuddy menu-bar icon. */
+  /* Keep the mascot away from interactive preview controls. On desktop it acts
+     as a small editorial brand signature attached to the copy column instead. */
+  .hero-stack {
+    position: relative;
+  }
+
   .hero-stack > picture:first-child {
+    display: grid;
+    position: absolute;
+    z-index: 6;
+    top: -74px;
+    left: 0;
+    place-items: center;
+    pointer-events: none;
+  }
+
+  .hero-stack > picture:first-child::before,
+  .hero-stack > picture:first-child::after {
     display: none;
   }
 
-  /* Reuse the former product-stage atmosphere layer as a single, small brand
-     signature. Alignment and proximity to the menu-bar icon make the mascot
-     read as part of the product rather than a detached hero decoration. */
-  .mac-stage::after {
-    content: "";
-    display: block;
-    position: absolute;
-    z-index: 5;
-    inset: auto 24px auto auto;
-    top: -68px;
-    width: 72px;
-    height: 72px;
-    border-radius: 0;
-    background: url("/buddy-hero-160.webp") center / contain no-repeat;
-    opacity: 1;
+  .hero-mascot {
+    height: 58px;
+    margin: 0;
     filter:
-      drop-shadow(0 16px 26px rgba(76, 43, 155, 0.3))
-      drop-shadow(0 6px 10px rgba(0, 0, 0, 0.38));
-    transform: none;
-    pointer-events: none;
-    mix-blend-mode: normal;
+      drop-shadow(0 14px 24px rgba(76, 43, 155, 0.28))
+      drop-shadow(0 5px 9px rgba(0, 0, 0, 0.34));
+  }
+
+  /* The product mock remains visually clean; the menu-bar icon is the only
+     ANCBuddy element inside the interactive preview chrome. */
+  .mac-stage::after {
+    display: none;
   }
 }
 
@@ -86,13 +92,6 @@
 
   .mac-stage::before {
     display: none;
-  }
-
-  .mac-stage::after {
-    top: -76px;
-    right: 32px;
-    width: 80px;
-    height: 80px;
   }
 
   .mac-stage .desktop {
