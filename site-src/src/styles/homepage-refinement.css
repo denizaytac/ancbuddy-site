@@ -1,5 +1,19 @@
 /* Final optical refinements for the homepage composition. */
 
+@media (min-width: 901px) {
+  /* The stacked mascot treatment works on mobile, but its hero-level absolute
+     positioning reads as a detached floating layer in the desktop composition. */
+  .hero-stack > picture:first-child {
+    display: none;
+  }
+
+  /* HeroAtmosphere already supplies the sonic field behind the hero. Avoid a
+     second copy at product-stage level, where it can visually bleed into the UI. */
+  .mac-stage::after {
+    display: none;
+  }
+}
+
 @media (min-width: 1121px) {
   .hero {
     grid-template-columns: minmax(470px, 0.9fr) minmax(590px, 1.1fr);
